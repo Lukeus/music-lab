@@ -1,0 +1,41 @@
+# Lukeus Avatar Image Placeholder
+
+This file serves as a placeholder for your actual avatar image.
+
+## Recommended Specifications:
+
+**Image Requirements:**
+- **Format**: JPG, PNG, or WebP
+- **Size**: 400x400 pixels minimum (square format)
+- **Quality**: High resolution for crisp display
+- **File Size**: Under 500KB for optimal loading
+
+**Style Recommendations:**
+- Professional music producer/artist photo
+- Good lighting and clear face visibility
+- Consider a slight music studio or creative background
+- Avoid overly busy backgrounds (the design adds effects)
+
+## How to Replace:
+
+1. Take or select your favorite professional photo
+2. Crop to square aspect ratio (1:1)
+3. Resize to at least 400x400 pixels
+4. Save as `lukeus-avatar.jpg`
+5. Replace this placeholder file
+
+## Alternative Formats:
+
+If you prefer other formats:
+- PNG: `lukeus-avatar.png`
+- WebP: `lukeus-avatar.webp`
+
+Just update the `src` attribute in `index.html` to match your chosen format.
+
+## Current Design Features:
+
+Your avatar will have:
+- ✨ Glowing border with your accent colors
+- 🎵 Rotating ring with musical notes
+- 💫 Pulsing effect on hover
+- 🎨 Responsive sizing for all devices
