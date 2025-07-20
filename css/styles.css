@@ -78,6 +78,44 @@ header {
     padding: 80px 0;
     text-align: center;
     background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '♪ ♫ ♪ ♫ ♪ ♪ ♫ ♪ ♫ ♪';
+    position: absolute;
+    top: 20%;
+    left: -20%;
+    width: 140%;
+    font-size: 2rem;
+    color: var(--accent);
+    opacity: 0.1;
+    animation: float-notes 20s linear infinite;
+    pointer-events: none;
+}
+
+.hero::after {
+    content: '♫ ♪ ♫ ♪ ♫ ♫ ♪ ♫ ♪ ♫';
+    position: absolute;
+    bottom: 20%;
+    right: -20%;
+    width: 140%;
+    font-size: 1.5rem;
+    color: var(--accent-secondary);
+    opacity: 0.1;
+    animation: float-notes-reverse 25s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes float-notes {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(20%); }
+}
+
+@keyframes float-notes-reverse {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-20%); }
 }
 
 .hero h1 {
@@ -137,10 +175,34 @@ header {
     overflow: hidden;
 }
 
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover::before {
+    transform: translateX(0);
+}
+
 .project-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
     border-color: var(--accent);
-    box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+    box-shadow: 
+        0 15px 40px rgba(0, 255, 136, 0.15),
+        0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.project-card:nth-child(2):hover {
+    box-shadow: 
+        0 15px 40px rgba(255, 107, 107, 0.15),
+        0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
 .project-header {
@@ -154,6 +216,31 @@ header {
     font-size: 1.4rem;
     color: var(--text-primary);
     margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.project-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: inline-block;
+    animation: gentle-float 3s ease-in-out infinite;
+}
+
+.project-card:nth-child(1) .project-icon {
+    animation-delay: 0s;
+}
+
+.project-card:nth-child(2) .project-icon {
+    animation-delay: 1s;
+}
+
+.project-card:nth-child(3) .project-icon {
+    animation-delay: 2s;
+}
+
+@keyframes gentle-float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
 }
 
 .project-status {
@@ -177,17 +264,60 @@ header {
 
 .progress-bar {
     background: rgba(255, 255, 255, 0.1);
-    height: 6px;
-    border-radius: 3px;
+    height: 8px;
+    border-radius: 4px;
     margin: 15px 0;
     overflow: hidden;
+    position: relative;
+}
+
+.progress-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        rgba(255, 255, 255, 0.05) 10px,
+        transparent 20px
+    );
+    animation: progress-shimmer 3s ease-in-out infinite;
 }
 
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
-    border-radius: 3px;
-    transition: width 0.3s ease;
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent);
+    animation: progress-sweep 2s ease-in-out infinite;
+}
+
+@keyframes progress-shimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+}
+
+@keyframes progress-sweep {
+    0% { left: -100%; }
+    100% { left: 100%; }
 }
 
 .project-meta {
@@ -210,11 +340,70 @@ header {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.play-button::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 40%, var(--accent) 70%);
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+.play-button:hover::before {
+    opacity: 0.3;
+    transform: scale(1.5);
 }
 
 .play-button:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
     background: #00cc6a;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.4),
+        0 0 40px rgba(0, 255, 136, 0.2);
+}
+
+.play-button:active {
+    transform: scale(0.95);
+}
+
+/* Playing state */
+.play-button.playing {
+    background: var(--accent-secondary);
+    animation: pulse-play 1.5s ease-in-out infinite;
+}
+
+.play-button.playing::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid var(--accent-secondary);
+    border-radius: 50%;
+    animation: ripple 1.5s ease-out infinite;
+    opacity: 0;
+}
+
+@keyframes pulse-play {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
 }
 
 /* Sound Experiments */
@@ -235,23 +424,49 @@ header {
     border-radius: 8px;
     padding: 20px;
     transition: all 0.3s ease;
+    position: relative;
 }
 
 .experiment-card:hover {
     border-color: var(--accent-secondary);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.1);
+}
+
+.experiment-header {
+    margin-bottom: 10px;
+}
+
+.experiment-type {
+    display: inline-block;
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: rgba(0, 255, 136, 0.1);
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.experiment-card h4 {
+    color: var(--text-primary);
+    margin: 8px 0;
+    font-size: 1.1rem;
 }
 
 .waveform {
     height: 60px;
-    background: linear-gradient(45deg, 
-        rgba(0, 255, 136, 0.3) 0%, 
-        rgba(255, 107, 107, 0.3) 50%, 
-        rgba(0, 255, 136, 0.3) 100%);
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
     border-radius: 4px;
     margin: 15px 0;
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 10px;
 }
 
 .waveform::before {
@@ -263,14 +478,48 @@ header {
     height: 100%;
     background: linear-gradient(90deg, 
         transparent, 
-        rgba(255, 255, 255, 0.1), 
+        rgba(0, 255, 136, 0.2), 
         transparent);
-    animation: wave 3s infinite;
+    animation: wave 4s infinite;
+    pointer-events: none;
+}
+
+/* Waveform bars */
+.waveform::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(var(--accent) 0%, var(--accent) 100%),
+        linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%),
+        linear-gradient(var(--accent) 0%, var(--accent) 100%),
+        linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%),
+        linear-gradient(var(--accent) 0%, var(--accent) 100%),
+        linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%),
+        linear-gradient(var(--accent) 0%, var(--accent) 100%),
+        linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%);
+    background-size: 3px 20%, 3px 60%, 3px 35%, 3px 80%, 3px 45%, 3px 25%, 3px 70%, 3px 15%;
+    background-position: 10px center, 20px center, 30px center, 40px center, 50px center, 60px center, 70px center, 80px center;
+    background-repeat: no-repeat;
+    animation: waveform-pulse 2s ease-in-out infinite;
+    opacity: 0.7;
 }
 
 @keyframes wave {
     0% { left: -100%; }
     100% { left: 100%; }
+}
+
+@keyframes waveform-pulse {
+    0%, 100% { 
+        transform: scaleY(1);
+        opacity: 0.7;
+    }
+    50% { 
+        transform: scaleY(1.2);
+        opacity: 1;
+    }
 }
 
 /* Creative Journal */
@@ -282,6 +531,23 @@ header {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    position: relative;
+}
+
+.journal-entries::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(
+        to bottom,
+        var(--accent) 0%,
+        var(--accent-secondary) 50%,
+        var(--accent) 100%
+    );
+    opacity: 0.3;
 }
 
 .journal-entry {
@@ -290,6 +556,32 @@ header {
     border-radius: 12px;
     padding: 30px;
     border-left: 4px solid var(--accent);
+    margin-left: 40px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.journal-entry::before {
+    content: '';
+    position: absolute;
+    left: -45px;
+    top: 30px;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 2px solid var(--bg-dark);
+}
+
+.journal-entry:hover {
+    transform: translateX(10px);
+    border-left-color: var(--accent-secondary);
+    box-shadow: 0 5px 20px rgba(0, 255, 136, 0.1);
+}
+
+.journal-entry:hover::before {
+    background: var(--accent-secondary);
+    transform: scale(1.3);
 }
 
 .journal-date {
@@ -340,6 +632,12 @@ footer {
         font-size: 2rem;
     }
     
+    .hero::before,
+    .hero::after {
+        font-size: 1.5rem;
+        animation-duration: 15s;
+    }
+    
     .projects-grid {
         grid-template-columns: 1fr;
     }
@@ -347,5 +645,29 @@ footer {
     .header-content {
         flex-direction: column;
         gap: 10px;
+    }
+    
+    .project-icon {
+        font-size: 1.5rem;
+    }
+    
+    .journal-entry {
+        margin-left: 20px;
+    }
+    
+    .journal-entry::before {
+        left: -25px;
+    }
+    
+    .journal-entries::before {
+        left: 10px;
+    }
+    
+    .experiment-type {
+        font-size: 0.7rem;
+    }
+    
+    .waveform {
+        height: 50px;
     }
 }

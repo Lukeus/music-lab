@@ -20,18 +20,42 @@ function initializePlayButtons() {
 }
 
 /**
- * Toggle play/pause state for buttons
+ * Toggle play/pause state for buttons with enhanced animations
  * @param {HTMLElement} button - The play button element
  */
 function togglePlayButton(button) {
     if (button.textContent === '▶') {
+        // Play state
         button.textContent = '⏸';
-        button.style.background = '#ff6b6b';
-        // Here you could add actual audio playback functionality
+        button.classList.add('playing');
+        button.style.background = 'var(--accent-secondary)';
+        
+        // Add ripple effect
+        const ripple = document.createElement('div');
+        ripple.className = 'button-ripple';
+        button.appendChild(ripple);
+        
+        // Simulate audio feedback
+        navigator.vibrate && navigator.vibrate(50);
         console.log('Playing audio...');
+        
+        // Auto-pause after demo duration (optional)
+        setTimeout(() => {
+            if (button.classList.contains('playing')) {
+                togglePlayButton(button);
+            }
+        }, 3000);
+        
     } else {
+        // Pause state
         button.textContent = '▶';
+        button.classList.remove('playing');
         button.style.background = 'var(--accent)';
+        
+        // Remove any ripple elements
+        const ripples = button.querySelectorAll('.button-ripple');
+        ripples.forEach(ripple => ripple.remove());
+        
         console.log('Pausing audio...');
     }
 }
@@ -44,7 +68,7 @@ function initializeProgressBars() {
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && entry.target instanceof HTMLElement) {
                 animateProgressBar(entry.target);
             }
         });
@@ -75,7 +99,7 @@ function animateProgressBar(progressBar) {
 function initializeParallaxEffect() {
     const hero = document.querySelector('.hero');
     
-    if (hero) {
+    if (hero instanceof HTMLElement) {
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
             const rate = scrolled * -0.3;
