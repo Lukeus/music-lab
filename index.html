@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lukeus Music Lab | Experimental Sound & Creative Process</title>
+    <title id="page-title"></title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 </head>
@@ -12,10 +12,10 @@
         <div class="container">
             <div class="header-content">
                 <a href="#" class="logo">LUKEUS</a>
-                <div class="status-indicator">
+                <div class="status-indicator" id="status-message">
                     <div class="status-dot"></div>
-                    Currently in the lab
                 </div>
+ <a href="#" class="logo" id="logo-text"></a>
             </div>
         </div>
     </header>
@@ -31,8 +31,8 @@
                     </div>
                 </div>
                 <div class="hero-text">
-                    <h1>Because Music Matters | Music Lab</h1>
-                    <p>Step into my creative space where feeling becomes sound. From acoustic storytelling to electronic experiments, this is where I capture the instant connection between music and emotion. Welcome to the process of turning dreams into reality.</p>
+ <h1 id="hero-heading"></h1>
+ <p id="hero-paragraph"></p>
                 </div>
             </div>
         </div>
@@ -45,47 +45,7 @@
                 Current Projects
             </h2>
             <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-header">
-                        <div>
-                            <div class="project-icon">🎸</div>
-                            <h3 class="project-title">Acoustic Storytelling Sessions</h3>
-                        </div>
-                        <span class="project-status">Active</span>
-                    </div>
-                    <p class="project-description">
-                        Just me, my acoustic guitar, and whatever story wants to come out. 98% freestyle lyrics flowing with the feeling. Each session captures a moment in time where sound meets emotion.
-                    </p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 85%"></div>
-                    </div>
-                    <div class="project-meta">
-                        <span>Ongoing collection</span>
-                        <button class="play-button">▶</button>
-                    </div>
-                </div>
 
-                <div class="project-card">
-                    <div class="project-header">
-                        <div>
-                            <div class="project-icon">🎛️</div>
-                            <h3 class="project-title">Electronic Transformation</h3>
-                        </div>
-                        <span class="project-status experimental">Experimental</span>
-                    </div>
-                    <p class="project-description">
-                        Taking those acoustic stories and reimagining them electronically. Same emotional core, completely different energy. Building from bass lines and beats using Logic Pro and UAD plugins.
-                    </p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 60%"></div>
-                    </div>
-                    <div class="project-meta">
-                        <span>5 versions in progress</span>
-                        <button class="play-button">▶</button>
-                    </div>
-                </div>
-
-                <div class="project-card">
                     <div class="project-header">
                         <div>
                             <div class="project-icon">💿</div>
@@ -106,7 +66,7 @@
                 </div>
             </div>
         </div>
-    </section>
+
 
     <section class="experiments">
         <div class="container">
@@ -115,26 +75,7 @@
                 Sound Experiments
             </h2>
             <div class="experiments-grid">
-                <div class="experiment-card">
-                    <div class="experiment-header">
-                        <span class="experiment-type">🎵 Composition</span>
-                        <h4>Bass Line First Approach</h4>
-                    </div>
-                    <div class="waveform"></div>
-                    <p>Starting with a bass line that feels right, then building chords around it. Each foundation creates a different emotional landscape.</p>
-                    <div class="project-meta">
-                        <span>This week</span>
-                        <button class="play-button">▶</button>
-                    </div>
-                </div>
 
-                <div class="experiment-card">
-                    <div class="experiment-header">
-                        <span class="experiment-type">🔄 Remix</span>
-                        <h4>Tempo Transformation Test</h4>
-                    </div>
-                    <div class="waveform"></div>
-                    <p>Same song, different energy. Taking an acoustic piece and experimenting with how upbeat tempo changes the entire feeling.</p>
                     <div class="project-meta">
                         <span>3 days ago</span>
                         <button class="play-button">▶</button>
@@ -165,48 +106,6 @@
                         <span>5 days ago</span>
                         <button class="play-button">▶</button>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="journal">
-        <div class="container">
-            <h2 class="section-title">
-                <div class="section-icon">📝</div>
-                Creative Journal
-            </h2>
-            <div class="journal-entries">
-                <div class="journal-entry">
-                    <div class="journal-date">January 18, 2025</div>
-                    <h4 class="journal-title">The Magic of Guitar Against Body</h4>
-                    <p class="journal-content">
-                        There's something about the vibrations of an acoustic guitar against your body that can't be replicated. It's not just hearing the music - it's feeling it resonate through you. Today I spent time trying to capture that physical connection in my recordings. How do you translate a feeling into something others can experience through speakers?
-                    </p>
-                </div>
-
-                <div class="journal-entry">
-                    <div class="journal-date">January 15, 2025</div>
-                    <h4 class="journal-title">Dreams as Creative Battles</h4>
-                    <p class="journal-content">
-                        That old technique I learned as a kid - fighting nightmares by becoming the superhero in my dreams - it applies to everything. Creative blocks, difficult emotions, life challenges. Put positive thinking and dedicated focus towards a dream, and the outcome usually favors the dreamer. Music is just another way of dreaming solutions into existence.
-                    </p>
-                </div>
-
-                <div class="journal-entry">
-                    <div class="journal-date">January 10, 2025</div>
-                    <h4 class="journal-title">When Sound Meets Feeling</h4>
-                    <p class="journal-content">
-                        There's an instant correlation between sound and being understood. When the right combination of notes hits, when the freestyle lyrics flow perfectly with the emotion - that's when music transcends technique and becomes pure connection. 98% of my lyrics come from this place of spontaneous truth.
-                    </p>
-                </div>
-
-                <div class="journal-entry">
-                    <div class="journal-date">January 5, 2025</div>
-                    <h4 class="journal-title">The Journey Continues</h4>
-                    <p class="journal-content">
-                        From struggling with purpose to finding it in sound. From destructive patterns to creative transformation. Delancey Street taught me that it's as important to teach as it is to learn. Every song I create now carries that wisdom - the understanding that we can choose to become who we're meant to be.
-                    </p>
                 </div>
             </div>
         </div>

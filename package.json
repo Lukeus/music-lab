@@ -6,9 +6,10 @@
   "scripts": {
     "start": "npx serve .",
     "dev": "npx live-server --port=3000 --open=/",
-    "build": "echo 'Build process not configured yet'",
+    "build": "echo 'Static site - no build process needed'",
     "lint": "npx eslint js/ --fix",
-    "format": "npx prettier --write '**/*.{html,css,js,md}'"
+    "format": "npx prettier --write '**/*.{html,css,js,md}'",
+    "deploy": "echo 'Deploy with: git push origin main - GitHub Pages will handle the rest!'"
   },
   "keywords": [
     "music",
@@ -16,7 +17,8 @@
     "sound",
     "creative",
     "portfolio",
-    "website"
+    "website",
+    "github-pages"
   ],
   "author": "Lukeus",
   "license": "MIT",
