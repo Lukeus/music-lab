@@ -1,7 +1,11 @@
 {
   "pageTitle": "Lukeus Music Lab | Experimental Sound & Creative Process",
-  "statusMessage": "Currently in the lab",
-  "logoText": "LUKEUS",
+  "statusMessage": "",
+  "logoText": "Music Lab",
+  "welcomeGate": {
+    "heading": "Welcome to the Lab",
+    "message": "This is a space for creativity, experimentation, and the love of music. Enjoy your visit."
+  },
   "heroSection": {
     "heading": "Because Music Matters | Music Lab",
     "paragraph": "Step into my creative space where feeling becomes sound. From acoustic storytelling to electronic experiments, this is where I capture the instant connection between music and emotion. Welcome to the process of turning dreams into reality."

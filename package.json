@@ -24,9 +24,12 @@
   "license": "MIT",
   "devDependencies": {
     "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
     "live-server": "^1.2.2",
+    "prettier": "^3.2.5",
     "serve": "^14.2.1"
+  },
+  "dependencies": {
+    "motion": "^12.23.12"
   },
   "repository": {
     "type": "git",

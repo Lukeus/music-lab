@@ -1,15 +1,37 @@
-// Main JavaScript for Lukeus Music Lab
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the music lab interface
+import { scroll, inView, animate } from "https://esm.sh/motion@10.18.0";
+
+window.addEventListener('load', function() {
+    if (sessionStorage.getItem('welcomeGateShown')) {
+        const welcomeGate = document.querySelector('.welcome-gate');
+        if (welcomeGate) {
+            welcomeGate.style.display = 'none';
+        }
+        document.body.classList.remove('scroll-lock');
+    }
+
+    initializeWelcomeGate();
     initializePlayButtons();
-    initializeProgressBars();
-    initializeParallaxEffect();
-    loadContent(); // Load static content from JSON
+    loadContent().then(initializeScrollAnimations);
 });
 
-/**
- * Fetch content from content.json and update the page
- */
+function initializeWelcomeGate() {
+    const welcomeGate = document.querySelector('.welcome-gate');
+    const enterButton = document.querySelector('.enter-button');
+
+    if (enterButton) {
+        enterButton.addEventListener('click', () => {
+            if (welcomeGate) {
+                welcomeGate.style.opacity = '0';
+                setTimeout(() => {
+                    welcomeGate.style.display = 'none';
+                }, 500);
+            }
+            document.body.classList.remove('scroll-lock');
+            sessionStorage.setItem('welcomeGateShown', 'true');
+        });
+    }
+}
+
 async function loadContent() {
     try {
         const response = await fetch('/content.json');
@@ -18,6 +40,11 @@ async function loadContent() {
         }
         const content = await response.json();
 
+        if (content.welcomeGate) {
+            document.getElementById('welcome-heading').textContent = content.welcomeGate.heading || '';
+            document.getElementById('welcome-message').textContent = content.welcomeGate.message || '';
+        }
+
         document.title = content.pageTitle || document.title;
         document.getElementById('status-message').textContent = content.statusMessage || '';
         document.getElementById('logo-text').textContent = content.logoText || '';
@@ -25,18 +52,15 @@ async function loadContent() {
         document.getElementById('hero-paragraph').textContent = content.heroSection.paragraph || '';
 
         populateProjects(content.currentProjects);
- populateExperiments(content.soundExperiments);
+        populateExperiments(content.soundExperiments);
+        populateJournalEntries(content.creativeJournal);
     } catch (error) {
         console.error('Failed to load content:', error);
     }
 }
 
-/**
- * Initialize play button interactions
- */
 function initializePlayButtons() {
     const playButtons = document.querySelectorAll('.play-button');
-    
     playButtons.forEach(button => {
         button.addEventListener('click', function() {
             togglePlayButton(this);
@@ -44,57 +68,22 @@ function initializePlayButtons() {
     });
 }
 
-/**
- * Toggle play/pause state for buttons with enhanced animations
- * @param {HTMLElement} button - The play button element
- */
 function togglePlayButton(button) {
     if (button.textContent === '▶') {
-        // Play state
         button.textContent = '⏸';
         button.classList.add('playing');
         button.style.background = 'var(--accent-secondary)';
-        
-        // Add ripple effect
-        const ripple = document.createElement('div');
-        ripple.className = 'button-ripple';
-        button.appendChild(ripple);
-        
-        // Simulate audio feedback
-        navigator.vibrate && navigator.vibrate(50);
-        console.log('Playing audio...');
-        
-        // Auto-pause after demo duration (optional)
-        setTimeout(() => {
-            if (button.classList.contains('playing')) {
-                togglePlayButton(button);
-            }
-        }, 3000);
-        
     } else {
-        // Pause state
         button.textContent = '▶';
         button.classList.remove('playing');
         button.style.background = 'var(--accent)';
-        
-        // Remove any ripple elements
-        const ripples = button.querySelectorAll('.button-ripple');
-        ripples.forEach(ripple => ripple.remove());
-        
-        console.log('Pausing audio...');
     }
 }
 
-/**
- * Populate the projects grid with data from the JSON
- * @param {Array<Object>} projects - An array of project objects
- */
 function populateProjects(projects) {
     const projectsGrid = document.querySelector('.projects-grid');
     if (!projectsGrid) return;
-
-    projectsGrid.innerHTML = ''; // Clear existing content
-
+    projectsGrid.innerHTML = '';
     projects.forEach(project => {
         const projectCard = `
             <div class="project-card">
@@ -114,16 +103,10 @@ function populateProjects(projects) {
     });
 }
 
-/**
- * Populate the experiments grid with data from the JSON
- * @param {Array<Object>} experiments - An array of experiment objects
- */
 function populateExperiments(experiments) {
     const experimentsGrid = document.querySelector('.experiments-grid');
     if (!experimentsGrid) return;
-
-    experimentsGrid.innerHTML = ''; // Clear existing content
-
+    experimentsGrid.innerHTML = '';
     experiments.forEach(experiment => {
         const experimentCard = `
             <div class="experiment-card">
@@ -133,23 +116,17 @@ function populateExperiments(experiments) {
                 </div>
                 <div class="waveform"></div>
                 <p>${experiment.description}</p>
-                <div class="project-meta"><span>${experiment.meta}</span><button class="play-button">▶</button></div>
+                <div class.project-meta"><span>${experiment.meta}</span><button class="play-button">▶</button></div>
             </div>
         `;
         experimentsGrid.innerHTML += experimentCard;
     });
 }
 
-/**
- * Populate the journal entries with data from the JSON
- * @param {Array<Object>} entries - An array of journal entry objects
- */
 function populateJournalEntries(entries) {
-    const journalEntriesContainer = document.querySelector('.journal-entries');
+    const journalEntriesContainer = document.getElementById('creative-journal-entries');
     if (!journalEntriesContainer) return;
-
-    journalEntriesContainer.innerHTML = ''; // Clear existing content
-
+    journalEntriesContainer.innerHTML = '';
     entries.forEach(entry => {
         const journalEntryCard = `
             <div class="journal-entry">
@@ -162,91 +139,33 @@ function populateJournalEntries(entries) {
     });
 }
 
-/**
- * Animate progress bars when they come into view
- */
-
-/**
- * Animate progress bars when they come into view
- */
-function initializeProgressBars() {
-    const progressBars = document.querySelectorAll('.progress-fill');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && entry.target instanceof HTMLElement) {
-                animateProgressBar(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.5,
-        rootMargin: '0px 0px -50px 0px'
-    });
-
-    progressBars.forEach(bar => observer.observe(bar));
-}
-
-/**
- * Animate a progress bar
- * @param {HTMLElement} progressBar - The progress bar element
- */
-function animateProgressBar(progressBar) {
-    const targetWidth = progressBar.style.width;
-    progressBar.style.width = '0';
-    
-    setTimeout(() => {
-        progressBar.style.width = targetWidth;
-    }, 100);
-}
-
-/**
- * Add subtle parallax effect to hero section
- */
-function initializeParallaxEffect() {
+function initializeScrollAnimations() {
     const hero = document.querySelector('.hero');
-    
-    if (hero instanceof HTMLElement) {
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.3;
-            hero.style.transform = `translateY(${rate}px)`;
-        });
+    if (hero) {
+        scroll(
+            ({ y }) => {
+                hero.style.backgroundPositionY = `${y.progress * 50}%`;
+            },
+            { target: hero }
+        );
     }
-}
 
-/**
- * Utility function to add smooth scrolling to anchor links
- */
-function initializeSmoothScrolling() {
-    const links = document.querySelectorAll('a[href^="#"]');
-    
-    links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-            
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
+    const progressFills = document.querySelectorAll('.progress-fill');
+    progressFills.forEach(bar => {
+        const width = bar.style.width;
+        bar.style.width = '0%';
+        inView(bar, () => {
+            animate(bar, { width }, { duration: 1 });
         });
     });
-}
 
-/**
- * Add theme toggle functionality (for future enhancement)
- */
-function initializeThemeToggle() {
-    // Placeholder for theme switching functionality
-    // Could be implemented to switch between dark/light modes
+    const cards = document.querySelectorAll('.project-card, .experiment-card, .journal-entry');
+    cards.forEach(card => {
+        inView(card, 
+            () => {
+                animate(card, { opacity: 1, transform: 'translateY(0)' }, { duration: 0.5 });
+            },
+            { amount: 0.2 }
+        );
+    });
 }
-
-// Export functions for potential use in other modules
-window.MusicLab = {
-    togglePlayButton,
-    animateProgressBar
-};

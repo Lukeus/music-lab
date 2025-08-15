@@ -7,15 +7,23 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 </head>
-<body>
+<body class="scroll-lock">
+    <div class="welcome-gate">
+        <div class="welcome-content">
+            <h1 id="welcome-heading"></h1>
+            <p id="welcome-message"></p>
+            <button class="enter-button">Enter</button>
+        </div>
+    </div>
+
     <header>
         <div class="container">
             <div class="header-content">
-                <a href="#" class="logo">LUKEUS</a>
+                <a href="#" class="logo">Because Music Matters</a>
                 <div class="status-indicator" id="status-message">
                     <div class="status-dot"></div>
                 </div>
- <a href="#" class="logo" id="logo-text"></a>
+                <a href="#" class="logo" id="logo-text"></a>
             </div>
         </div>
     </header>
@@ -31,8 +39,8 @@
                     </div>
                 </div>
                 <div class="hero-text">
- <h1 id="hero-heading"></h1>
- <p id="hero-paragraph"></p>
+                    <h1 id="hero-heading"></h1>
+                    <p id="hero-paragraph"></p>
                 </div>
             </div>
         </div>
@@ -45,28 +53,10 @@
                 Current Projects
             </h2>
             <div class="projects-grid">
-
-                    <div class="project-header">
-                        <div>
-                            <div class="project-icon">💿</div>
-                            <h3 class="project-title">Upcoming Release Package</h3>
-                        </div>
-                        <span class="project-status">In Progress</span>
-                    </div>
-                    <p class="project-description">
-                        Curating a collection that spans from soulful acoustic pieces to quirky EDM dance tracks. Each song represents a different facet of the journey from feeling to sound.
-                    </p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 70%"></div>
-                    </div>
-                    <div class="project-meta">
-                        <span>Multiple tracks being refined</span>
-                        <button class="play-button">▶</button>
-                    </div>
                 </div>
             </div>
         </div>
-
+    </section>
 
     <section class="experiments">
         <div class="container">
@@ -75,54 +65,31 @@
                 Sound Experiments
             </h2>
             <div class="experiments-grid">
-
-                    <div class="project-meta">
-                        <span>3 days ago</span>
-                        <button class="play-button">▶</button>
-                    </div>
-                </div>
-
-                <div class="experiment-card">
-                    <div class="experiment-header">
-                        <span class="experiment-type">🎸 Recording</span>
-                        <h4>Guitar Vibration Study</h4>
-                    </div>
-                    <div class="waveform"></div>
-                    <p>Capturing that magical feeling when the acoustic guitar vibrates against your body. Trying to translate that physical connection into recorded sound.</p>
-                    <div class="project-meta">
-                        <span>1 week ago</span>
-                        <button class="play-button">▶</button>
-                    </div>
-                </div>
-
-                <div class="experiment-card">
-                    <div class="experiment-header">
-                        <span class="experiment-type">🎤 Vocal</span>
-                        <h4>Freestyle Vocal Flow</h4>
-                    </div>
-                    <div class="waveform"></div>
-                    <p>Pure stream of consciousness vocals over a simple chord progression. No plan, just feeling and whatever wants to come out.</p>
-                    <div class="project-meta">
-                        <span>5 days ago</span>
-                        <button class="play-button">▶</button>
-                    </div>
-                </div>
             </div>
+        </div>
+    </section>
+
+    <section class="journal">
+        <div class="container">
+            <h2 class="section-title">
+                <div class="section-icon">✍️</div>
+                Creative Journal
+            </h2>
+            <div id="creative-journal-entries" class="journal-entries"></div>
         </div>
     </section>
 
     <footer>
         <div class="container">
             <div class="social-links">
-                <a href="#" class="social-link">Spotify</a>
-                <a href="#" class="social-link">SoundCloud</a>
-                <a href="#" class="social-link">Bandcamp</a>
-                <a href="#" class="social-link">Instagram</a>
+                <a href="https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl?si=pNvmFrLvTFGIBu0KTAYlqQ" class="social-link" target="_blank">Spotify</a>
+                <a href="https://soundcloud.com/lukeusmusic" class="social-link" target="_blank">SoundCloud</a>
+                <a href="https://www.instagram.com/musiclukeus/" class="social-link" target="_blank">Instagram</a>
             </div>
             <p>&copy; 2025 Lukeus. All experiments are works in progress.</p>
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="js/main.js" type="module"></script>
 </body>
 </html>
