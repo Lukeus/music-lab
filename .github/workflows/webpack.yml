@@ -1,35 +1,35 @@
-name: Static Site - Serve Public Folder
+# name: Static Site - Serve Public Folder
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
 
-jobs:
-  preview:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+# jobs:
+#   preview:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20.x
 
-      - name: Install dependencies
-        run: npm install
+#       - name: Install dependencies
+#         run: npm install
 
-      - name: Serve public folder for CI (optional)
-        run: npx serve public --listen 5000 &
-        # Only for preview/test. For deployment, skip or use a deployment action.
+#       - name: Serve public folder for CI (optional)
+#         run: npx serve public --listen 5000 &
+#         # Only for preview/test. For deployment, skip or use a deployment action.
 
-      - name: Lint and format
-        run: |
-          npm run lint
-          npm run format
+#       - name: Lint and format
+#         run: |
+#           npm run lint
+#           npm run format
 
-      # Remove Webpack step, as you don't use it!
+#       # Remove Webpack step, as you don't use it!
 
-      # Optionally, add deployment step if not using GitHub Pages automatic deploy
-      # See https://github.com/peaceiris/actions-gh-pages for deploying manually
+#       # Optionally, add deployment step if not using GitHub Pages automatic deploy
+#       # See https://github.com/peaceiris/actions-gh-pages for deploying manually
