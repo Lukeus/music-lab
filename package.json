@@ -2,7 +2,7 @@
   "name": "lukeus-music-lab",
   "version": "1.0.0",
   "description": "Lukeus Music Lab - Experimental Sound & Creative Process website",
-  "main": "index.html",
+  "main": "~/public/index.html",
   "scripts": {
     "start": "npx serve .",
     "dev": "npx live-server --port=3000 --open=/",

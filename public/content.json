@@ -1,0 +1,87 @@
+{
+  "pageTitle": "Lukeus Music Lab | Experimental Sound & Creative Process",
+  "statusMessage": "",
+  "logoText": "Music Lab",
+  "welcomeGate": {
+    "heading": "Welcome to the Lab",
+    "message": "This is a space for creativity, experimentation, and the love of music. Here, ideas don’t need permission—they just flow. Step inside, take a listen, and maybe find some inspiration along the way. Enjoy your visit."
+  },
+  "heroSection": {
+    "heading": "Because Music Matters | Music Lab",
+    "paragraph": "Step into my creative space where feeling becomes sound and sound becomes story. From stripped-down acoustic storytelling to layered electronic experiments, this is where I capture the instant connection between emotion and vibration. Every note is a step in the process of turning dreams into reality, and you’re welcome to witness it unfold."
+  },
+  "currentProjects": [
+    {
+      "icon": "🎸",
+      "title": "Acoustic Storytelling Sessions",
+      "status": "Active",
+      "description": "Just me, my acoustic guitar, and whatever story wants to come out. 98% freestyle lyrics flowing with the feeling, leaving room for honesty and surprise. Each session captures a moment in time where sound meets emotion, and the imperfections make it real.",
+      "progress": "85%",
+      "meta": "Ongoing collection of raw, unfiltered sessions"
+    },
+    {
+      "icon": "🎛️",
+      "title": "Electronic Transformation",
+      "status": "Experimental",
+      "description": "Taking those acoustic stories and reimagining them electronically. Same emotional core, completely different energy. Building from bass lines and beats using Logic Pro and UAD plugins, layering textures until something unexpected emerges. The goal isn’t perfection—it’s discovery.",
+      "progress": "60%",
+      "meta": "5 versions in progress, each with its own energy"
+    },
+    {
+      "icon": "💿",
+      "title": "Upcoming Release Package",
+      "status": "In Progress",
+      "description": "Curating a collection that spans from soulful acoustic pieces to quirky EDM dance tracks. Each song represents a different facet of the journey from feeling to sound, tied together by the same heartbeat of exploration. This release is less about fitting into a genre and more about creating a snapshot of the process.",
+      "progress": "70%",
+      "meta": "Multiple tracks being refined for final polish"
+    }
+  ],
+  "soundExperiments": [
+    {
+      "type": "🎵 Composition",
+      "title": "Bass Line First Approach",
+      "description": "Starting with a bass line that feels right, then building chords around it. Each foundation creates a different emotional landscape, and it’s amazing how a single note can shift the whole mood. Sometimes the bassline feels like the true narrator of the track.",
+      "meta": "This week"
+    },
+    {
+      "type": "🔄 Remix",
+      "title": "Tempo Transformation Test",
+      "description": "Same song, different energy. Taking an acoustic piece and experimenting with how upbeat tempo changes the entire feeling. It’s proof that rhythm alone can reshape the personality of a track.",
+      "meta": "3 days ago"
+    },
+    {
+      "type": "🎸 Recording",
+      "title": "Guitar Vibration Study",
+      "description": "Capturing that magical feeling when the acoustic guitar vibrates against your body. Trying to translate that physical connection into recorded sound, where the resonance feels alive even through headphones.",
+      "meta": "1 week ago"
+    },
+    {
+      "type": "🎤 Vocal",
+      "title": "Freestyle Vocal Flow",
+      "description": "Pure stream of consciousness vocals over a simple chord progression. No plan, no edits—just feeling and whatever wants to come out. It’s risky, but that’s where the truth shows up.",
+      "meta": "5 days ago"
+    }
+  ],
+  "creativeJournal": [
+    {
+      "date": "January 18, 2025",
+      "title": "The Magic of Guitar Against Body",
+      "content": "There's something about the vibrations of an acoustic guitar against your body that can't be replicated. It's not just hearing the music—it's feeling it resonate through you like a second heartbeat. Today I spent time trying to capture that physical connection in my recordings. How do you translate a feeling into something others can experience through speakers? It’s not about technical accuracy, it’s about emotional accuracy."
+    },
+    {
+      "date": "January 15, 2025",
+      "title": "Dreams as Creative Battles",
+      "content": "That old technique I learned as a kid—fighting nightmares by becoming the superhero in my dreams—it applies to everything. Creative blocks, difficult emotions, life challenges. Put positive thinking and dedicated focus towards a dream, and the outcome usually favors the dreamer. Music is just another way of dreaming solutions into existence, turning fear into melody and struggle into rhythm."
+    },
+    {
+      "date": "January 10, 2025",
+      "title": "When Sound Meets Feeling",
+      "content": "There's an instant correlation between sound and being understood. When the right combination of notes hits, when the freestyle lyrics flow perfectly with the emotion—that’s when music transcends technique and becomes pure connection. 98% of my lyrics come from this place of spontaneous truth, and that’s why they feel alive even to me after the moment has passed."
+    },
+    {
+      "date": "January 5, 2025",
+      "title": "The Journey Continues",
+      "content": "From struggling with purpose to finding it in sound. From destructive patterns to creative transformation. Delancey Street taught me that it’s as important to teach as it is to learn, and that discipline creates freedom. Every song I create now carries that wisdom—the understanding that we can choose to become who we’re meant to be, and music is the way I remind myself daily."
+    }
+  ]
+}
