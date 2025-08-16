@@ -852,6 +852,10 @@ footer {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+    .welcome-gate {
+        height: 100vh;
+    }
+
     .hero-content {
         flex-direction: column;
         gap: 40px;

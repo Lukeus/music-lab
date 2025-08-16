@@ -1,4 +1,4 @@
-name: NodeJS with Webpack
+name: Static Site - Serve Public Folder
 
 on:
   push:
@@ -7,22 +7,29 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  preview:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
 
-    - name: Build
-      run: |
-        npm install
-        npx webpack
+      - name: Install dependencies
+        run: npm install
+
+      - name: Serve public folder for CI (optional)
+        run: npx serve public --listen 5000 &
+        # Only for preview/test. For deployment, skip or use a deployment action.
+
+      - name: Lint and format
+        run: |
+          npm run lint
+          npm run format
+
+      # Remove Webpack step, as you don't use it!
+
+      # Optionally, add deployment step if not using GitHub Pages automatic deploy
+      # See https://github.com/peaceiris/actions-gh-pages for deploying manually

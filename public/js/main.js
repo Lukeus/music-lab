@@ -184,7 +184,7 @@ function initializeScrollAnimations() {
     cards.forEach(card => {
         inView(card, 
             () => {
-                animate(card, { opacity: 1, transform: 'translateY(0)' }, { duration: 0.5 });
+                animate(card, { opacity: 1, transform: 'translateY(0)' }, { duration: 0.5, delay: 0.1 });
             },
             { amount: 0.2 }
         );
