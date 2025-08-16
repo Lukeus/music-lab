@@ -4,7 +4,7 @@
   "description": "Lukeus Music Lab - Experimental Sound & Creative Process website",
   "main": "~/public/index.html",
   "scripts": {
-    "start": "npx serve .",
+    "start": "npx serve public",
     "dev": "npx live-server --port=3000 --open=/",
     "build": "echo 'Static site - no build process needed'",
     "lint": "npx eslint js/ --fix",

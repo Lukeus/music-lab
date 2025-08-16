@@ -10,8 +10,12 @@ window.addEventListener('load', function() {
     }
 
     initializeWelcomeGate();
+    initializeHeaderLink();
     initializePlayButtons();
-    loadContent().then(initializeScrollAnimations);
+    loadContent().then(() => {
+        initializeScrollAnimations();
+        initializeParallax();
+    });
 });
 
 function initializeWelcomeGate() {
@@ -28,6 +32,23 @@ function initializeWelcomeGate() {
             }
             document.body.classList.remove('scroll-lock');
             sessionStorage.setItem('welcomeGateShown', 'true');
+        });
+    }
+}
+
+function initializeHeaderLink() {
+    const logoLink = document.querySelector('header .logo');
+    const welcomeGate = document.querySelector('.welcome-gate');
+
+    if (logoLink && welcomeGate) {
+        logoLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            welcomeGate.style.display = 'flex';
+            setTimeout(() => {
+                welcomeGate.style.opacity = '1';
+            }, 10);
+            document.body.classList.add('scroll-lock');
+            sessionStorage.removeItem('welcomeGateShown');
         });
     }
 }
@@ -167,5 +188,17 @@ function initializeScrollAnimations() {
             },
             { amount: 0.2 }
         );
+    });
+}
+
+function initializeParallax() {
+    const icons = document.querySelectorAll('.parallax-icon');
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        icons.forEach(icon => {
+            const speed = icon.dataset.speed;
+            const yPos = -(scrollY * speed / 10);
+            icon.style.transform = `translateY(${yPos}px)`;
+        });
     });
 }
