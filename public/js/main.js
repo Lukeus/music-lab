@@ -231,7 +231,7 @@ currentAudio.addEventListener('pause', () => {
 });
 
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     if (sessionStorage.getItem('welcomeGateShown')) {
         const welcomeGate = document.querySelector('.welcome-gate');
         if (welcomeGate) {
@@ -258,7 +258,8 @@ function initializeDrumMachine() {
 
     // Ensure AudioContext exists (reuse site context)
     if (!audioCtx) {
-        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch {} }
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch { }
+    }
 
     // Inject styles once
     if (!document.getElementById('drum-style')) {
@@ -269,9 +270,11 @@ function initializeDrumMachine() {
         .drum-head{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
         .drum-title{font-weight:700}
         .drum-ctrls{display:flex;gap:8px;align-items:center}
-        .drum-grid{display:grid;grid-template-columns:56px repeat(16, minmax(0,1fr));gap:6px;user-select:none}
+        .drum-grid{display:grid;grid-template-columns:56px repeat(16, var(--step,48px));gap:6px;user-select:none;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+        .drum-wrap{--step:min(48px,7.2vw)}
+        .drum-scroll-hint{font-size:.75rem;opacity:.6;margin-top:6px}
         .drum-label{display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:.9rem;opacity:.8}
-        .drum-step{width:100%;aspect-ratio:1/1;border:0;border-radius:6px;background:var(--surface-2,#222);cursor:pointer}
+        .drum-step{width:var(--step,48px);aspect-ratio:1/1;border:0;border-radius:6px;background:var(--surface-2,#222);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0)}
         .drum-step.on{background:var(--accent,#5ef)}
         .drum-step.playing{outline:2px solid var(--accent-secondary,#ff6)}
         .drum-foot{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
@@ -280,7 +283,11 @@ function initializeDrumMachine() {
         .drum-btn.tog{min-width:72px}
         .drum-bpm{display:flex;gap:8px;align-items:center}
         .drum-bpm input{width:160px}
-        @media (max-width:700px){.drum-grid{grid-template-columns:40px repeat(16, minmax(0,1fr));}.drum-label{font-size:.8rem}}
+        @media (max-width:700px){
+        .drum-grid{grid-template-columns:40px repeat(16, var(--step,42px));}
+        .drum-label{font-size:.8rem}
+        .drum-btn{padding:10px 12px}
+        }
         .drum-mode{display:flex;gap:6px;align-items:center;margin-right:8px}
         .drum-mode .mode[aria-pressed="true"]{outline:2px solid var(--accent-secondary,#ff6)}
         .drum-swing{display:flex;gap:8px;align-items:center;margin-left:8px}
@@ -292,7 +299,7 @@ function initializeDrumMachine() {
     const host = document.querySelector('#drum-doodle') || document.querySelector('.hero') || document.body;
     const wrap = document.createElement('section');
     wrap.className = 'drum-wrap';
-    wrap.setAttribute('aria-label','Drum Machine');
+    wrap.setAttribute('aria-label', 'Drum Machine');
     wrap.innerHTML = `
       <div class="drum-head">
         <div class="drum-title">Music Lab Doodle Drum</div>
@@ -323,6 +330,12 @@ function initializeDrumMachine() {
         <div class="right" style="opacity:.7">Only one thing plays at a time — starting this will pause any track.</div>
       </div>
     `;
+    if (window.matchMedia('(max-width: 700px)').matches){
+        const hint = document.createElement('div');
+        hint.className = 'drum-scroll-hint';
+        hint.textContent = 'Swipe sideways to see all steps →';
+        wrap.appendChild(hint);
+    }
     if (host === document.body) {
         document.body.insertBefore(wrap, document.body.firstChild);
     } else {
@@ -331,26 +344,26 @@ function initializeDrumMachine() {
 
     // Model
     const instruments = [
-        { key:'Kick', synth: hitKick },
-        { key:'Snare', synth: hitSnare },
-        { key:'Hat',   synth: hitHat },
-        { key:'Clap',  synth: hitClap }
+        { key: 'Kick', synth: hitKick },
+        { key: 'Snare', synth: hitSnare },
+        { key: 'Hat', synth: hitHat },
+        { key: 'Clap', synth: hitClap }
     ];
     const steps = 16;
-    const pattern = instruments.map(()=>Array.from({length:steps},()=>false));
+    const pattern = instruments.map(() => Array.from({ length: steps }, () => false));
 
     // UI grid
     const grid = wrap.querySelector('#drum-grid');
-    instruments.forEach((inst, r)=>{
+    instruments.forEach((inst, r) => {
         const label = document.createElement('div');
         label.className = 'drum-label';
         label.textContent = inst.key;
         grid.appendChild(label);
-        for (let c=0;c<steps;c++){
+        for (let c = 0; c < steps; c++) {
             const btn = document.createElement('button');
             btn.className = 'drum-step';
-            btn.setAttribute('aria-label', `${inst.key} step ${c+1}`);
-            btn.addEventListener('click', ()=>{
+            btn.setAttribute('aria-label', `${inst.key} step ${c + 1}`);
+            btn.addEventListener('click', () => {
                 pattern[r][c] = !pattern[r][c];
                 btn.classList.toggle('on', pattern[r][c]);
             });
@@ -370,47 +383,47 @@ function initializeDrumMachine() {
     const modeSynthBtn = wrap.querySelector('#drum-mode-synth');
     const mode808Btn = wrap.querySelector('#drum-mode-808');
 
-    const state = { playing:false, step:0, bpm:parseInt(bpmSlider.value,10)||110, swing:parseInt(swingSlider.value,10)||0, timer:null, mode:'synth', samples:null };
+    const state = { playing: false, step: 0, bpm: parseInt(bpmSlider.value, 10) || 110, swing: parseInt(swingSlider.value, 10) || 0, timer: null, mode: 'synth', samples: null };
 
-    bpmSlider.addEventListener('input', ()=>{ state.bpm = parseInt(bpmSlider.value,10); bpmVal.textContent = String(state.bpm); if (state.playing) restartLoop(); });
+    bpmSlider.addEventListener('input', () => { state.bpm = parseInt(bpmSlider.value, 10); bpmVal.textContent = String(state.bpm); if (state.playing) restartLoop(); });
 
-    swingSlider.addEventListener('input', ()=>{ state.swing = parseInt(swingSlider.value,10); swingVal.textContent = `${state.swing}%`; if (state.playing) restartLoop(); });
+    swingSlider.addEventListener('input', () => { state.swing = parseInt(swingSlider.value, 10); swingVal.textContent = `${state.swing}%`; if (state.playing) restartLoop(); });
 
-    function setMode(mode){
+    function setMode(mode) {
         state.mode = mode;
-        modeSynthBtn.setAttribute('aria-pressed', mode==='synth' ? 'true' : 'false');
-        mode808Btn.setAttribute('aria-pressed', mode==='808' ? 'true' : 'false');
+        modeSynthBtn.setAttribute('aria-pressed', mode === 'synth' ? 'true' : 'false');
+        mode808Btn.setAttribute('aria-pressed', mode === '808' ? 'true' : 'false');
     }
 
-    modeSynthBtn.addEventListener('click', ()=> setMode('synth'));
-    mode808Btn.addEventListener('click', async ()=>{
+    modeSynthBtn.addEventListener('click', () => setMode('synth'));
+    mode808Btn.addEventListener('click', async () => {
         setMode('808');
         if (!state.samples) { state.samples = await load808Samples(); }
     });
 
-    function advance(){ state.step = (state.step+1)%steps; markPlayhead(state.step); }
+    function advance() { state.step = (state.step + 1) % steps; markPlayhead(state.step); }
 
-    function markPlayhead(s){
+    function markPlayhead(s) {
         const cells = grid.querySelectorAll('.drum-step');
-        cells.forEach((el,i)=>{
+        cells.forEach((el, i) => {
             const col = i % steps; // each row has 16 cells
-            el.classList.toggle('playing', col===s);
+            el.classList.toggle('playing', col === s);
         });
     }
 
-    function baseStepMs(){ return (60/state.bpm/4)*1000; }
+    function baseStepMs() { return (60 / state.bpm / 4) * 1000; }
 
-    function nextDelayFor(step){
+    function nextDelayFor(step) {
         // Swing applies to off-beats (odd steps in 0-based indexing)
-        const swingAmt = (state.swing/100)*0.5; // max shift 50% of 16th
+        const swingAmt = (state.swing / 100) * 0.5; // max shift 50% of 16th
         const base = baseStepMs();
-        if (state.swing<=0) return base;
-        return (step % 2 === 1) ? base*(1 + swingAmt) : base*(1 - swingAmt);
+        if (state.swing <= 0) return base;
+        return (step % 2 === 1) ? base * (1 + swingAmt) : base * (1 - swingAmt);
     }
 
-    function loop(){
+    function loop() {
         // schedule hits for this step
-        instruments.forEach((inst, r)=>{
+        instruments.forEach((inst, r) => {
             if (pattern[r][state.step]) playHit(inst);
         });
         advance();
@@ -418,48 +431,56 @@ function initializeDrumMachine() {
         state.timer = setTimeout(loop, delay);
     }
 
-    function restartLoop(){
-        if (state.timer){ clearTimeout(state.timer); state.timer=null; }
-        if (state.playing){ state.timer = setTimeout(loop, nextDelayFor(state.step)); }
+    function restartLoop() {
+        if (state.timer) { clearTimeout(state.timer); state.timer = null; }
+        if (state.playing && wrap.style.display !== 'none') {
+            state.timer = setTimeout(loop, nextDelayFor(state.step));
+        }
     }
 
-    function start(){
-        try{ if (currentAudio && !currentAudio.paused) currentAudio.pause(); }catch{}
-        if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume().catch(()=>{}); }
+    function start() {
+        try { if (currentAudio && !currentAudio.paused) currentAudio.pause(); } catch { }
+        if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume().catch(() => { }); }
         if (state.timer) return;
         state.playing = true;
+        if (wrap.style.display === 'none') {
+            state.playing = false;
+            playBtn.textContent = '▶ Play';
+            playBtn.setAttribute('aria-pressed', 'false');
+            return;
+        }
         playBtn.textContent = '⏸ Pause';
-        playBtn.setAttribute('aria-pressed','true');
+        playBtn.setAttribute('aria-pressed', 'true');
         markPlayhead(state.step);
         state.timer = setTimeout(loop, nextDelayFor(state.step));
     }
 
-    function stop(){
+    function stop() {
         state.playing = false;
         playBtn.textContent = '▶ Play';
-        playBtn.setAttribute('aria-pressed','false');
-        if (state.timer){ clearTimeout(state.timer); state.timer=null; }
+        playBtn.setAttribute('aria-pressed', 'false');
+        if (state.timer) { clearTimeout(state.timer); state.timer = null; }
     }
 
-    playBtn.addEventListener('click', ()=>{ state.playing ? stop() : start(); });
+    playBtn.addEventListener('click', () => { state.playing ? stop() : start(); });
 
-    clearBtn.addEventListener('click', ()=>{
-        pattern.forEach(row=>row.fill(false));
-        grid.querySelectorAll('.drum-step').forEach(el=>el.classList.remove('on'));
+    clearBtn.addEventListener('click', () => {
+        pattern.forEach(row => row.fill(false));
+        grid.querySelectorAll('.drum-step').forEach(el => el.classList.remove('on'));
     });
 
-    randBtn.addEventListener('click', ()=>{
-        pattern.forEach((row,r)=>{
-            row.forEach((_,c)=>{
-                const on = Math.random() < (r===2?0.3:0.2); // slightly more hats
-                row[c]=on;
+    randBtn.addEventListener('click', () => {
+        pattern.forEach((row, r) => {
+            row.forEach((_, c) => {
+                const on = Math.random() < (r === 2 ? 0.3 : 0.2); // slightly more hats
+                row[c] = on;
             });
         });
         // reflect UI
         const cells = grid.querySelectorAll('.drum-step');
-        cells.forEach((el,i)=>{
-            const r = Math.floor(i/steps);
-            const c = i%steps;
+        cells.forEach((el, i) => {
+            const r = Math.floor(i / steps);
+            const c = i % steps;
             el.classList.toggle('on', pattern[r][c]);
         });
     });
@@ -467,20 +488,34 @@ function initializeDrumMachine() {
     // Hidden by default; toggled by hero avatar image
     wrap.style.display = 'none';
 
-    function findHeroAvatar(){
+    function findHeroAvatar() {
         return document.querySelector('#hero-avatar, .avatar-container img, .hero img');
     }
-    function toggleDrumVisibility(){
-        wrap.style.display = (wrap.style.display === 'none') ? 'block' : 'none';
+    function toggleDrumVisibility() {
+        const willShow = (wrap.style.display === 'none');
+        if (!willShow && state.playing) { stop(); }
+        wrap.style.display = willShow ? 'block' : 'none';
     }
     const heroImg = findHeroAvatar();
-    if (heroImg && !heroImg.__drumBound){
+    if (heroImg && !heroImg.__drumBound) {
         heroImg.__drumBound = true;
         heroImg.style.cursor = 'pointer';
         heroImg.addEventListener('click', toggleDrumVisibility);
+        // Stop playing if doodle not visible on screen or tab hidden
+        try {
+            const obs = new IntersectionObserver((entries) => {
+                const e = entries[0];
+                if (!e || !e.isIntersecting) { if (state.playing) stop(); }
+            }, { threshold: 0.1 });
+            obs.observe(wrap);
+        } catch { /* no IO support */ }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && state.playing) stop();
+        });
     }
 
-    function playHit(inst){
+    function playHit(inst) {
         if (state.mode === '808' && state.samples && state.samples[inst.key]) {
             const src = audioCtx.createBufferSource();
             src.buffer = state.samples[inst.key];
@@ -495,74 +530,74 @@ function initializeDrumMachine() {
     }
 
     // --- Embedded 808 mini-kit (generated on the fly, zero assets) ---
-    function createBufferFromFn(seconds, renderFn){
+    function createBufferFromFn(seconds, renderFn) {
         const sr = audioCtx.sampleRate;
         const len = Math.max(1, Math.floor(seconds * sr));
         const buf = audioCtx.createBuffer(1, len, sr);
         const ch = buf.getChannelData(0);
-        for (let i=0; i<len; i++) ch[i] = renderFn(i, sr, len);
+        for (let i = 0; i < len; i++) ch[i] = renderFn(i, sr, len);
         return buf;
     }
 
-    function mkKick808(){
+    function mkKick808() {
         // 808-style sine drop with exponential amp decay ~160Hz -> 50Hz
         const dur = 0.35;
         const f0 = 160, f1 = 50;
         const tau = 0.18; // amplitude decay seconds
-        return createBufferFromFn(dur, (i, sr)=>{
-            const t = i/sr;
-            const f = f0 * Math.pow(f1/f0, t/dur);
-            const env = Math.exp(-t/tau);
-            return Math.sin(2*Math.PI*f*t) * env * 0.95;
+        return createBufferFromFn(dur, (i, sr) => {
+            const t = i / sr;
+            const f = f0 * Math.pow(f1 / f0, t / dur);
+            const env = Math.exp(-t / tau);
+            return Math.sin(2 * Math.PI * f * t) * env * 0.95;
         });
     }
 
-    function mkSnare808(){
+    function mkSnare808() {
         // noise + short body tone, fast decay
         const dur = 0.22;
         const toneF = 180;
         const tauN = 0.12, tauT = 0.08;
-        return createBufferFromFn(dur, (i, sr)=>{
-            const t = i/sr;
-            const n = (Math.random()*2-1) * Math.exp(-t/tauN);
-            const tone = Math.sin(2*Math.PI*toneF*t) * Math.exp(-t/tauT) * 0.35;
-            return (n*0.7 + tone) * 0.9;
+        return createBufferFromFn(dur, (i, sr) => {
+            const t = i / sr;
+            const n = (Math.random() * 2 - 1) * Math.exp(-t / tauN);
+            const tone = Math.sin(2 * Math.PI * toneF * t) * Math.exp(-t / tauT) * 0.35;
+            return (n * 0.7 + tone) * 0.9;
         });
     }
 
-    function mkHat808(){
+    function mkHat808() {
         // short bright noise burst
         const dur = 0.07;
         const tau = 0.03;
-        return createBufferFromFn(dur, (i, sr)=>{
-            const t = i/sr;
+        return createBufferFromFn(dur, (i, sr) => {
+            const t = i / sr;
             // emphasis of highs via simple HP-ish curve
-            const n = (Math.random()*2-1);
-            const hp = n - 0.6*(Math.random()*2-1);
-            const env = Math.exp(-t/tau);
+            const n = (Math.random() * 2 - 1);
+            const hp = n - 0.6 * (Math.random() * 2 - 1);
+            const env = Math.exp(-t / tau);
             return hp * env * 0.5;
         });
     }
 
-    function mkClap808(){
+    function mkClap808() {
         // three quick noise bursts approximating an 808 clap
         const dur = 0.18;
         const taps = [0, 0.013, 0.026];
         const tau = 0.06;
-        return createBufferFromFn(dur, (i, sr, len)=>{
-            const t = i/sr;
+        return createBufferFromFn(dur, (i, sr, len) => {
+            const t = i / sr;
             let v = 0;
-            for (const o of taps){
+            for (const o of taps) {
                 const tt = Math.max(0, t - o);
-                const env = Math.exp(-tt/tau);
-                const n = (Math.random()*2-1);
+                const env = Math.exp(-tt / tau);
+                const n = (Math.random() * 2 - 1);
                 v += n * env;
             }
-            return (v/ taps.length) * 0.6;
+            return (v / taps.length) * 0.6;
         });
     }
 
-    function buildEmbedded808(){
+    function buildEmbedded808() {
         return {
             'Kick': mkKick808(),
             'Snare': mkSnare808(),
@@ -571,7 +606,7 @@ function initializeDrumMachine() {
         };
     }
 
-    async function load808Samples(){
+    async function load808Samples() {
         if (!audioCtx) return null;
 
         // If no explicit base path is provided, default to embedded kit to avoid 404s
@@ -586,30 +621,30 @@ function initializeDrumMachine() {
             console.info('[Drum]', 'Trying external 808 samples from', base, '(set window.DRUM_SAMPLE_BASE = "embedded" to force offline kit)');
             load808Samples._logged = true;
         }
-        const names = { 'Kick':'kick','Snare':'snare','Hat':'hihat','Clap':'clap' };
+        const names = { 'Kick': 'kick', 'Snare': 'snare', 'Hat': 'hihat', 'Clap': 'clap' };
         const tryExt = ['.wav', '.mp3', '.ogg'];
 
-        async function fetchDecodeOne(stem){
-            for (const ext of tryExt){
+        async function fetchDecodeOne(stem) {
+            for (const ext of tryExt) {
                 const url = base + stem + ext;
                 try {
                     const res = await fetch(url, { cache: 'force-cache' });
                     if (!res.ok) { continue; }
                     const arr = await res.arrayBuffer();
                     return await audioCtx.decodeAudioData(arr);
-                } catch(e){ /* try next */ }
+                } catch (e) { /* try next */ }
             }
             return null;
         }
 
         const out = {};
-        await Promise.all(Object.entries(names).map(async ([label, stem])=>{
+        await Promise.all(Object.entries(names).map(async ([label, stem]) => {
             out[label] = await fetchDecodeOne(stem);
         }));
 
         // Fill any missing with embedded kit
         const embedded = buildEmbedded808();
-        for (const k of Object.keys(names)){
+        for (const k of Object.keys(names)) {
             if (!out[k]) out[k] = embedded[k];
         }
         return out;
@@ -621,59 +656,59 @@ function initializeDrumMachine() {
 }
 
 // ——— Simple drum synths (no samples) ———
-function hitKick(){
+function hitKick() {
     if (!audioCtx) return;
     const t = audioCtx.currentTime;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = 'sine';
     osc.frequency.setValueAtTime(150, t);
-    osc.frequency.exponentialRampToValueAtTime(50, t+0.12);
-    gain.gain.setValueAtTime(0.9,t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t+0.15);
+    osc.frequency.exponentialRampToValueAtTime(50, t + 0.12);
+    gain.gain.setValueAtTime(0.9, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
     osc.connect(gain).connect(audioCtx.destination);
-    osc.start(t); osc.stop(t+0.16);
+    osc.start(t); osc.stop(t + 0.16);
 }
-function hitSnare(){
+function hitSnare() {
     if (!audioCtx) return;
     const t = audioCtx.currentTime;
     const noise = audioCtx.createBufferSource();
-    const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate*0.2, audioCtx.sampleRate);
+    const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.2, audioCtx.sampleRate);
     const data = buffer.getChannelData(0);
-    for(let i=0;i<data.length;i++){ data[i] = (Math.random()*2-1) * (1 - i/data.length); }
+    for (let i = 0; i < data.length; i++) { data[i] = (Math.random() * 2 - 1) * (1 - i / data.length); }
     noise.buffer = buffer;
-    const bp = audioCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1800; bp.Q.value=0.5;
-    const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.7,t); gain.gain.exponentialRampToValueAtTime(0.001,t+0.18);
+    const bp = audioCtx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1800; bp.Q.value = 0.5;
+    const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.7, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
     noise.connect(bp).connect(gain).connect(audioCtx.destination);
-    noise.start(t); noise.stop(t+0.2);
+    noise.start(t); noise.stop(t + 0.2);
 }
-function hitHat(){
+function hitHat() {
     if (!audioCtx) return;
     const t = audioCtx.currentTime;
     const noise = audioCtx.createBufferSource();
-    const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate*0.05, audioCtx.sampleRate);
+    const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.05, audioCtx.sampleRate);
     const data = buffer.getChannelData(0);
-    for(let i=0;i<data.length;i++){ data[i] = Math.random()*2-1; }
+    for (let i = 0; i < data.length; i++) { data[i] = Math.random() * 2 - 1; }
     noise.buffer = buffer;
-    const hp = audioCtx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=6000; hp.Q.value=0.7;
-    const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.4,t); gain.gain.exponentialRampToValueAtTime(0.001,t+0.05);
+    const hp = audioCtx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 6000; hp.Q.value = 0.7;
+    const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.4, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
     noise.connect(hp).connect(gain).connect(audioCtx.destination);
-    noise.start(t); noise.stop(t+0.06);
+    noise.start(t); noise.stop(t + 0.06);
 }
-function hitClap(){
+function hitClap() {
     if (!audioCtx) return;
     const t = audioCtx.currentTime;
     // cluster of short noise bursts
-    [0,0.012,0.025].forEach(offset=>{
+    [0, 0.012, 0.025].forEach(offset => {
         const n = audioCtx.createBufferSource();
-        const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate*0.06, audioCtx.sampleRate);
+        const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.06, audioCtx.sampleRate);
         const data = buffer.getChannelData(0);
-        for(let i=0;i<data.length;i++){ data[i] = Math.random()*2-1; }
+        for (let i = 0; i < data.length; i++) { data[i] = Math.random() * 2 - 1; }
         n.buffer = buffer;
-        const hp = audioCtx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1200; hp.Q.value=0.8;
-        const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.5,t+offset); gain.gain.exponentialRampToValueAtTime(0.001, t+offset+0.08);
+        const hp = audioCtx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1200; hp.Q.value = 0.8;
+        const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.5, t + offset); gain.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.08);
         n.connect(hp).connect(gain).connect(audioCtx.destination);
-        n.start(t+offset); n.stop(t+offset+0.09);
+        n.start(t + offset); n.stop(t + offset + 0.09);
     });
 }
 // === End Drum Machine ===
@@ -763,7 +798,7 @@ function initializePlayButtons() {
             button.disabled = false; // keep functional for future features
         }
 
-        button.addEventListener('click', async function() {
+        button.addEventListener('click', async function () {
             const src = this.getAttribute('data-audio');
 
             // If no audio bound, fall back to old visual toggle only
