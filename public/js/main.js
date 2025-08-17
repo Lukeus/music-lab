@@ -220,6 +220,11 @@ currentAudio.addEventListener('play', () => {
     const { play } = getMiniElements();
     if (play) { play.textContent = '⏸'; play.setAttribute('aria-pressed', 'true'); play.setAttribute('aria-label', 'Pause audio'); }
 });
+currentAudio.addEventListener('play', () => {
+    if (typeof stopDrumMachine === 'function') {
+        stopDrumMachine();
+    }
+});
 currentAudio.addEventListener('pause', () => {
     const { play } = getMiniElements();
     if (play) { play.textContent = '▶'; play.setAttribute('aria-pressed', 'false'); play.setAttribute('aria-label', 'Play audio'); }
@@ -241,8 +246,437 @@ window.addEventListener('load', function() {
     loadContent().then(() => {
         initializeScrollAnimations();
         initializeParallax();
+        initializeDrumMachine();
     });
 });
+// === Simple Doodle Drum Machine (self-contained) ===
+let drumMachine = null;
+
+function initializeDrumMachine() {
+    // Avoid double init
+    if (drumMachine) return;
+
+    // Ensure AudioContext exists (reuse site context)
+    if (!audioCtx) {
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch {} }
+
+    // Inject styles once
+    if (!document.getElementById('drum-style')) {
+        const style = document.createElement('style');
+        style.id = 'drum-style';
+        style.textContent = `
+        .drum-wrap{position:relative;margin:24px auto;max-width:960px;padding:16px;border-radius:12px;background:var(--card-bg,rgba(255,255,255,.06));backdrop-filter:saturate(1.2) blur(6px);box-shadow:0 6px 24px rgba(0,0,0,.12)}
+        .drum-head{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
+        .drum-title{font-weight:700}
+        .drum-ctrls{display:flex;gap:8px;align-items:center}
+        .drum-grid{display:grid;grid-template-columns:56px repeat(16, minmax(0,1fr));gap:6px;user-select:none}
+        .drum-label{display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:.9rem;opacity:.8}
+        .drum-step{width:100%;aspect-ratio:1/1;border:0;border-radius:6px;background:var(--surface-2,#222);cursor:pointer}
+        .drum-step.on{background:var(--accent,#5ef)}
+        .drum-step.playing{outline:2px solid var(--accent-secondary,#ff6)}
+        .drum-foot{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
+        .drum-foot .left, .drum-foot .right{display:flex;gap:8px;align-items:center}
+        .drum-btn{padding:8px 12px;border:0;border-radius:8px;background:var(--accent,#5ef);color:#000;font-weight:600;cursor:pointer}
+        .drum-btn.tog{min-width:72px}
+        .drum-bpm{display:flex;gap:8px;align-items:center}
+        .drum-bpm input{width:160px}
+        @media (max-width:700px){.drum-grid{grid-template-columns:40px repeat(16, minmax(0,1fr));}.drum-label{font-size:.8rem}}
+        .drum-mode{display:flex;gap:6px;align-items:center;margin-right:8px}
+        .drum-mode .mode[aria-pressed="true"]{outline:2px solid var(--accent-secondary,#ff6)}
+        .drum-swing{display:flex;gap:8px;align-items:center;margin-left:8px}
+        `;
+        document.head.appendChild(style);
+    }
+
+    // Build container near top of page
+    const host = document.querySelector('#drum-doodle') || document.querySelector('.hero') || document.body;
+    const wrap = document.createElement('section');
+    wrap.className = 'drum-wrap';
+    wrap.setAttribute('aria-label','Drum Machine');
+    wrap.innerHTML = `
+      <div class="drum-head">
+        <div class="drum-title">Music Lab Doodle Drum</div>
+        <div class="drum-ctrls">
+          <div class="drum-mode" role="group" aria-label="Sound Mode">
+            <button class="drum-btn mode" id="drum-mode-synth" aria-pressed="true">Synth</button>
+            <button class="drum-btn mode" id="drum-mode-808" aria-pressed="false">808</button>
+          </div>
+          <button class="drum-btn tog" id="drum-play" aria-pressed="false">▶ Play</button>
+          <div class="drum-bpm">
+            <label for="drum-bpm" style="opacity:.8">BPM</label>
+            <input id="drum-bpm" type="range" min="60" max="180" value="110"/>
+            <span id="drum-bpm-val">110</span>
+          </div>
+          <div class="drum-swing">
+            <label for="drum-swing" style="opacity:.8">Swing</label>
+            <input id="drum-swing" type="range" min="0" max="60" value="0"/>
+            <span id="drum-swing-val">0%</span>
+          </div>
+        </div>
+      </div>
+      <div class="drum-grid" id="drum-grid"></div>
+      <div class="drum-foot">
+        <div class="left">
+          <button class="drum-btn" id="drum-clear">Clear</button>
+          <button class="drum-btn" id="drum-rand">Randomize</button>
+        </div>
+        <div class="right" style="opacity:.7">Only one thing plays at a time — starting this will pause any track.</div>
+      </div>
+    `;
+    if (host === document.body) {
+        document.body.insertBefore(wrap, document.body.firstChild);
+    } else {
+        host.parentNode.insertBefore(wrap, host.nextSibling);
+    }
+
+    // Model
+    const instruments = [
+        { key:'Kick', synth: hitKick },
+        { key:'Snare', synth: hitSnare },
+        { key:'Hat',   synth: hitHat },
+        { key:'Clap',  synth: hitClap }
+    ];
+    const steps = 16;
+    const pattern = instruments.map(()=>Array.from({length:steps},()=>false));
+
+    // UI grid
+    const grid = wrap.querySelector('#drum-grid');
+    instruments.forEach((inst, r)=>{
+        const label = document.createElement('div');
+        label.className = 'drum-label';
+        label.textContent = inst.key;
+        grid.appendChild(label);
+        for (let c=0;c<steps;c++){
+            const btn = document.createElement('button');
+            btn.className = 'drum-step';
+            btn.setAttribute('aria-label', `${inst.key} step ${c+1}`);
+            btn.addEventListener('click', ()=>{
+                pattern[r][c] = !pattern[r][c];
+                btn.classList.toggle('on', pattern[r][c]);
+            });
+            grid.appendChild(btn);
+        }
+    });
+
+    // Controls
+    const playBtn = wrap.querySelector('#drum-play');
+    const bpmSlider = wrap.querySelector('#drum-bpm');
+    const bpmVal = wrap.querySelector('#drum-bpm-val');
+    const clearBtn = wrap.querySelector('#drum-clear');
+    const randBtn = wrap.querySelector('#drum-rand');
+
+    const swingSlider = wrap.querySelector('#drum-swing');
+    const swingVal = wrap.querySelector('#drum-swing-val');
+    const modeSynthBtn = wrap.querySelector('#drum-mode-synth');
+    const mode808Btn = wrap.querySelector('#drum-mode-808');
+
+    const state = { playing:false, step:0, bpm:parseInt(bpmSlider.value,10)||110, swing:parseInt(swingSlider.value,10)||0, timer:null, mode:'synth', samples:null };
+
+    bpmSlider.addEventListener('input', ()=>{ state.bpm = parseInt(bpmSlider.value,10); bpmVal.textContent = String(state.bpm); if (state.playing) restartLoop(); });
+
+    swingSlider.addEventListener('input', ()=>{ state.swing = parseInt(swingSlider.value,10); swingVal.textContent = `${state.swing}%`; if (state.playing) restartLoop(); });
+
+    function setMode(mode){
+        state.mode = mode;
+        modeSynthBtn.setAttribute('aria-pressed', mode==='synth' ? 'true' : 'false');
+        mode808Btn.setAttribute('aria-pressed', mode==='808' ? 'true' : 'false');
+    }
+
+    modeSynthBtn.addEventListener('click', ()=> setMode('synth'));
+    mode808Btn.addEventListener('click', async ()=>{
+        setMode('808');
+        if (!state.samples) { state.samples = await load808Samples(); }
+    });
+
+    function advance(){ state.step = (state.step+1)%steps; markPlayhead(state.step); }
+
+    function markPlayhead(s){
+        const cells = grid.querySelectorAll('.drum-step');
+        cells.forEach((el,i)=>{
+            const col = i % steps; // each row has 16 cells
+            el.classList.toggle('playing', col===s);
+        });
+    }
+
+    function baseStepMs(){ return (60/state.bpm/4)*1000; }
+
+    function nextDelayFor(step){
+        // Swing applies to off-beats (odd steps in 0-based indexing)
+        const swingAmt = (state.swing/100)*0.5; // max shift 50% of 16th
+        const base = baseStepMs();
+        if (state.swing<=0) return base;
+        return (step % 2 === 1) ? base*(1 + swingAmt) : base*(1 - swingAmt);
+    }
+
+    function loop(){
+        // schedule hits for this step
+        instruments.forEach((inst, r)=>{
+            if (pattern[r][state.step]) playHit(inst);
+        });
+        advance();
+        const delay = nextDelayFor(state.step);
+        state.timer = setTimeout(loop, delay);
+    }
+
+    function restartLoop(){
+        if (state.timer){ clearTimeout(state.timer); state.timer=null; }
+        if (state.playing){ state.timer = setTimeout(loop, nextDelayFor(state.step)); }
+    }
+
+    function start(){
+        try{ if (currentAudio && !currentAudio.paused) currentAudio.pause(); }catch{}
+        if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume().catch(()=>{}); }
+        if (state.timer) return;
+        state.playing = true;
+        playBtn.textContent = '⏸ Pause';
+        playBtn.setAttribute('aria-pressed','true');
+        markPlayhead(state.step);
+        state.timer = setTimeout(loop, nextDelayFor(state.step));
+    }
+
+    function stop(){
+        state.playing = false;
+        playBtn.textContent = '▶ Play';
+        playBtn.setAttribute('aria-pressed','false');
+        if (state.timer){ clearTimeout(state.timer); state.timer=null; }
+    }
+
+    playBtn.addEventListener('click', ()=>{ state.playing ? stop() : start(); });
+
+    clearBtn.addEventListener('click', ()=>{
+        pattern.forEach(row=>row.fill(false));
+        grid.querySelectorAll('.drum-step').forEach(el=>el.classList.remove('on'));
+    });
+
+    randBtn.addEventListener('click', ()=>{
+        pattern.forEach((row,r)=>{
+            row.forEach((_,c)=>{
+                const on = Math.random() < (r===2?0.3:0.2); // slightly more hats
+                row[c]=on;
+            });
+        });
+        // reflect UI
+        const cells = grid.querySelectorAll('.drum-step');
+        cells.forEach((el,i)=>{
+            const r = Math.floor(i/steps);
+            const c = i%steps;
+            el.classList.toggle('on', pattern[r][c]);
+        });
+    });
+
+    // Hidden by default; toggled by hero avatar image
+    wrap.style.display = 'none';
+
+    function findHeroAvatar(){
+        return document.querySelector('#hero-avatar, .avatar-container img, .hero img');
+    }
+    function toggleDrumVisibility(){
+        wrap.style.display = (wrap.style.display === 'none') ? 'block' : 'none';
+    }
+    const heroImg = findHeroAvatar();
+    if (heroImg && !heroImg.__drumBound){
+        heroImg.__drumBound = true;
+        heroImg.style.cursor = 'pointer';
+        heroImg.addEventListener('click', toggleDrumVisibility);
+    }
+
+    function playHit(inst){
+        if (state.mode === '808' && state.samples && state.samples[inst.key]) {
+            const src = audioCtx.createBufferSource();
+            src.buffer = state.samples[inst.key];
+            const gain = audioCtx.createGain();
+            gain.gain.value = 0.9;
+            src.connect(gain).connect(audioCtx.destination);
+            src.start();
+            return;
+        }
+        // default synth fallback
+        inst.synth();
+    }
+
+    // --- Embedded 808 mini-kit (generated on the fly, zero assets) ---
+    function createBufferFromFn(seconds, renderFn){
+        const sr = audioCtx.sampleRate;
+        const len = Math.max(1, Math.floor(seconds * sr));
+        const buf = audioCtx.createBuffer(1, len, sr);
+        const ch = buf.getChannelData(0);
+        for (let i=0; i<len; i++) ch[i] = renderFn(i, sr, len);
+        return buf;
+    }
+
+    function mkKick808(){
+        // 808-style sine drop with exponential amp decay ~160Hz -> 50Hz
+        const dur = 0.35;
+        const f0 = 160, f1 = 50;
+        const tau = 0.18; // amplitude decay seconds
+        return createBufferFromFn(dur, (i, sr)=>{
+            const t = i/sr;
+            const f = f0 * Math.pow(f1/f0, t/dur);
+            const env = Math.exp(-t/tau);
+            return Math.sin(2*Math.PI*f*t) * env * 0.95;
+        });
+    }
+
+    function mkSnare808(){
+        // noise + short body tone, fast decay
+        const dur = 0.22;
+        const toneF = 180;
+        const tauN = 0.12, tauT = 0.08;
+        return createBufferFromFn(dur, (i, sr)=>{
+            const t = i/sr;
+            const n = (Math.random()*2-1) * Math.exp(-t/tauN);
+            const tone = Math.sin(2*Math.PI*toneF*t) * Math.exp(-t/tauT) * 0.35;
+            return (n*0.7 + tone) * 0.9;
+        });
+    }
+
+    function mkHat808(){
+        // short bright noise burst
+        const dur = 0.07;
+        const tau = 0.03;
+        return createBufferFromFn(dur, (i, sr)=>{
+            const t = i/sr;
+            // emphasis of highs via simple HP-ish curve
+            const n = (Math.random()*2-1);
+            const hp = n - 0.6*(Math.random()*2-1);
+            const env = Math.exp(-t/tau);
+            return hp * env * 0.5;
+        });
+    }
+
+    function mkClap808(){
+        // three quick noise bursts approximating an 808 clap
+        const dur = 0.18;
+        const taps = [0, 0.013, 0.026];
+        const tau = 0.06;
+        return createBufferFromFn(dur, (i, sr, len)=>{
+            const t = i/sr;
+            let v = 0;
+            for (const o of taps){
+                const tt = Math.max(0, t - o);
+                const env = Math.exp(-tt/tau);
+                const n = (Math.random()*2-1);
+                v += n * env;
+            }
+            return (v/ taps.length) * 0.6;
+        });
+    }
+
+    function buildEmbedded808(){
+        return {
+            'Kick': mkKick808(),
+            'Snare': mkSnare808(),
+            'Hat': mkHat808(),
+            'Clap': mkClap808()
+        };
+    }
+
+    async function load808Samples(){
+        if (!audioCtx) return null;
+
+        // If no explicit base path is provided, default to embedded kit to avoid 404s
+        const requestedBase = window.DRUM_SAMPLE_BASE;
+        if (requestedBase === 'embedded' || requestedBase === false || typeof requestedBase === 'undefined' || requestedBase === null) {
+            return buildEmbedded808();
+        }
+
+        // Otherwise, try to load from the provided base path and fall back per-file
+        const base = String(requestedBase).replace(/\/$/, '/');
+        if (!load808Samples._logged && base) {
+            console.info('[Drum]', 'Trying external 808 samples from', base, '(set window.DRUM_SAMPLE_BASE = "embedded" to force offline kit)');
+            load808Samples._logged = true;
+        }
+        const names = { 'Kick':'kick','Snare':'snare','Hat':'hihat','Clap':'clap' };
+        const tryExt = ['.wav', '.mp3', '.ogg'];
+
+        async function fetchDecodeOne(stem){
+            for (const ext of tryExt){
+                const url = base + stem + ext;
+                try {
+                    const res = await fetch(url, { cache: 'force-cache' });
+                    if (!res.ok) { continue; }
+                    const arr = await res.arrayBuffer();
+                    return await audioCtx.decodeAudioData(arr);
+                } catch(e){ /* try next */ }
+            }
+            return null;
+        }
+
+        const out = {};
+        await Promise.all(Object.entries(names).map(async ([label, stem])=>{
+            out[label] = await fetchDecodeOne(stem);
+        }));
+
+        // Fill any missing with embedded kit
+        const embedded = buildEmbedded808();
+        for (const k of Object.keys(names)){
+            if (!out[k]) out[k] = embedded[k];
+        }
+        return out;
+    }
+
+    drumMachine = { start, stop, state };
+    // expose stoppers for integration
+    window.stopDrumMachine = stop;
+}
+
+// ——— Simple drum synths (no samples) ———
+function hitKick(){
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(150, t);
+    osc.frequency.exponentialRampToValueAtTime(50, t+0.12);
+    gain.gain.setValueAtTime(0.9,t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t+0.15);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t); osc.stop(t+0.16);
+}
+function hitSnare(){
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime;
+    const noise = audioCtx.createBufferSource();
+    const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate*0.2, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<data.length;i++){ data[i] = (Math.random()*2-1) * (1 - i/data.length); }
+    noise.buffer = buffer;
+    const bp = audioCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1800; bp.Q.value=0.5;
+    const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.7,t); gain.gain.exponentialRampToValueAtTime(0.001,t+0.18);
+    noise.connect(bp).connect(gain).connect(audioCtx.destination);
+    noise.start(t); noise.stop(t+0.2);
+}
+function hitHat(){
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime;
+    const noise = audioCtx.createBufferSource();
+    const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate*0.05, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<data.length;i++){ data[i] = Math.random()*2-1; }
+    noise.buffer = buffer;
+    const hp = audioCtx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=6000; hp.Q.value=0.7;
+    const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.4,t); gain.gain.exponentialRampToValueAtTime(0.001,t+0.05);
+    noise.connect(hp).connect(gain).connect(audioCtx.destination);
+    noise.start(t); noise.stop(t+0.06);
+}
+function hitClap(){
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime;
+    // cluster of short noise bursts
+    [0,0.012,0.025].forEach(offset=>{
+        const n = audioCtx.createBufferSource();
+        const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate*0.06, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for(let i=0;i<data.length;i++){ data[i] = Math.random()*2-1; }
+        n.buffer = buffer;
+        const hp = audioCtx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1200; hp.Q.value=0.8;
+        const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.5,t+offset); gain.gain.exponentialRampToValueAtTime(0.001, t+offset+0.08);
+        n.connect(hp).connect(gain).connect(audioCtx.destination);
+        n.start(t+offset); n.stop(t+offset+0.09);
+    });
+}
+// === End Drum Machine ===
 
 function initializeWelcomeGate() {
     const welcomeGate = document.querySelector('.welcome-gate');
