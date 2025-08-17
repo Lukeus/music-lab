@@ -9,6 +9,42 @@ let audioCtx = null;               // WebAudio context (lazy)
 let analyser = null;               // shared analyser
 let sourceNode = null;             // media element source (bound once to currentAudio)
 let activeCanvas = null;           // canvas for the currently playing card
+// Mobile audio unlock: resume WebAudio & nudge HTMLAudio once on first gesture
+(function setupMobileAudioUnlock() {
+    let unlocked = false;
+    async function unlock() {
+        if (unlocked) return;
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state !== 'running') {
+                try { await audioCtx.resume(); } catch { }
+            }
+            // Nudge WebAudio with a 1-frame silent buffer (iOS quirk)
+            try {
+                const sr = audioCtx.sampleRate || 44100;
+                const buf = audioCtx.createBuffer(1, 1, sr);
+                const src = audioCtx.createBufferSource();
+                src.buffer = buf;
+                src.connect(audioCtx.destination);
+                src.start(0);
+            } catch { }
+            // Also unlock HTMLAudio element path
+            try {
+                const p = currentAudio.play();
+                if (p && typeof p.then === 'function') await p.catch(() => { });
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            } catch { }
+            unlocked = true;
+            ['touchstart', 'pointerdown', 'mousedown', 'keydown'].forEach(ev =>
+                document.removeEventListener(ev, unlock, { passive: true })
+            );
+        } catch { }
+    }
+    ['touchstart', 'pointerdown', 'mousedown', 'keydown'].forEach(ev =>
+        document.addEventListener(ev, unlock, { passive: true })
+    );
+})();
 
 function toTime(t) {
     if (!isFinite(t) || t < 0) t = 0;
@@ -330,7 +366,7 @@ function initializeDrumMachine() {
         <div class="right" style="opacity:.7">Only one thing plays at a time — starting this will pause any track.</div>
       </div>
     `;
-    if (window.matchMedia('(max-width: 700px)').matches){
+    if (window.matchMedia('(max-width: 700px)').matches) {
         const hint = document.createElement('div');
         hint.className = 'drum-scroll-hint';
         hint.textContent = 'Swipe sideways to see all steps →';
@@ -462,7 +498,12 @@ function initializeDrumMachine() {
         if (state.timer) { clearTimeout(state.timer); state.timer = null; }
     }
 
-    playBtn.addEventListener('click', () => { state.playing ? stop() : start(); });
+    playBtn.addEventListener('click', async () => {
+        if (audioCtx && audioCtx.state === 'suspended') {
+            try { await audioCtx.resume(); } catch { }
+        }
+        state.playing ? stop() : start();
+    });
 
     clearBtn.addEventListener('click', () => {
         pattern.forEach(row => row.fill(false));
@@ -506,7 +547,7 @@ function initializeDrumMachine() {
             const obs = new IntersectionObserver((entries) => {
                 const e = entries[0];
                 if (!e || !e.isIntersecting) { if (state.playing) stop(); }
-            }, { threshold: 0.1 });
+            }, { threshold: 0.0 });
             obs.observe(wrap);
         } catch { /* no IO support */ }
 
