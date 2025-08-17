@@ -1116,6 +1116,29 @@ button:focus-visible, a:focus-visible {
 .mini-player .audio-progress { height: 6px; background: #e5e5e5; border-radius: 999px; overflow: hidden; position: relative; cursor: pointer; }
 .mini-player .audio-progress-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: var(--accent); }
 
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 9999; /* Ensure it's above the header */
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  background: #000;
+  color: #fff;
+  padding: .5rem .75rem;
+  border-radius: .25rem;
+}
 /* Respect iOS safe area */
 @supports(padding: max(0px)) {
   .mini-player { bottom: max(16px, env(safe-area-inset-bottom)); }

@@ -9,6 +9,23 @@ let audioCtx = null;               // WebAudio context (lazy)
 let analyser = null;               // shared analyser
 let sourceNode = null;             // media element source (bound once to currentAudio)
 let activeCanvas = null;           // canvas for the currently playing card
+// --- Global helpers (icons + toast) ---
+function iconPlaySVG(){
+  return '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+}
+function iconPauseSVG(){
+  return '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+}
+function showToast(msg){
+  const host = document.getElementById('toast-host');
+  if (!host) return;
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'background:#111;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);font-size:.9rem;max-width:80vw;';
+  host.appendChild(t);
+  setTimeout(()=>{ t.style.transition = 'opacity .25s'; t.style.opacity = '0'; }, 1600);
+  setTimeout(()=>{ t.remove(); }, 2000);
+}
 // Mobile audio unlock: resume WebAudio & nudge HTMLAudio once on first gesture
 (function setupMobileAudioUnlock() {
     let unlocked = false;
@@ -28,13 +45,7 @@ let activeCanvas = null;           // canvas for the currently playing card
                 src.connect(audioCtx.destination);
                 src.start(0);
             } catch { }
-            // Also unlock HTMLAudio element path
-            try {
-                const p = currentAudio.play();
-                if (p && typeof p.then === 'function') await p.catch(() => { });
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            } catch { }
+            // Intentionally avoid touching currentAudio here to prevent double-tap-to-play races on first gesture.
             unlocked = true;
             ['touchstart', 'pointerdown', 'mousedown', 'keydown'].forEach(ev =>
                 document.removeEventListener(ev, unlock, { passive: true })
@@ -90,13 +101,16 @@ function ensureMiniPlayer() {
     mp.id = 'mini-player';
     mp.className = 'mini-player';
     mp.innerHTML = `
-        <button class="mini-close" aria-label="Close player">✕</button>
-        <button class="mini-play" aria-pressed="false" aria-label="Play audio">▶</button>
-        <div class="mini-meta">
-            <div class="mini-title" id="mini-title">—</div>
-            <div class="audio-time"><span class="current">0:00</span> / <span class="duration">0:00</span></div>
-            <div class="audio-progress" role="slider" aria-label="Seek" tabindex="0"><div class="audio-progress-fill"></div></div>
-        </div>`;
+    <button class="mini-close" aria-label="Close player">✕</button>
+    <button class="mini-play" aria-pressed="false" aria-label="Play audio" title="Play">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <div class="mini-meta">
+        <div class="mini-title" id="mini-title">—</div>
+        <div class="audio-time"><span class="current">0:00</span> / <span class="duration">0:00</span></div>
+        <div class="audio-progress" role="slider" aria-label="Seek" tabindex="0"><div class="audio-progress-fill"></div></div>
+    </div>
+    <div id="toast-host" aria-live="polite" style="position:fixed;bottom:72px;left:50%;transform:translateX(-50%);"></div>`;
     document.body.appendChild(mp);
     bindMiniPlayer();
     return mp;
@@ -119,13 +133,24 @@ function getMiniElements() {
 
 function bindMiniPlayer() {
     const { play, close, progress } = getMiniElements();
+
+    // --- Play/Pause toggle
     if (play && !play.__bound) {
         play.__bound = true;
         play.addEventListener('click', async () => {
-            try { if (currentAudio.paused) { await currentAudio.play(); } else { currentAudio.pause(); } }
-            catch (e) { console.warn(e); }
+            try {
+                // If you use WebAudio, consider:
+                // if (audioCtx && audioCtx.state === 'suspended') { await audioCtx.resume(); }
+                if (currentAudio.paused) { await currentAudio.play(); }
+                else { currentAudio.pause(); }
+            } catch (e) {
+                console.warn(e);
+                if (typeof showToast === 'function') showToast('Tap to enable audio');
+            }
         });
     }
+
+    // --- Close player
     if (close && !close.__bound) {
         close.__bound = true;
         close.addEventListener('click', () => {
@@ -135,14 +160,57 @@ function bindMiniPlayer() {
             if (root) root.classList.remove('show');
         });
     }
+
+    // --- Seek (pointer + keyboard) with slider semantics
     if (progress && !progress.__bound) {
         progress.__bound = true;
-        progress.addEventListener('click', (e) => {
+
+        // Give it basic slider semantics if not already present
+        if (!progress.hasAttribute('role')) progress.setAttribute('role', 'slider');
+        progress.setAttribute('aria-valuemin', '0');
+        progress.setAttribute('aria-valuemax', '100');
+        progress.setAttribute('tabindex', '0');
+
+        function seekFromClientX(clientX) {
             const rect = progress.getBoundingClientRect();
-            const x = Math.min(Math.max(0, e.clientX - rect.left), rect.width);
-            const ratio = x / rect.width;
+            const x = Math.min(Math.max(0, clientX - rect.left), rect.width);
+            const ratio = rect.width ? x / rect.width : 0;
             if (isFinite(currentAudio.duration)) {
                 currentAudio.currentTime = ratio * currentAudio.duration;
+                progress.setAttribute('aria-valuenow', String(Math.round(ratio * 100)));
+            }
+        }
+
+        // Pointer (mouse/pen/touch)
+        progress.addEventListener('pointerdown', e => {
+            progress.setPointerCapture?.(e.pointerId);
+            seekFromClientX(e.clientX);
+        });
+        progress.addEventListener('pointermove', e => {
+            if (e.buttons) seekFromClientX(e.clientX);
+        });
+
+        // Fallback click (still fine to keep)
+        progress.addEventListener('click', e => seekFromClientX(e.clientX));
+
+        // Keyboard (Left/Right/Home/End)
+        progress.addEventListener('keydown', e => {
+            if (!isFinite(currentAudio.duration)) return;
+            const step = 5; // seconds
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                const delta = e.key === 'ArrowLeft' ? -step : step;
+                currentAudio.currentTime = Math.max(0, Math.min(currentAudio.duration, currentAudio.currentTime + delta));
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                currentAudio.currentTime = 0;
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                currentAudio.currentTime = currentAudio.duration;
+            }
+            if (isFinite(currentAudio.duration)) {
+                const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
+                progress.setAttribute('aria-valuenow', String(Math.round(pct)));
             }
         });
     }
@@ -241,7 +309,9 @@ currentAudio.addEventListener('timeupdate', () => {
     if (mini.progressFill && isFinite(currentAudio.duration) && currentAudio.duration > 0) {
         const pct2 = (currentAudio.currentTime / currentAudio.duration) * 100;
         mini.progressFill.style.width = `${pct2}%`;
+        mini.progress.setAttribute('aria-valuenow', String(Math.round(pct2)));
     }
+    
 });
 
 currentAudio.addEventListener('loadedmetadata', () => {
@@ -253,8 +323,16 @@ currentAudio.addEventListener('loadedmetadata', () => {
 });
 
 currentAudio.addEventListener('play', () => {
+    if (currentButton) setButtonState(currentButton, true);
     const { play } = getMiniElements();
-    if (play) { play.textContent = '⏸'; play.setAttribute('aria-pressed', 'true'); play.setAttribute('aria-label', 'Pause audio'); }
+    // in 'play' listener
+    if (play) { play.innerHTML = iconPauseSVG(); play.setAttribute('aria-pressed', 'true'); play.setAttribute('aria-label', 'Pause audio'); }
+});
+currentAudio.addEventListener('playing', () => {
+    // When playback is confirmed (after decoding/first frame), force UI sync
+    if (currentButton) setButtonState(currentButton, true);
+    const { play } = getMiniElements();
+    if (play) { play.innerHTML = iconPauseSVG(); play.setAttribute('aria-pressed', 'true'); play.setAttribute('aria-label', 'Pause audio'); }
 });
 currentAudio.addEventListener('play', () => {
     if (typeof stopDrumMachine === 'function') {
@@ -263,7 +341,8 @@ currentAudio.addEventListener('play', () => {
 });
 currentAudio.addEventListener('pause', () => {
     const { play } = getMiniElements();
-    if (play) { play.textContent = '▶'; play.setAttribute('aria-pressed', 'false'); play.setAttribute('aria-label', 'Play audio'); }
+    // in 'pause' listener
+    if (play) { play.innerHTML = iconPlaySVG(); play.setAttribute('aria-pressed', 'false'); play.setAttribute('aria-label', 'Play audio'); }
 });
 
 
@@ -305,28 +384,50 @@ function initializeDrumMachine() {
         .drum-wrap{position:relative;margin:24px auto;max-width:960px;padding:16px;border-radius:12px;background:var(--card-bg,rgba(255,255,255,.06));backdrop-filter:saturate(1.2) blur(6px);box-shadow:0 6px 24px rgba(0,0,0,.12)}
         .drum-head{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
         .drum-title{font-weight:700}
-        .drum-ctrls{display:flex;gap:8px;align-items:center}
-        .drum-grid{display:grid;grid-template-columns:56px repeat(16, var(--step,48px));gap:6px;user-select:none;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+        .drum-ctrls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+        .drum-grid{display:grid;grid-template-columns:72px repeat(16, var(--step,48px));gap:8px;user-select:none;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding:6px 8px 6px 10px;box-sizing:border-box}
         .drum-wrap{--step:min(48px,7.2vw)}
         .drum-scroll-hint{font-size:.75rem;opacity:.6;margin-top:6px}
-        .drum-label{display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:.9rem;opacity:.8}
-        .drum-step{width:var(--step,48px);aspect-ratio:1/1;border:0;border-radius:6px;background:var(--surface-2,#222);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0)}
-        .drum-step.on{background:var(--accent,#5ef)}
-        .drum-step.playing{outline:2px solid var(--accent-secondary,#ff6)}
+        .drum-label{position:sticky;left:0;z-index:2;display:flex;align-items:center;justify-content:flex-end;padding:0 10px 0 12px;min-width:72px;box-sizing:border-box;font-size:.9rem;opacity:.9;background:var(--card-bg,rgba(20,20,20,.5));backdrop-filter:saturate(1.1) blur(2px);overflow:visible}
+        .drum-step{width:var(--step,48px);aspect-ratio:1/1;border:1px solid rgba(255,255,255,.12);box-sizing:border-box;border-radius:6px;background:var(--surface-2,#222);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);transition:transform .06s ease}
+        .drum-step:active{transform:scale(.96)}
+        .drum-step:focus-visible{outline:2px solid var(--accent-secondary,#ff6);outline-offset:2px}
+        .drum-step.on{background:var(--accent,#5ef);border-color:rgba(255,255,255,.22)}
+        .drum-step.playing{box-shadow:inset 0 0 0 2px var(--accent-secondary,#ff6)}
         .drum-foot{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
         .drum-foot .left, .drum-foot .right{display:flex;gap:8px;align-items:center}
-        .drum-btn{padding:8px 12px;border:0;border-radius:8px;background:var(--accent,#5ef);color:#000;font-weight:600;cursor:pointer}
-        .drum-btn.tog{min-width:72px}
-        .drum-bpm{display:flex;gap:8px;align-items:center}
-        .drum-bpm input{width:160px}
+        .drum-wrap{contain:layout paint}
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,1px,1px);white-space:nowrap;border:0}
+        .drum-label-btn{display:flex;align-items:center;justify-content:flex-end;gap:6px}
+        .drum-micro{font-size:.75rem;opacity:.75;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:2px 6px;cursor:pointer}
+        .drum-btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border:0;border-radius:8px;background:var(--accent,#5ef);color:#000;font-weight:600;cursor:pointer;white-space:nowrap}
+        .drum-btn.tog{width:120px}
+        /* Show only text+icon on desktop (hide icon by default) */
+        .drum-btn.tog svg{display:none}
+        .drum-bpm{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;min-width:260px;flex:1 1 auto}
+        .drum-swing{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;min-width:220px;flex:1 1 auto;margin-left:8px}
+        .drum-bpm input{width:100%}
+        .drum-swing input{width:100%}
+        input[type="range"]{appearance:none;-webkit-appearance:none;height:28px;background:transparent}
+        input[type="range"]::-webkit-slider-runnable-track{height:6px;border-radius:4px;background:rgba(255,255,255,.25)}
+        input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:var(--accent,#5ef);border:0;margin-top:-9px;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+        input[type="range"]::-moz-range-track{height:6px;border-radius:4px;background:rgba(255,255,255,.25)}
+        input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--accent,#5ef);border:0;box-shadow:0 1px 3px rgba(0,0,0,.3)}
         @media (max-width:700px){
-        .drum-grid{grid-template-columns:40px repeat(16, var(--step,42px));}
-        .drum-label{font-size:.8rem}
+        .drum-grid{grid-template-columns:64px repeat(16, var(--step,44px));}
+        .drum-wrap{--step:min(44px,10.5vw)}
+        .drum-label{min-width:64px;font-size:.85rem;padding:0 8px 0 10px}
         .drum-btn{padding:10px 12px}
+        .drum-btn.tog{width:108px}
+        .drum-btn.tog svg{display:inline-block;width:20px;height:20px}
+        .drum-btn.tog span{display:none !important}
+        .drum-ctrls{gap:6px}
+        .drum-bpm,.drum-swing{min-width:0;flex:1 1 100%;width:100%;grid-template-columns:auto 1fr auto}
+        #drum-bpm,#drum-swing{width:100%}
+        .drum-bpm label,.drum-swing label{font-size:.9rem}
         }
         .drum-mode{display:flex;gap:6px;align-items:center;margin-right:8px}
         .drum-mode .mode[aria-pressed="true"]{outline:2px solid var(--accent-secondary,#ff6)}
-        .drum-swing{display:flex;gap:8px;align-items:center;margin-left:8px}
         `;
         document.head.appendChild(style);
     }
@@ -365,6 +466,7 @@ function initializeDrumMachine() {
         </div>
         <div class="right" style="opacity:.7">Only one thing plays at a time — starting this will pause any track.</div>
       </div>
+      <div id="drum-aria" class="sr-only" aria-live="polite"></div>
     `;
     if (window.matchMedia('(max-width: 700px)').matches) {
         const hint = document.createElement('div');
@@ -393,22 +495,63 @@ function initializeDrumMachine() {
     instruments.forEach((inst, r) => {
         const label = document.createElement('div');
         label.className = 'drum-label';
-        label.textContent = inst.key;
+        const wrapLbl = document.createElement('div');
+        wrapLbl.className = 'drum-label-btn';
+        const txt = document.createElement('span');
+        txt.textContent = inst.key;
+        const audition = document.createElement('button');
+        audition.className = 'drum-micro';
+        audition.type = 'button';
+        audition.textContent = '▶';
+        audition.title = `Audition ${inst.key}`;
+        audition.addEventListener('click', () => playHit(inst));
+        // simple long-press on the label itself
+        let pressT = 0, pressTimer = null;
+        function clearPress(){ if (pressTimer){ clearTimeout(pressTimer); pressTimer=null; } }
+        label.addEventListener('pointerdown', () => { pressT = Date.now(); clearPress(); pressTimer = setTimeout(()=>{ playHit(inst); }, 320); });
+        label.addEventListener('pointerup', clearPress);
+        label.addEventListener('pointerleave', clearPress);
+        wrapLbl.appendChild(txt);
+        wrapLbl.appendChild(audition);
+        label.appendChild(wrapLbl);
         grid.appendChild(label);
+        // drag-to-paint state (shared across grid)
+        if (!initializeDrumMachine._paintState){ initializeDrumMachine._paintState = { painting:false, value:true }; }
         for (let c = 0; c < steps; c++) {
             const btn = document.createElement('button');
             btn.className = 'drum-step';
             btn.setAttribute('aria-label', `${inst.key} step ${c + 1}`);
-            btn.addEventListener('click', () => {
-                pattern[r][c] = !pattern[r][c];
-                btn.classList.toggle('on', pattern[r][c]);
+            const apply = (val) => {
+                pattern[r][c] = val;
+                btn.classList.toggle('on', val);
+                try { if (navigator.vibrate) navigator.vibrate(5); } catch {}
+                persistPattern();
+            };
+            btn.addEventListener('pointerdown', (e) => {
+                btn.setPointerCapture?.(e.pointerId);
+                const targetVal = !pattern[r][c];
+                initializeDrumMachine._paintState.painting = true;
+                initializeDrumMachine._paintState.value = targetVal;
+                apply(targetVal);
             });
+            btn.addEventListener('pointerenter', () => {
+                if (initializeDrumMachine._paintState.painting) {
+                    apply(initializeDrumMachine._paintState.value);
+                }
+            });
+            btn.addEventListener('pointerup', () => { initializeDrumMachine._paintState.painting = false; });
+            btn.addEventListener('lostpointercapture', () => { initializeDrumMachine._paintState.painting = false; });
+            btn.addEventListener('click', (e) => { e.preventDefault(); /* handled in pointerdown */ });
             grid.appendChild(btn);
         }
     });
 
     // Controls
     const playBtn = wrap.querySelector('#drum-play');
+    // Replace Play button content to use span+svg for label/icon
+    if (playBtn) {
+        playBtn.innerHTML = '<span>▶ Play</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+    }
     const bpmSlider = wrap.querySelector('#drum-bpm');
     const bpmVal = wrap.querySelector('#drum-bpm-val');
     const clearBtn = wrap.querySelector('#drum-clear');
@@ -421,14 +564,38 @@ function initializeDrumMachine() {
 
     const state = { playing: false, step: 0, bpm: parseInt(bpmSlider.value, 10) || 110, swing: parseInt(swingSlider.value, 10) || 0, timer: null, mode: 'synth', samples: null };
 
-    bpmSlider.addEventListener('input', () => { state.bpm = parseInt(bpmSlider.value, 10); bpmVal.textContent = String(state.bpm); if (state.playing) restartLoop(); });
+    // --- Persistence helpers ---
+    const STORAGE_KEY = 'mlab_drum_v1';
+    function persistPattern(){
+        try{
+            const data = { pattern, bpm: state.bpm, swing: state.swing, mode: state.mode };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }catch{}
+    }
+    function restorePattern(){
+        try{
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            const { pattern: p, bpm, swing, mode } = JSON.parse(raw);
+            if (Array.isArray(p) && p.length === instruments.length && Array.isArray(p[0]) && p[0].length === steps){
+                for (let r=0;r<instruments.length;r++) for (let c=0;c<steps;c++){ pattern[r][c] = !!p[r][c]; }
+            }
+            if (typeof bpm === 'number'){ state.bpm = bpm; bpmSlider.value = String(bpm); bpmVal.textContent = String(bpm); }
+            if (typeof swing === 'number'){ state.swing = swing; swingSlider.value = String(swing); swingVal.textContent = `${swing}%`; }
+            if (mode === '808' || mode === 'synth'){ setMode(mode); }
+        }catch{}
+    }
+    restorePattern();
 
-    swingSlider.addEventListener('input', () => { state.swing = parseInt(swingSlider.value, 10); swingVal.textContent = `${state.swing}%`; if (state.playing) restartLoop(); });
+    bpmSlider.addEventListener('input', () => { state.bpm = parseInt(bpmSlider.value, 10); bpmVal.textContent = String(state.bpm); if (state.playing) restartLoop(); persistPattern(); });
+
+    swingSlider.addEventListener('input', () => { state.swing = parseInt(swingSlider.value, 10); swingVal.textContent = `${state.swing}%`; if (state.playing) restartLoop(); persistPattern(); });
 
     function setMode(mode) {
         state.mode = mode;
         modeSynthBtn.setAttribute('aria-pressed', mode === 'synth' ? 'true' : 'false');
         mode808Btn.setAttribute('aria-pressed', mode === '808' ? 'true' : 'false');
+        persistPattern();
     }
 
     modeSynthBtn.addEventListener('click', () => setMode('synth'));
@@ -437,7 +604,11 @@ function initializeDrumMachine() {
         if (!state.samples) { state.samples = await load808Samples(); }
     });
 
-    function advance() { state.step = (state.step + 1) % steps; markPlayhead(state.step); }
+    function advance() {
+        state.step = (state.step + 1) % steps; 
+        markPlayhead(state.step);
+        ensurePlayheadVisible(state.step);
+    }
 
     function markPlayhead(s) {
         const cells = grid.querySelectorAll('.drum-step');
@@ -445,6 +616,13 @@ function initializeDrumMachine() {
             const col = i % steps; // each row has 16 cells
             el.classList.toggle('playing', col === s);
         });
+    }
+
+    // keep current step in view on narrow screens
+    function ensurePlayheadVisible(col){
+        if (!window.matchMedia('(max-width: 700px)').matches) return;
+        const cell = grid.querySelectorAll('.drum-step')[col];
+        if (cell) { cell.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' }); }
     }
 
     function baseStepMs() { return (60 / state.bpm / 4) * 1000; }
@@ -476,38 +654,48 @@ function initializeDrumMachine() {
 
     function start() {
         try { if (currentAudio && !currentAudio.paused) currentAudio.pause(); } catch { }
+        announce('Drum machine playing');
         if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume().catch(() => { }); }
         if (state.timer) return;
         state.playing = true;
         if (wrap.style.display === 'none') {
             state.playing = false;
-            playBtn.textContent = '▶ Play';
+            if (playBtn) playBtn.querySelector('span').textContent = '▶ Play';
+            // Swap SVG to play icon for mobile
+            const svgElEarly = playBtn.querySelector('svg');
+            if (svgElEarly) { svgElEarly.outerHTML = iconPlaySVG(); }
             playBtn.setAttribute('aria-pressed', 'false');
             return;
         }
-        playBtn.textContent = '⏸ Pause';
+        if (playBtn) playBtn.querySelector('span').textContent = '⏸ Pause';
         playBtn.setAttribute('aria-pressed', 'true');
+        // Swap SVG to pause icon for mobile
+        const svgElStart = playBtn.querySelector('svg');
+        if (svgElStart) { svgElStart.outerHTML = iconPauseSVG(); }
         markPlayhead(state.step);
         state.timer = setTimeout(loop, nextDelayFor(state.step));
     }
 
     function stop() {
         state.playing = false;
-        playBtn.textContent = '▶ Play';
+        if (playBtn) playBtn.querySelector('span').textContent = '▶ Play';
+        // Swap SVG to play icon for mobile
+        const svgElStop = playBtn.querySelector('svg');
+        if (svgElStop) { svgElStop.outerHTML = iconPlaySVG(); }
         playBtn.setAttribute('aria-pressed', 'false');
         if (state.timer) { clearTimeout(state.timer); state.timer = null; }
+        announce('Drum machine stopped');
     }
 
     playBtn.addEventListener('click', async () => {
-        if (audioCtx && audioCtx.state === 'suspended') {
-            try { await audioCtx.resume(); } catch { }
-        }
+        try{ if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume(); }catch{}
         state.playing ? stop() : start();
     });
 
     clearBtn.addEventListener('click', () => {
         pattern.forEach(row => row.fill(false));
         grid.querySelectorAll('.drum-step').forEach(el => el.classList.remove('on'));
+        persistPattern();
     });
 
     randBtn.addEventListener('click', () => {
@@ -524,6 +712,7 @@ function initializeDrumMachine() {
             const c = i % steps;
             el.classList.toggle('on', pattern[r][c]);
         });
+        persistPattern();
     });
 
     // Hidden by default; toggled by hero avatar image
@@ -555,6 +744,18 @@ function initializeDrumMachine() {
             if (document.hidden && state.playing) stop();
         });
     }
+
+    // focusable wrapper for keyboard control
+    wrap.tabIndex = 0;
+    wrap.addEventListener('keydown', (e)=>{
+        if (e.code === 'Space'){ e.preventDefault(); state.playing ? stop() : start(); }
+        else if ((e.key === 'r' || e.key === 'R')) { e.preventDefault(); randBtn.click(); }
+        else if ((e.key === 'c' || e.key === 'C')) { e.preventDefault(); clearBtn.click(); }
+        else if (e.key === '1') { playHit(instruments[0]); }
+        else if (e.key === '2') { playHit(instruments[1]); }
+        else if (e.key === '3') { playHit(instruments[2]); }
+        else if (e.key === '4') { playHit(instruments[3]); }
+    });
 
     function playHit(inst) {
         if (state.mode === '808' && state.samples && state.samples[inst.key]) {
@@ -691,6 +892,11 @@ function initializeDrumMachine() {
         return out;
     }
 
+    // ARIA live announcer
+    const ariaLive = wrap.querySelector('#drum-aria');
+    function announce(msg){ if (ariaLive) ariaLive.textContent = msg; }
+
+    persistPattern();
     drumMachine = { start, stop, state };
     // expose stoppers for integration
     window.stopDrumMachine = stop;
@@ -865,9 +1071,13 @@ function initializePlayButtons() {
                 // Switching tracks: reset previous button, set new source
                 if (currentButton) setButtonState(currentButton, false);
                 currentButton = this;
+                setButtonState(this, true);
+                syncMiniTo(this);
 
                 if (currentAudio.src !== src) {
                     currentAudio.src = src;
+                    // Hint Safari to create a new decoder pipeline before play
+                    if (currentAudio.readyState < 2) { try { currentAudio.load(); } catch { /* no-op */ } }
                     const type = this.getAttribute('data-type');
                     // Optionally set type via canPlayType hint
                     if (type && !currentAudio.canPlayType(type)) {
@@ -876,6 +1086,8 @@ function initializePlayButtons() {
                 }
 
                 currentAudio.currentTime = 0; // start fresh
+                // Ensure WebAudio context is running before play (fixes iOS/Safari resume)
+                if (audioCtx && audioCtx.state === 'suspended') { try { await audioCtx.resume(); } catch { /* ignore */ } }
                 await currentAudio.play();
                 const els = getCardElementsFromButton(this);
                 if (els.timeDuration && isFinite(currentAudio.duration)) {
@@ -898,8 +1110,12 @@ function initializePlayButtons() {
                 stopWaveform();
                 startWaveform(els.canvas);
                 setButtonState(this, true);
+                // Ensure last-write-wins after async events
+                requestAnimationFrame(() => setButtonState(this, true));
                 syncMiniTo(this);
             } catch (err) {
+                console.error('Audio play failed:', err);
+                showToast('Tap to enable audio');
                 console.error('Audio play failed:', err);
                 setButtonState(this, false);
                 stopWaveform();

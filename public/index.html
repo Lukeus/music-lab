@@ -1,102 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title"></title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title"></title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <!-- Social sharing metadata -->
+  <meta property="og:title" content="Because Music Matters | Lukeus Music Lab">
+  <meta property="og:description" content="Experiments, sketches, and songs in progress. Step into the Lab.">
+  <meta property="og:image" content="/assets/images/lukeus-avatar.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://music-labs-1d8e1.web.app/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Because Music Matters | Lukeus Music Lab">
+  <meta name="twitter:description" content="Experiments, sketches, and songs in progress. Step into the Lab.">
+  <meta name="twitter:image" content="/assets/images/lukeus-avatar.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Lukeus Music Lab",
+    "url": "https://music-labs-1d8e1.web.app/",
+    "publisher": {
+      "@type": "Person",
+      "name": "Lukeus",
+      "sameAs": [
+        "https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl",
+        "https://soundcloud.com/lukeusmusic",
+        "https://www.instagram.com/musiclukeus/"
+      ]
+    }
+  }
+  </script>
 </head>
 <body class="scroll-lock">
-    <div class="parallax-background">
-        <div class="parallax-icon icon-headphones" data-speed="2">🎧</div>
-        <div class="parallax-icon icon-mic" data-speed="-3">🎤</div>
-        <div class="parallax-icon icon-note1" data-speed="5">🎵</div>
-        <div class="parallax-icon icon-note2" data-speed="-2">🎶</div>
-        <div class="parallax-icon icon-synth" data-speed="3">🎹</div>
-        <div class="parallax-icon icon-cassette" data-speed="-4">📼</div>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <div class="parallax-background">
+    <div class="parallax-icon icon-headphones" data-speed="2">🎧</div>
+    <div class="parallax-icon icon-mic" data-speed="-3">🎤</div>
+    <div class="parallax-icon icon-note1" data-speed="5">🎵</div>
+    <div class="parallax-icon icon-note2" data-speed="-2">🎶</div>
+    <div class="parallax-icon icon-synth" data-speed="3">🎹</div>
+    <div class="parallax-icon icon-cassette" data-speed="-4">📼</div>
+  </div>
+
+  <div class="welcome-gate" role="dialog" aria-modal="true" aria-labelledby="welcome-heading" aria-describedby="welcome-message" aria-hidden="false">
+    <div class="welcome-content">
+      <h1 id="welcome-heading"></h1>
+      <p id="welcome-message"></p>
+      <button class="enter-button">Enter</button>
     </div>
+  </div>
 
-    <div class="welcome-gate" role="dialog" aria-modal="true" aria-labelledby="welcome-heading" aria-describedby="welcome-message">
-        <div class="welcome-content">
-            <h1 id="welcome-heading"></h1>
-            <p id="welcome-message"></p>
-            <button class="enter-button">Enter</button>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="#" class="logo">Because Music Matters</a>
+        <div class="status-indicator" id="status-message" aria-live="polite">
+          <div class="status-dot"></div>
         </div>
+        <a href="#" class="logo" id="logo-text"></a>
+      </div>
     </div>
+  </header>
 
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="#" class="logo">Because Music Matters</a>
-                <div class="status-indicator" id="status-message" aria-live="polite">
-                    <div class="status-dot"></div>
-                </div>
-                <a href="#" class="logo" id="logo-text"></a>
-            </div>
+  <section id="main-content" class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="avatar-section">
+          <div class="avatar-container">
+            <img src="assets/images/lukeus-avatar.png" alt="Lukeus - Music Producer and Songwriter" class="avatar-image" width="256" height="256" loading="eager">
+            <div class="avatar-ring"></div>
+            <div class="avatar-pulse"></div>
+          </div>
         </div>
-    </header>
-
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="avatar-section">
-                    <div class="avatar-container">
-                        <img src="assets/images/lukeus-avatar.png" alt="Lukeus - Music Producer and Songwriter" class="avatar-image">
-                        <div class="avatar-ring"></div>
-                        <div class="avatar-pulse"></div>
-                    </div>
-                </div>
-                <div class="hero-text">
-                    <h1 id="hero-heading" aria-live="polite"></h1>
-                    <p id="hero-paragraph"></p>
-                </div>
-            </div>
+        <div class="hero-text">
+          <h1 id="hero-heading" aria-live="polite"></h1>
+          <p id="hero-paragraph"></p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section class="lab-dashboard">
-        <div class="container">
-            <h2 class="section-title">
-                <div class="section-icon">⚗️</div>
-                Current Projects
-            </h2>
-            <div class="projects-grid"></div>
-        </div>
-    </section>
+  <section class="lab-dashboard">
+    <div class="container">
+      <h2 class="section-title">
+        <div class="section-icon" aria-hidden="true">⚗️</div>
+        <span>Current Projects</span>
+      </h2>
+      <div class="projects-grid"></div>
+    </div>
+  </section>
 
-    <section class="experiments">
-        <div class="container">
-            <h2 class="section-title">
-                <div class="section-icon">🔬</div>
-                Sound Experiments
-            </h2>
-            <div class="experiments-grid">
-            </div>
-        </div>
-    </section>
+  <section class="experiments">
+    <div class="container">
+      <h2 class="section-title">
+        <div class="section-icon" aria-hidden="true">🔬</div>
+        <span>Sound Experiments</span>
+      </h2>
+      <div class="experiments-grid"></div>
+    </div>
+  </section>
 
-    <section class="journal">
-        <div class="container">
-            <h2 class="section-title">
-                <div class="section-icon">✍️</div>
-                Creative Journal
-            </h2>
-            <div id="creative-journal-entries" class="journal-entries"></div>
-        </div>
-    </section>
+  <section class="journal">
+    <div class="container">
+      <h2 class="section-title">
+        <div class="section-icon" aria-hidden="true">✍️</div>
+        <span>Creative Journal</span>
+      </h2>
+      <div id="creative-journal-entries" class="journal-entries"></div>
+    </div>
+  </section>
 
-    <footer>
-        <div class="container">
-            <div class="social-links">
-                <a href="https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl?si=pNvmFrLvTFGIBu0KTAYlqQ" class="social-link" target="_blank">Spotify</a>
-                <a href="https://soundcloud.com/lukeusmusic" class="social-link" target="_blank">SoundCloud</a>
-                <a href="https://www.instagram.com/musiclukeus/" class="social-link" target="_blank">Instagram</a>
-            </div>
-            <p>&copy; 2025 Lukeus. All experiments are works in progress.</p>
-        </div>
-    </footer>
+  <footer>
+    <div class="container">
+      <div class="social-links">
+        <a href="https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl?si=pNvmFrLvTFGIBu0KTAYlqQ" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on Spotify">Spotify</a>
+        <a href="https://soundcloud.com/lukeusmusic" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on SoundCloud">SoundCloud</a>
+        <a href="https://www.instagram.com/musiclukeus/" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on Instagram">Instagram</a>
+      </div>
+      <p>&copy; 2025 Lukeus. All experiments are works in progress.</p>
+    </div>
+  </footer>
 
-    <script src="js/main.js" type="module"></script>
+  <script src="js/main.js" type="module"></script>
 </body>
 </html>
