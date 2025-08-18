@@ -3,6 +3,7 @@ import { scroll, inView, animate } from "https://esm.sh/motion@10.18.0";
 // Shared audio player so only one track plays at a time
 let currentAudio = new Audio();
 currentAudio.preload = 'metadata';
+currentAudio.crossOrigin = 'anonymous';
 let currentButton = null;
 let currentRAF = 0;                // waveform animation frame id
 let audioCtx = null;               // WebAudio context (lazy)
@@ -1097,6 +1098,8 @@ function initializePlayButtons() {
                 syncMiniTo(this);
 
                 if (currentAudio.src !== src) {
+                    // Ensure CORS is enabled before setting a new HTTPS source
+                    if (!currentAudio.crossOrigin) currentAudio.crossOrigin = 'anonymous';
                     currentAudio.src = src;
                     // Hint Safari to create a new decoder pipeline before play
                     if (currentAudio.readyState < 2) { try { currentAudio.load(); } catch { /* no-op */ } }
