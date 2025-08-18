@@ -3,19 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="page-title"></title>
+  <title id="page-title">Because Music Matters | Lukeus — Music Lab</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
   <!-- Social sharing metadata -->
   <meta property="og:title" content="Because Music Matters | Lukeus Music Lab">
   <meta property="og:description" content="Experiments, sketches, and songs in progress. Step into the Lab.">
   <meta property="og:image" content="/assets/images/lukeus-avatar.png">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://music-labs-1d8e1.web.app/">
+  <meta property="og:url" content="https://lukeus.art/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Because Music Matters | Lukeus Music Lab">
   <meta name="twitter:description" content="Experiments, sketches, and songs in progress. Step into the Lab.">
   <meta name="twitter:image" content="/assets/images/lukeus-avatar.png">
+  <meta name="theme-color" content="#0B0F14">
+  <meta name="color-scheme" content="light dark">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -33,6 +38,7 @@
     }
   }
   </script>
+ 
 </head>
 <body class="scroll-lock">
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -61,7 +67,7 @@
         <div class="status-indicator" id="status-message" aria-live="polite">
           <div class="status-dot"></div>
         </div>
-        <a href="#" class="logo" id="logo-text"></a>
+        <a href="#" class="logo" id="logo-text">LUKEUS · Music Lab</a>
       </div>
     </div>
   </header>
@@ -110,7 +116,80 @@
         <div class="section-icon" aria-hidden="true">✍️</div>
         <span>Creative Journal</span>
       </h2>
-      <div id="creative-journal-entries" class="journal-entries"></div>
+      <div class="journal-toolbar" role="region" aria-label="Filter journal entries">
+        <input id="journal-search" class="journal-search" type="search" placeholder="Search notes, lyrics, ideas…" aria-label="Search journal" autocomplete="off">
+        <div class="journal-tags" role="listbox" aria-label="Filter by tag">
+          <button class="tag-filter is-active" data-tag="all" aria-pressed="true">All</button>
+          <button class="tag-filter" data-tag="song-idea" aria-pressed="false">🎶 Song Idea</button>
+          <button class="tag-filter" data-tag="lyric-sketch" aria-pressed="false">✍️ Lyric Sketch</button>
+          <button class="tag-filter" data-tag="studio-note" aria-pressed="false">🧪 Studio Note</button>
+        </div>
+      </div>
+
+      <div id="creative-journal-entries" class="journal-entries" aria-live="polite">
+        <!-- Journal Entry 1 -->
+        <article class="journal-card" data-tags="song-idea studio-note">
+          <header class="journal-head">
+            <time class="journal-date" datetime="2025-08-15">Aug 15, 2025</time>
+            <h3 class="journal-title">Bass line from the park bench</h3>
+            <div class="journal-pill">🎶 Song Idea</div>
+          </header>
+          <div class="journal-body">
+            <p class="journal-snippet">
+              Caught a 96 BPM groove tapping on the bench armrest—syncopated kick on the “&” of 3. Might layer a muted guitar triplet over bars 5–8 to create lift…
+            </p>
+            <div class="journal-more" hidden>
+              <p>
+                Idea to try: short plate reverb on the snare, high-passed at ~600 Hz so it doesn’t cloud the low end. Sidechain the pad to the kick only in the chorus to open the verses.
+              </p>
+              <audio controls preload="metadata" class="journal-audio" src="assets/audio/WhatYouWant.mp3">
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+            <button class="read-more" aria-expanded="false" aria-controls="more-1" id="toggle-1">Read more</button>
+          </div>
+        </article>
+
+        <!-- Journal Entry 2 -->
+        <article class="journal-card" data-tags="lyric-sketch">
+          <header class="journal-head">
+            <time class="journal-date" datetime="2025-08-12">Aug 12, 2025</time>
+            <h3 class="journal-title">Lyric fragment: “half-light on Alberta”</h3>
+            <div class="journal-pill">✍️ Lyric Sketch</div>
+          </header>
+          <div class="journal-body">
+            <p class="journal-snippet">
+              “In the half-light on Alberta / my shadow learns your name” — keep chorus monosyllabic; verse 2 pivots to call-and-response with harmony thirds…
+            </p>
+            <div class="journal-more" hidden>
+              <p>
+                Test a descending bass walk for the pre-chorus to signal the drop. Consider sparse percussion (claves or rim) to leave space for vocal texture.
+              </p>
+            </div>
+            <button class="read-more" aria-expanded="false" aria-controls="more-2" id="toggle-2">Read more</button>
+          </div>
+        </article>
+
+        <!-- Journal Entry 3 -->
+        <article class="journal-card" data-tags="studio-note">
+          <header class="journal-head">
+            <time class="journal-date" datetime="2025-08-09">Aug 9, 2025</time>
+            <h3 class="journal-title">Studio note: UAD chain for intimate vox</h3>
+            <div class="journal-pill">🧪 Studio Note</div>
+          </header>
+          <div class="journal-body">
+            <p class="journal-snippet">
+              Chain rough-in: LA‑2A (2–3 dB GR), Pultec low-shelf dip @ 100 Hz, Neve 33609 bus comp in parallel. Aim for breathy presence without sibilance…
+            </p>
+            <div class="journal-more" hidden>
+              <p>
+                De-ess pre-bus @ ~6.5 kHz, then add a gentle tilt EQ +1.5 dB above 4 kHz. Automate 1 dB lift on the last word of each phrase.
+              </p>
+            </div>
+            <button class="read-more" aria-expanded="false" aria-controls="more-3" id="toggle-3">Read more</button>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 

@@ -3,7 +3,7 @@
   "statusMessage": "",
   "logoText": "",
   "welcomeGate": {
-    "heading": "Welcome to the Music Lab",
+    "heading": "Welcome to The Music Lab",
     "message": "This is a space for creativity, experimentation, and the love of music. Here, ideas don’t need permission—they just flow. Step inside, take a listen, and maybe find some inspiration along the way. Enjoy your visit."
   },
   "heroSection": {
@@ -67,21 +67,25 @@
     {
       "date": "January 18, 2025",
       "title": "The Magic of Guitar Against Body",
+      "tags": ["studio-note", "guitar"],
       "content": "There's something about the vibrations of an acoustic guitar against your body that can't be replicated. It's not just hearing the music—it's feeling it resonate through you like a second heartbeat. Today I spent time trying to capture that physical connection in my recordings. How do you translate a feeling into something others can experience through speakers? It’s not about technical accuracy, it’s about emotional accuracy."
     },
     {
       "date": "January 15, 2025",
       "title": "Dreams as Creative Battles",
+      "tags": ["lyric-sketch", "reflection"],
       "content": "That old technique I learned as a kid—fighting nightmares by becoming the superhero in my dreams—it applies to everything. Creative blocks, difficult emotions, life challenges. Put positive thinking and dedicated focus towards a dream, and the outcome usually favors the dreamer. Music is just another way of dreaming solutions into existence, turning fear into melody and struggle into rhythm."
     },
     {
       "date": "January 10, 2025",
       "title": "When Sound Meets Feeling",
+      "tags": ["lyric-sketch", "song-idea"],
       "content": "There's an instant correlation between sound and being understood. When the right combination of notes hits, when the freestyle lyrics flow perfectly with the emotion—that’s when music transcends technique and becomes pure connection. 98% of my lyrics come from this place of spontaneous truth, and that’s why they feel alive even to me after the moment has passed."
     },
     {
       "date": "January 5, 2025",
       "title": "The Journey Continues",
+      "tags": ["studio-note", "reflection"],
       "content": "From struggling with purpose to finding it in sound. From destructive patterns to creative transformation. Delancey Street taught me that it’s as important to teach as it is to learn, and that discipline creates freedom. Every song I create now carries that wisdom—the understanding that we can choose to become who we’re meant to be, and music is the way I remind myself daily."
     }
   ]

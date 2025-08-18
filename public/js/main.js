@@ -10,21 +10,21 @@ let analyser = null;               // shared analyser
 let sourceNode = null;             // media element source (bound once to currentAudio)
 let activeCanvas = null;           // canvas for the currently playing card
 // --- Global helpers (icons + toast) ---
-function iconPlaySVG(){
-  return '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+function iconPlaySVG() {
+    return '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
 }
-function iconPauseSVG(){
-  return '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+function iconPauseSVG() {
+    return '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
 }
-function showToast(msg){
-  const host = document.getElementById('toast-host');
-  if (!host) return;
-  const t = document.createElement('div');
-  t.textContent = msg;
-  t.style.cssText = 'background:#111;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);font-size:.9rem;max-width:80vw;';
-  host.appendChild(t);
-  setTimeout(()=>{ t.style.transition = 'opacity .25s'; t.style.opacity = '0'; }, 1600);
-  setTimeout(()=>{ t.remove(); }, 2000);
+function showToast(msg) {
+    const host = document.getElementById('toast-host');
+    if (!host) return;
+    const t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = 'background:#111;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);font-size:.9rem;max-width:80vw;';
+    host.appendChild(t);
+    setTimeout(() => { t.style.transition = 'opacity .25s'; t.style.opacity = '0'; }, 1600);
+    setTimeout(() => { t.remove(); }, 2000);
 }
 // Mobile audio unlock: resume WebAudio & nudge HTMLAudio once on first gesture
 (function setupMobileAudioUnlock() {
@@ -311,7 +311,7 @@ currentAudio.addEventListener('timeupdate', () => {
         mini.progressFill.style.width = `${pct2}%`;
         mini.progress.setAttribute('aria-valuenow', String(Math.round(pct2)));
     }
-    
+
 });
 
 currentAudio.addEventListener('loadedmetadata', () => {
@@ -346,6 +346,27 @@ currentAudio.addEventListener('pause', () => {
 });
 
 
+// Fix: ensure journal entry headers are not sticky
+function disableStickyJournalHeaders() {
+    // CSS override in case stylesheets set sticky positioning
+    if (!document.getElementById('journal-sticky-fix')) {
+        const s = document.createElement('style');
+        s.id = 'journal-sticky-fix';
+        s.textContent = `
+            .journal-head { position: static !important; top: auto !important; }
+        `;
+        document.head.appendChild(s);
+    }
+    // Also clear any inline sticky styles that may have been applied dynamically
+    document.querySelectorAll('.journal-head').forEach(h => {
+        const cs = getComputedStyle(h);
+        if (cs.position === 'sticky' || h.style.position === 'sticky') {
+            h.style.position = 'static';
+            h.style.top = 'auto';
+        }
+    });
+}
+
 window.addEventListener('load', function () {
     if (sessionStorage.getItem('welcomeGateShown')) {
         const welcomeGate = document.querySelector('.welcome-gate');
@@ -359,6 +380,7 @@ window.addEventListener('load', function () {
     initializeHeaderLink();
     initializePlayButtons();
     loadContent().then(() => {
+        disableStickyJournalHeaders();
         initializeScrollAnimations();
         initializeParallax();
         initializeDrumMachine();
@@ -507,8 +529,8 @@ function initializeDrumMachine() {
         audition.addEventListener('click', () => playHit(inst));
         // simple long-press on the label itself
         let pressT = 0, pressTimer = null;
-        function clearPress(){ if (pressTimer){ clearTimeout(pressTimer); pressTimer=null; } }
-        label.addEventListener('pointerdown', () => { pressT = Date.now(); clearPress(); pressTimer = setTimeout(()=>{ playHit(inst); }, 320); });
+        function clearPress() { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } }
+        label.addEventListener('pointerdown', () => { pressT = Date.now(); clearPress(); pressTimer = setTimeout(() => { playHit(inst); }, 320); });
         label.addEventListener('pointerup', clearPress);
         label.addEventListener('pointerleave', clearPress);
         wrapLbl.appendChild(txt);
@@ -516,7 +538,7 @@ function initializeDrumMachine() {
         label.appendChild(wrapLbl);
         grid.appendChild(label);
         // drag-to-paint state (shared across grid)
-        if (!initializeDrumMachine._paintState){ initializeDrumMachine._paintState = { painting:false, value:true }; }
+        if (!initializeDrumMachine._paintState) { initializeDrumMachine._paintState = { painting: false, value: true }; }
         for (let c = 0; c < steps; c++) {
             const btn = document.createElement('button');
             btn.className = 'drum-step';
@@ -524,7 +546,7 @@ function initializeDrumMachine() {
             const apply = (val) => {
                 pattern[r][c] = val;
                 btn.classList.toggle('on', val);
-                try { if (navigator.vibrate) navigator.vibrate(5); } catch {}
+                try { if (navigator.vibrate) navigator.vibrate(5); } catch { }
                 persistPattern();
             };
             btn.addEventListener('pointerdown', (e) => {
@@ -566,24 +588,24 @@ function initializeDrumMachine() {
 
     // --- Persistence helpers ---
     const STORAGE_KEY = 'mlab_drum_v1';
-    function persistPattern(){
-        try{
+    function persistPattern() {
+        try {
             const data = { pattern, bpm: state.bpm, swing: state.swing, mode: state.mode };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        }catch{}
+        } catch { }
     }
-    function restorePattern(){
-        try{
+    function restorePattern() {
+        try {
             const raw = localStorage.getItem(STORAGE_KEY);
             if (!raw) return;
             const { pattern: p, bpm, swing, mode } = JSON.parse(raw);
-            if (Array.isArray(p) && p.length === instruments.length && Array.isArray(p[0]) && p[0].length === steps){
-                for (let r=0;r<instruments.length;r++) for (let c=0;c<steps;c++){ pattern[r][c] = !!p[r][c]; }
+            if (Array.isArray(p) && p.length === instruments.length && Array.isArray(p[0]) && p[0].length === steps) {
+                for (let r = 0; r < instruments.length; r++) for (let c = 0; c < steps; c++) { pattern[r][c] = !!p[r][c]; }
             }
-            if (typeof bpm === 'number'){ state.bpm = bpm; bpmSlider.value = String(bpm); bpmVal.textContent = String(bpm); }
-            if (typeof swing === 'number'){ state.swing = swing; swingSlider.value = String(swing); swingVal.textContent = `${swing}%`; }
-            if (mode === '808' || mode === 'synth'){ setMode(mode); }
-        }catch{}
+            if (typeof bpm === 'number') { state.bpm = bpm; bpmSlider.value = String(bpm); bpmVal.textContent = String(bpm); }
+            if (typeof swing === 'number') { state.swing = swing; swingSlider.value = String(swing); swingVal.textContent = `${swing}%`; }
+            if (mode === '808' || mode === 'synth') { setMode(mode); }
+        } catch { }
     }
     restorePattern();
 
@@ -605,7 +627,7 @@ function initializeDrumMachine() {
     });
 
     function advance() {
-        state.step = (state.step + 1) % steps; 
+        state.step = (state.step + 1) % steps;
         markPlayhead(state.step);
         ensurePlayheadVisible(state.step);
     }
@@ -619,10 +641,10 @@ function initializeDrumMachine() {
     }
 
     // keep current step in view on narrow screens
-    function ensurePlayheadVisible(col){
+    function ensurePlayheadVisible(col) {
         if (!window.matchMedia('(max-width: 700px)').matches) return;
         const cell = grid.querySelectorAll('.drum-step')[col];
-        if (cell) { cell.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' }); }
+        if (cell) { cell.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); }
     }
 
     function baseStepMs() { return (60 / state.bpm / 4) * 1000; }
@@ -688,7 +710,7 @@ function initializeDrumMachine() {
     }
 
     playBtn.addEventListener('click', async () => {
-        try{ if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume(); }catch{}
+        try { if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume(); } catch { }
         state.playing ? stop() : start();
     });
 
@@ -747,8 +769,8 @@ function initializeDrumMachine() {
 
     // focusable wrapper for keyboard control
     wrap.tabIndex = 0;
-    wrap.addEventListener('keydown', (e)=>{
-        if (e.code === 'Space'){ e.preventDefault(); state.playing ? stop() : start(); }
+    wrap.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') { e.preventDefault(); state.playing ? stop() : start(); }
         else if ((e.key === 'r' || e.key === 'R')) { e.preventDefault(); randBtn.click(); }
         else if ((e.key === 'c' || e.key === 'C')) { e.preventDefault(); clearBtn.click(); }
         else if (e.key === '1') { playHit(instruments[0]); }
@@ -894,7 +916,7 @@ function initializeDrumMachine() {
 
     // ARIA live announcer
     const ariaLive = wrap.querySelector('#drum-aria');
-    function announce(msg){ if (ariaLive) ariaLive.textContent = msg; }
+    function announce(msg) { if (ariaLive) ariaLive.textContent = msg; }
 
     persistPattern();
     drumMachine = { start, stop, state };
@@ -1193,17 +1215,44 @@ function populateExperiments(experiments) {
 function populateJournalEntries(entries) {
     const journalEntriesContainer = document.getElementById('creative-journal-entries');
     if (!journalEntriesContainer) return;
+
+    // Helper: make a short teaser + remainder
+    function splitSnippet(text, max = 180) {
+        if (!text) return { snippet: '', rest: '' };
+        const t = String(text).trim();
+        if (t.length <= max) return { snippet: t, rest: '' };
+        const cut = t.indexOf(' ', max);
+        return { snippet: t.slice(0, cut === -1 ? max : cut) + '…', rest: cut === -1 ? '' : t.slice(cut + 1) };
+    }
+
     journalEntriesContainer.innerHTML = '';
-    entries.forEach(entry => {
-        const journalEntryCard = `
-            <div class="journal-entry">
-                <div class="journal-date">${entry.date ?? ''}</div>
-                <h4 class="journal-title">${entry.title ?? ''}</h4>
-                <p class="journal-content">${entry.content ?? ''}</p>
-            </div>
-        `;
-        journalEntriesContainer.insertAdjacentHTML('beforeend', journalEntryCard);
+    entries.forEach((entry, i) => {
+        const { snippet, rest } = splitSnippet(entry.content || '', 200);
+        const tags = Array.isArray(entry.tags) ? entry.tags : [];
+        const tagList = tags.join(' ');
+        const pill = tags.includes('song-idea') ? '🎶 Song Idea' :
+                     tags.includes('lyric-sketch') ? '✍️ Lyric Sketch' :
+                     tags.includes('studio-note') ? '🧪 Studio Note' : '🗒️ Note';
+
+        const card = document.createElement('article');
+        card.className = 'journal-card';
+        card.setAttribute('data-tags', tagList);
+        card.innerHTML = `
+          <header class="journal-head">
+            <time class="journal-date">${entry.date ?? ''}</time>
+            <h3 class="journal-title">${entry.title ?? ''}</h3>
+            <div class="journal-pill">${pill}</div>
+          </header>
+          <div class="journal-body">
+            <p class="journal-snippet">${snippet}</p>
+            <div class="journal-more" hidden>${rest ? `<p>${rest}</p>` : ''}</div>
+            <button class="read-more" aria-expanded="false" ${rest ? '' : 'hidden'}>Read more</button>
+          </div>`;
+        journalEntriesContainer.appendChild(card);
     });
+
+    // Let filter logic know items are ready
+    journalEntriesContainer.dispatchEvent(new CustomEvent('journal:rendered'));
 }
 
 function initializeScrollAnimations() {
@@ -1260,3 +1309,72 @@ window.addEventListener('resize', () => {
 });
 // Initialize canvas sizes on load
 window.dispatchEvent(new Event('resize'));
+
+// —— Creative Journal UX ——
+(function () {
+    const root = document;
+    const entriesWrap = root.getElementById('creative-journal-entries');
+    if (!entriesWrap) return;
+    // Ensure sticky is disabled even if cards render later
+    disableStickyJournalHeaders();
+
+    const search = root.getElementById('journal-search');
+    const tagButtons = Array.from(root.querySelectorAll('.tag-filter'));
+
+    function entryMatches(entry, q, tag) {
+        const text = entry.innerText.toLowerCase();
+        const tags = (entry.getAttribute('data-tags') || '').split(/\s+/);
+        const qOk = !q || text.includes(q);
+        const tagOk = !tag || tag === 'all' || tags.includes(tag);
+        return qOk && tagOk;
+    }
+
+    function applyFilter() {
+        const q = (search?.value || '').trim().toLowerCase();
+        const activeBtn = tagButtons.find(b => b.classList.contains('is-active'));
+        const tag = activeBtn ? activeBtn.getAttribute('data-tag') : 'all';
+        const items = Array.from(entriesWrap.querySelectorAll('.journal-card'));
+        entriesWrap.setAttribute('aria-busy', 'true');
+        for (const el of items) {
+            const show = entryMatches(el, q, tag);
+            el.style.display = show ? '' : 'none';
+        }
+        entriesWrap.setAttribute('aria-busy', 'false');
+    }
+
+    // Read-more toggles
+    entriesWrap.addEventListener('click', (e) => {
+        const btn = e.target.closest('.read-more');
+        if (!btn) return;
+        const card = btn.closest('.journal-card');
+        const more = card?.querySelector('.journal-more');
+        if (!more) return;
+        const isOpen = !more.hasAttribute('hidden');
+        if (isOpen) {
+            more.setAttribute('hidden', '');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.textContent = 'Read more';
+        } else {
+            more.removeAttribute('hidden');
+            btn.setAttribute('aria-expanded', 'true');
+            btn.textContent = 'Show less';
+        }
+    });
+
+    // Tag filters
+    tagButtons.forEach(b => b.addEventListener('click', () => {
+        tagButtons.forEach(x => { x.classList.remove('is-active'); x.setAttribute('aria-pressed', 'false'); });
+        b.classList.add('is-active');
+        b.setAttribute('aria-pressed', 'true');
+        applyFilter();
+    }));
+
+    // Search
+    search?.addEventListener('input', applyFilter);
+
+    if (entriesWrap.querySelector('.journal-card')) {
+        applyFilter();
+    } else {
+        entriesWrap.addEventListener('journal:rendered', () => { applyFilter(); disableStickyJournalHeaders(); }, { once: true });
+    }
+})();
