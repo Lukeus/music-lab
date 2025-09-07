@@ -4,12 +4,11 @@
   "description": "Lukeus Music Lab - Experimental Sound & Creative Process website",
   "main": "~/public/index.html",
   "scripts": {
-    "start": "npx serve public",
-    "dev": "npx live-server --port=3000 --open=/",
-    "build": "echo 'Static site - no build process needed'",
-    "lint": "npx eslint js/ --fix",
-    "format": "npx prettier --write '**/*.{html,css,js,md}'",
-    "deploy": "echo 'Deploy with: git push origin main - GitHub Pages will handle the rest!'"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "eslint src/ --fix",
+    "format": "prettier --write '**/*.{html,css,js,ts,astro,md,mdx}'"
   },
   "keywords": [
     "music",
@@ -23,12 +22,18 @@
   "author": "Lukeus",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^8.57.0",
-    "live-server": "^1.2.2",
+    "@astrojs/mdx": "^4.3.4",
+    "@typescript-eslint/eslint-plugin": "^8.39.1",
+    "@typescript-eslint/parser": "^8.39.1",
+    "astro": "^5.13.2",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "postcss": "^8.5.6",
     "prettier": "^3.2.5",
-    "serve": "^14.2.1"
+    "vite": "^5.2.0"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "motion": "^12.23.12"
   },
   "repository": {

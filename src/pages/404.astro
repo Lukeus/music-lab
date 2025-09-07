@@ -1,0 +1,208 @@
+---
+import Base from "../layouts/base.astro";
+---
+
+<Base title="404 - Page Not Found | Lukeus Music Lab">
+  <div class="container error-page">
+    <div class="error-content">
+      <h1 class="error-title">404</h1>
+      <h2 class="error-subtitle">This frequency isn't broadcasting</h2>
+      <p class="error-description">
+        The page you're looking for seems to have wandered off into the creative ether. 
+        Don't worry—sometimes the best discoveries happen when we're a little lost.
+      </p>
+      
+      <div class="error-actions">
+        <a href="/" class="btn btn-primary">
+          🏠 Back to the Lab
+        </a>
+        <a href="/#journal" class="btn btn-secondary">
+          📖 Browse Journal
+        </a>
+      </div>
+      
+      <div class="error-suggestions">
+        <p>Looking for something specific? Try:</p>
+        <ul>
+          <li><a href="/#projects">Current Projects</a> - See what's brewing</li>
+          <li><a href="/#experiments">Sound Experiments</a> - Latest explorations</li>
+          <li><a href="/#journal">Creative Journal</a> - Process insights</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Audio visualization for 404 -->
+    <div class="error-visual">
+      <canvas id="error-canvas" width="200" height="100"></canvas>
+      <p class="error-visual-caption">~ frequency not found ~</p>
+    </div>
+  </div>
+
+  <style>
+    .error-page {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .error-content {
+      max-width: 600px;
+      margin-bottom: 3rem;
+    }
+    
+    .error-title {
+      font-size: 6rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 0;
+      text-shadow: 0 0 20px rgba(124, 210, 255, 0.3);
+    }
+    
+    .error-subtitle {
+      font-size: 1.8rem;
+      color: var(--text-primary);
+      margin: 1rem 0;
+      font-weight: 600;
+    }
+    
+    .error-description {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin: 2rem 0;
+      line-height: 1.6;
+    }
+    
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg-dark);
+    }
+    
+    .btn-primary:hover {
+      background: var(--accent-2);
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border-color: var(--text-secondary);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--bg-secondary);
+      border-color: var(--accent);
+    }
+    
+    .error-suggestions {
+      margin-top: 3rem;
+      text-align: left;
+      max-width: 400px;
+    }
+    
+    .error-suggestions p {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+    
+    .error-suggestions ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .error-suggestions li {
+      margin: 0.5rem 0;
+    }
+    
+    .error-suggestions a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    
+    .error-suggestions a:hover {
+      color: var(--accent-2);
+      text-decoration: underline;
+    }
+    
+    .error-visual {
+      margin-top: 2rem;
+    }
+    
+    #error-canvas {
+      border: 1px solid var(--text-secondary);
+      border-radius: 4px;
+      opacity: 0.6;
+    }
+    
+    .error-visual-caption {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+    
+    @media (max-width: 768px) {
+      .error-title {
+        font-size: 4rem;
+      }
+      
+      .error-subtitle {
+        font-size: 1.4rem;
+      }
+      
+      .error-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .error-suggestions {
+        text-align: center;
+      }
+    }
+  </style>
+
+  <script>
+    // Simple static waveform for 404 page
+    const canvas = document.getElementById('error-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    if (ctx) {
+      ctx.strokeStyle = '#7CD2FF';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      
+      // Draw a "flat line" - no signal found
+      const centerY = canvas.height / 2;
+      ctx.moveTo(0, centerY);
+      ctx.lineTo(canvas.width, centerY);
+      
+      // Add some small noise to show it's "trying"
+      for (let i = 0; i < canvas.width; i += 20) {
+        const noise = (Math.random() - 0.5) * 4;
+        ctx.lineTo(i, centerY + noise);
+      }
+      
+      ctx.stroke();
+    }
+  </script>
+</Base>

@@ -1,0 +1,13 @@
+---
+// MiniPlayer component stub
+---
+<div id="mini-player" class="mini-player">
+  <button class="mini-close" aria-label="Close player">✕</button>
+  <button class="mini-play" aria-pressed="false" aria-label="Play audio" title="Play">▶</button>
+  <div class="mini-meta">
+  <div class="mini-title" id="mini-title">Untitled</div>
+    <div class="audio-time"><span class="current">0:00</span> / <span class="duration">0:00</span></div>
+    <div class="audio-progress" role="slider" aria-label="Seek" tabindex="0"><div class="audio-progress-fill"></div></div>
+  </div>
+  <div id="toast-host" aria-live="polite" style="position:fixed;bottom:72px;left:50%;transform:translateX(-50%);"></div>
+</div>

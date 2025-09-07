@@ -1,0 +1,446 @@
+/* components.css: buttons, cards, player, etc. */
+.play[data-state="playing"] { /* show pause icon */ }
+.play[data-state="paused"]  { /* show play icon  */ }
+/* Buttons */
+.enter-button{ background:linear-gradient(180deg,var(--accent), #57BFF0); color:#041018; border:0; border-radius:var(--radius-3);
+  padding:var(--space-3) var(--space-6); font-weight:700; box-shadow:var(--shadow-1);
+  transition:transform 120ms ease, box-shadow 120ms ease; }
+.enter-button:hover{ transform:translateY(-1px); background:color-mix(in srgb, var(--accent) 85%, white); }
+.enter-button:active{ transform:translateY(0); }
+
+/* Project cards */
+.project-card{ background:var(--bg-secondary); border:1px solid var(--border); border-radius:12px; padding:30px;
+  transition:all .3s ease; position:relative; overflow:hidden; opacity:1; transform:none; }
+.project-card::before{ content:''; position:absolute; top:0; left:0; width:100%; height:4px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-secondary)); transform:translateX(-100%); transition:transform .3s ease; }
+.project-card:hover::before{ transform:translateX(0); }
+.project-card:hover{ transform:translateY(-8px); border-color:var(--accent);
+  box-shadow:0 15px 40px rgba(0,255,136,.15), 0 5px 20px rgba(0,0,0,.3); }
+.project-card:nth-child(2):hover{ box-shadow:0 15px 40px rgba(255,107,107,.15), 0 5px 20px rgba(0,0,0,.3); }
+
+.project-header{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; }
+.project-title{ font-size:1.4rem; color:var(--text-primary); margin:10px 0 5px; }
+.project-icon{ font-size:2rem; margin-bottom:10px; display:inline-block; animation:gentle-float 3s ease-in-out infinite; }
+.project-card:nth-child(1) .project-icon{ animation-delay:0s }
+.project-card:nth-child(2) .project-icon{ animation-delay:1s }
+.project-card:nth-child(3) .project-icon{ animation-delay:2s }
+@keyframes gentle-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+.project-status{ background:var(--accent); color:var(--bg-dark); padding:4px 12px; border-radius:20px; font-size:12px; font-weight:bold; }
+.project-status.experimental{ background:var(--accent-secondary); }
+
+.project-description{ color:var(--text-secondary); margin-bottom:6px; line-height:1.5; }
+
+.progress-bar{ background:rgba(255,255,255,.1); height:8px; border-radius:4px; margin:15px 0; overflow:hidden; position:relative; }
+.progress-bar::before{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent 0px, rgba(255,255,255,.05) 10px, transparent 20px);
+  animation:progress-shimmer 3s ease-in-out infinite; }
+.progress-fill{ height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-secondary));
+  border-radius:4px; transition:width .6s cubic-bezier(.4,0,.2,1); position:relative; overflow:hidden; }
+.progress-fill::after{ content:''; position:absolute; inset:0; left:-100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  animation:progress-sweep 2s ease-in-out infinite; }
+@keyframes progress-shimmer{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}
+@keyframes progress-sweep{0%{left:-100%}100%{left:100%}}
+
+.project-meta{ display:grid; grid-template-columns:1fr; gap:8px; align-items:start; margin-top:10px; }
+.project-meta>span{ order:0 }
+.project-meta .audio-ui{ order:1; width:100% }
+.project-card .audio-ui{ grid-column:1 / -1 }
+.project-card .audio-time{ font-size:.85rem; opacity:.85 }
+.project-card .audio-progress{ height:6px }
+.project-card canvas.waveform-canvas{ margin-top:4px }
+
+/* Lab Dashboard */
+.lab-dashboard{ padding:60px 0; }
+
+/* Experiments */
+.experiments{ padding:60px 0; background:rgba(255,255,255,.02); }
+.experiments-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+.experiment-card{ background:var(--bg-secondary); border:1px solid var(--border); border-radius:8px; padding:20px;
+  transition:all .3s ease; position:relative; opacity:1; transform:none; }
+.experiment-card:hover{ border-color:var(--accent-secondary); transform:translateY(-3px); box-shadow:0 8px 25px rgba(255,107,107,.1); }
+.experiment-header{ display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 12px; margin-bottom:10px; }
+.experiment-type{ display:inline-block; font-size:.8rem; color:var(--accent); background:rgba(0,255,136,.1);
+  padding:4px 8px; border-radius:12px; margin-bottom:8px; font-weight:500; }
+.experiment-card h4{ color:var(--text-primary); margin:8px 0; font-size:1.1rem; }
+.waveform{ height:60px; background:var(--bg-dark); border:1px solid var(--border); border-radius:4px; margin:15px 0;
+  position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; gap:2px; padding:10px; }
+.waveform::before{ content:''; position:absolute; inset:0; left:-100%;
+  background:linear-gradient(90deg, transparent, rgba(0,255,136,.2), transparent);
+  animation:wave 4s infinite; pointer-events:none; }
+.waveform::after{ content:''; position:absolute; inset:0;
+  background-image: linear-gradient(var(--accent) 0%, var(--accent) 100%),
+    linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%),
+    linear-gradient(var(--accent) 0%, var(--accent) 100%),
+    linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%),
+    linear-gradient(var(--accent) 0%, var(--accent) 100%),
+    linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%),
+    linear-gradient(var(--accent) 0%, var(--accent) 100%),
+    linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%);
+  background-size:3px 20%,3px 60%,3px 35%,3px 80%,3px 45%,3px 25%,3px 70%,3px 15%;
+  background-position:10px center,20px center,30px center,40px center,50px center,60px center,70px center,80px center;
+  background-repeat:no-repeat; animation:waveform-pulse 2s ease-in-out infinite; opacity:.7;
+}
+@keyframes wave{0%{left:-100%}100%{left:100%}}
+@keyframes waveform-pulse{0%,100%{transform:scaleY(1);opacity:.7}50%{transform:scaleY(1.2);opacity:1}}
+
+/* Play button */
+.play-button{ background:var(--accent); color:var(--bg-dark); border:0; width:40px; height:40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .3s ease; position:relative; overflow:hidden; }
+.play-button::before{ content:''; position:absolute; inset:0; border-radius:50%;
+  background: radial-gradient(circle, transparent 40%, var(--accent) 70%); opacity:0; transform:scale(0); transition:all .3s ease; }
+.play-button:hover::before{ opacity:.3; transform:scale(1.5); }
+.play-button:hover{ transform:scale(1.15); background:var(--accent-secondary);
+  box-shadow:0 0 20px color-mix(in srgb, var(--accent-secondary) 40%, transparent),
+             0 0 40px color-mix(in srgb, var(--accent-secondary) 20%, transparent); }
+.play-button:active{ transform:scale(.95); }
+.play-button.playing{ background:var(--accent-secondary); animation:pulse-play 1.5s ease-in-out infinite; }
+.play-button.playing::after{ content:''; position:absolute; width:60px; height:60px; border:2px solid var(--accent-secondary);
+  border-radius:50%; animation:ripple 1.5s ease-out infinite; opacity:0; }
+@keyframes pulse-play{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes ripple{0%{transform:scale(1);opacity:1}100%{transform:scale(1.5);opacity:0}}
+
+/* ===== CINEMATIC PARTICLE BACKGROUND SYSTEM ===== */
+.cinematic-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    pointer-events: none;
+    overflow: hidden;
+    background: radial-gradient(ellipse at center, 
+        rgba(124, 210, 255, 0.03) 0%, 
+        rgba(163, 255, 176, 0.02) 40%, 
+        transparent 70%);
+}
+
+/* Dynamic lighting layers */
+.cinematic-background::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 20%, 
+        rgba(124, 210, 255, 0.08) 0%, 
+        transparent 50%),
+    radial-gradient(circle at 70% 80%, 
+        rgba(163, 255, 176, 0.06) 0%, 
+        transparent 50%),
+    radial-gradient(circle at 50% 50%, 
+        rgba(255, 107, 107, 0.04) 0%, 
+        transparent 70%);
+    animation: cinematic-drift 45s ease-in-out infinite;
+    opacity: 0.7;
+}
+
+.cinematic-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        transparent 0%, 
+        rgba(124, 210, 255, 0.02) 25%, 
+        transparent 50%, 
+        rgba(163, 255, 176, 0.02) 75%, 
+        transparent 100%);
+    animation: cinematic-sweep 60s ease-in-out infinite;
+}
+
+/* Particle container */
+.particle-field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Individual particles */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+    animation: particle-life 15s linear infinite;
+}
+
+.particle.musical-note {
+    width: auto;
+    height: auto;
+    font-size: 1.5rem;
+    background: none;
+    color: var(--accent);
+    font-family: 'Arial Unicode MS', sans-serif;
+}
+
+.particle.musical-note::before {
+    content: '♪';
+}
+
+.particle.musical-note:nth-child(3n)::before {
+    content: '♫';
+}
+
+.particle.musical-note:nth-child(5n)::before {
+    content: '♬';
+}
+
+.particle.musical-note:nth-child(7n)::before {
+    content: '♩';
+}
+
+.particle.waveform {
+    width: 20px;
+    height: 2px;
+    border-radius: 1px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+    animation: particle-wave-life 12s ease-in-out infinite;
+}
+
+.particle.frequency-bar {
+    width: 3px;
+    height: 15px;
+    border-radius: 1.5px;
+    background: var(--accent-secondary);
+    animation: particle-bar-life 18s ease-in-out infinite;
+}
+
+/* Particle animation keyframes */
+@keyframes particle-life {
+    0% {
+        opacity: 0;
+        transform: translateY(100vh) translateX(0) scale(0.8) rotate(0deg);
+    }
+    10% {
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(50vh) translateX(var(--drift, 0px)) scale(1) rotate(180deg);
+    }
+    90% {
+        opacity: 0.2;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20vh) translateX(calc(var(--drift, 0px) * 2)) scale(1.2) rotate(360deg);
+    }
+}
+
+@keyframes particle-wave-life {
+    0% {
+        opacity: 0;
+        transform: translateY(100vh) scaleX(0.5) rotate(0deg);
+    }
+    15% {
+        opacity: 0.6;
+        transform: translateY(80vh) scaleX(1) rotate(5deg);
+    }
+    85% {
+        opacity: 0.3;
+        transform: translateY(20vh) scaleX(0.8) rotate(-5deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10vh) scaleX(0.3) rotate(0deg);
+    }
+}
+
+@keyframes particle-bar-life {
+    0% {
+        opacity: 0;
+        transform: translateY(100vh) scaleY(0.2) rotate(0deg);
+    }
+    20% {
+        opacity: 0.7;
+        transform: translateY(75vh) scaleY(1.5) rotate(3deg);
+    }
+    80% {
+        opacity: 0.2;
+        transform: translateY(25vh) scaleY(0.8) rotate(-3deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-15vh) scaleY(0.1) rotate(0deg);
+    }
+}
+
+/* Dynamic lighting animations */
+@keyframes cinematic-drift {
+    0%, 100% {
+        transform: translate(0%, 0%) scale(1);
+        filter: hue-rotate(0deg);
+    }
+    25% {
+        transform: translate(10%, 5%) scale(1.1);
+        filter: hue-rotate(15deg);
+    }
+    50% {
+        transform: translate(-5%, 10%) scale(0.95);
+        filter: hue-rotate(30deg);
+    }
+    75% {
+        transform: translate(-10%, -5%) scale(1.05);
+        filter: hue-rotate(15deg);
+    }
+}
+
+@keyframes cinematic-sweep {
+    0% {
+        transform: translateX(-100%) skewX(-5deg);
+        opacity: 0;
+    }
+    25% {
+        opacity: 0.4;
+    }
+    50% {
+        transform: translateX(0%) skewX(0deg);
+        opacity: 0.6;
+    }
+    75% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateX(100%) skewX(5deg);
+        opacity: 0;
+    }
+}
+
+/* Audio-reactive states */
+.cinematic-background.audio-playing::before {
+    animation-duration: 30s;
+    opacity: 1;
+    filter: saturate(1.3) brightness(1.2);
+}
+
+.cinematic-background.audio-playing .particle {
+    animation-duration: 8s;
+}
+
+.cinematic-background.audio-playing .particle.musical-note {
+    animation-duration: 6s;
+    color: var(--accent-secondary);
+    text-shadow: 0 0 10px currentColor;
+}
+
+/* Intensity levels based on audio */
+.cinematic-background.intensity-low {
+    opacity: 0.6;
+}
+
+.cinematic-background.intensity-medium {
+    opacity: 0.8;
+    filter: saturate(1.1);
+}
+
+.cinematic-background.intensity-high {
+    opacity: 1;
+    filter: saturate(1.3) brightness(1.1);
+}
+
+.cinematic-background.intensity-high::before {
+    animation-duration: 20s;
+}
+
+.cinematic-background.intensity-high .particle {
+    animation-duration: 5s;
+}
+
+/* Spotlight effect for dramatic moments */
+.cinematic-spotlight {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(124, 210, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 2s ease;
+    animation: spotlight-roam 40s ease-in-out infinite;
+}
+
+.cinematic-background.dramatic .cinematic-spotlight {
+    opacity: 1;
+}
+
+@keyframes spotlight-roam {
+    0%, 100% {
+        transform: translate(-200px, -200px) scale(0.8);
+    }
+    25% {
+        transform: translate(calc(100vw - 200px), -100px) scale(1.2);
+    }
+    50% {
+        transform: translate(calc(100vw - 100px), calc(100vh - 200px)) scale(0.9);
+    }
+    75% {
+        transform: translate(-100px, calc(100vh - 100px)) scale(1.1);
+    }
+}
+
+/* Film grain overlay for authentic movie feel */
+.film-grain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.03;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="grain"><feTurbulence baseFrequency="0.95" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23grain)"/></svg>');
+    animation: grain-dance 8s steps(8) infinite;
+    mix-blend-mode: overlay;
+}
+
+@keyframes grain-dance {
+    0%, 100% { transform: translate(0, 0); }
+    12.5% { transform: translate(-2%, 1%); }
+    25% { transform: translate(1%, -1%); }
+    37.5% { transform: translate(-1%, 2%); }
+    50% { transform: translate(2%, -2%); }
+    62.5% { transform: translate(-1%, -1%); }
+    75% { transform: translate(1%, 1%); }
+    87.5% { transform: translate(-2%, -1%); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cinematic-background {
+        opacity: 0.7; /* Reduce intensity on mobile */
+    }
+    
+    .particle {
+        font-size: 1.2rem;
+    }
+    
+    .cinematic-spotlight {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .cinematic-background,
+    .particle,
+    .cinematic-spotlight,
+    .film-grain {
+        animation: none !important;
+        transform: none !important;
+    }
+    
+    .cinematic-background::before,
+    .cinematic-background::after {
+        animation: none !important;
+    }
+}

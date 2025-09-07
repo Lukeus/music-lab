@@ -1,0 +1,16 @@
+
+---
+export interface Props {
+  heading: string;
+  message: string;
+}
+const { heading, message } = Astro.props;
+---
+
+<div class="welcome-gate" role="dialog" aria-modal="true" aria-labelledby="welcome-heading" aria-describedby="welcome-message" aria-hidden="false">
+  <div class="welcome-content">
+    <h1 id="welcome-heading">{heading}</h1>
+    <p id="welcome-message">{message}</p>
+    <button class="enter-button">Enter</button>
+  </div>
+</div>

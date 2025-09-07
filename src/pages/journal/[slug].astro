@@ -1,0 +1,39 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { createSlug } from '../../utils/blog';
+
+export async function getStaticPaths() {
+  const journalEntries = await getCollection('journal');
+  
+  return journalEntries.map((entry: CollectionEntry<'journal'>) => {
+    const slug = entry.slug || createSlug(entry.data.title);
+    return {
+      params: { slug },
+      props: { entry },
+    };
+  });
+}
+
+interface Props {
+  entry: CollectionEntry<'journal'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<BlogPost 
+  frontmatter={{
+    title: entry.data.title,
+    date: entry.data.date,
+    excerpt: entry.data.excerpt,
+    tags: entry.data.tags,
+    categories: entry.data.categories,
+    featuredImage: entry.data.featuredImage,
+    author: entry.data.author
+  }}
+  content={entry.body}
+>
+  <Content />
+</BlogPost>

@@ -1,0 +1,40 @@
+/* ===== Lukeus.art – Design tokens & themes ===== */
+:root {
+    --bg: #0B0F14;
+    --bg-elev: #121821;
+    --text: #EAF2FF;
+    --muted: #A9B6CC;
+    --accent: #7CD2FF;
+    --accent-2: #A3FFB0;
+    --bg-dark: var(--bg);
+    --bg-secondary: var(--bg-elev);
+    --text-primary: var(--text);
+    --text-secondary: var(--muted);
+    --accent-secondary: var(--accent-2);
+    --border: color-mix(in srgb, var(--text) 10%, transparent);
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-12: 48px;
+    --radius-2: 8px;
+    --radius-3: 12px;
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 20px rgba(0, 0, 0, .25);
+}
+:root[data-theme="light"] {
+    --bg: #F7FAFF;
+    --bg-elev: #FFFFFF;
+    --text: #0A0F14;
+    --muted: #3B4B61;
+    --accent: #006F9C;
+    --accent-2: #146C43;
+    --bg-dark: var(--bg);
+    --bg-secondary: var(--bg-elev);
+    --text-primary: var(--text);
+    --text-secondary: var(--muted);
+    --accent-secondary: var(--accent-2);
+    --border: color-mix(in srgb, var(--text) 12%, transparent);
+}
+

@@ -1,0 +1,223 @@
+---
+// src/layouts/Base.astro
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/layout.css';
+import '../styles/components.css';
+import '../styles/drumMachine.css';
+import '../styles/journal.css';
+import '../styles/mini-player.css';
+import '../styles/utilities.css';
+
+const { title = 'Lukeus Music Lab' } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content="Step into Lukeus's creative laboratory where experimental music, sound design, and musical storytelling come to life. From acoustic sessions to electronic transformations." />
+    <meta name="keywords" content="lukeus, music lab, experimental music, electronic music, acoustic sessions, creative process, music producer, Portland musician" />
+    
+    <!-- Canonical and site relationships -->
+    <link rel="canonical" href="https://lukeus.app/" />
+    <link rel="alternate" type="application/rss+xml" title="Lukeus Music Lab Journal" href="/feed.xml" />
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/lukeus-avatar.png" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Because Music Matters | Lukeus Music Lab" />
+    <meta property="og:description" content="Step into the creative laboratory where experimental music and sound design come to life. From acoustic storytelling to electronic transformations." />
+    <meta property="og:image" content="https://lukeus.app/assets/images/lukeus-avatar.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lukeus.app/" />
+    <meta property="og:site_name" content="Lukeus Music Lab" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Because Music Matters | Lukeus Music Lab" />
+    <meta name="twitter:description" content="Step into the creative laboratory where experimental music and sound design come to life." />
+    <meta name="twitter:image" content="https://lukeus.app/assets/images/lukeus-avatar.png" />
+    <meta name="twitter:creator" content="@lukeus" />
+    
+    <!-- Theme and app -->
+    <meta name="theme-color" content="#0B0F14" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Lukeus Music Lab",
+        "alternateName": "Because Music Matters",
+        "url": "https://lukeus.app/",
+        "description": "Experimental music laboratory and creative workspace by Lukeus",
+        "author": {
+          "@type": "Person",
+          "name": "Lukeus",
+          "url": "https://lukeus.com/",
+          "sameAs": [
+            "https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl",
+            "https://soundcloud.com/lukeusmusic",
+            "https://www.instagram.com/musiclukeus/"
+          ],
+          "jobTitle": "Music Producer, Artist",
+          "knowsAbout": ["Electronic Music", "Acoustic Music", "Sound Design", "Music Production"]
+        },
+        "publisher": {
+          "@type": "Person",
+          "name": "Lukeus",
+          "url": "https://lukeus.com/"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://lukeus.app/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
+        "mainEntity": {
+          "@type": "CreativeWork",
+          "name": "Music Lab",
+          "description": "Experimental music projects and creative process documentation"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <slot />
+    
+    <script>
+      import { bindPlayButtons, bindMiniPlayer, bindWaveform } from '../scripts/audio';
+      import { bindJournalFeatures } from '../scripts/journal';
+      import { initParallax } from '../scripts/parallax';
+      import { initWelcomeGate } from '../scripts/welcomeGate';
+      import { initDashboard } from '../scripts/dashboard';
+      import { initCinematicBackground } from '../scripts/cinematic';
+      import { initializeDrumMachine } from '../scripts/drumMachine';
+
+      window.addEventListener('DOMContentLoaded', () => {
+        bindPlayButtons();
+        bindMiniPlayer();
+        bindWaveform();
+        bindJournalFeatures();
+        initParallax();
+        initWelcomeGate();
+        initDashboard();
+        initAvatarClickHandler();
+        initCinematicBackground();
+      });
+
+      // Avatar click handler to show/hide drum machine
+      function initAvatarClickHandler() {
+        const avatar = document.getElementById('hero-avatar');
+        const drumContainer = document.getElementById('drum-machine-container');
+        const avatarContainer = document.querySelector('.avatar-container');
+        
+        if (!avatar || !drumContainer) return;
+        
+        // Ensure drum machine starts hidden
+        drumContainer.classList.remove('show');
+        
+        // Force initial hidden styles
+        drumContainer.style.opacity = '0';
+        drumContainer.style.visibility = 'hidden';
+        drumContainer.style.maxHeight = '0';
+        drumContainer.style.transform = 'translateY(20px)';
+        
+        let drumMachineInitialized = false;
+        let isVisible = false;
+        let isToggling = false; // Prevent rapid clicks
+        
+        // Add click cursor to avatar
+        avatar.style.cursor = 'pointer';
+        if (avatarContainer) {
+          avatarContainer.style.cursor = 'pointer';
+        }
+        
+        // Add click event to avatar
+        const toggleDrumMachine = async () => {
+          // Prevent rapid clicks
+          if (isToggling) {
+            console.log('🚫 Click ignored - already toggling');
+            return;
+          }
+          isToggling = true;
+          
+          console.log('🥁 Avatar clicked! Initializing drum machine...');
+          
+          if (!drumMachineInitialized) {
+            // Initialize drum machine on first click
+            try {
+              await initializeDrumMachine();
+              drumMachineInitialized = true;
+              console.log('✅ Drum machine initialized successfully');
+            } catch (error) {
+              console.error('❌ Failed to initialize drum machine:', error);
+              return;
+            }
+          }
+          
+          // Toggle visibility
+          isVisible = !isVisible;
+          console.log(`🎵 Toggling drum machine visibility: ${isVisible ? 'SHOW' : 'HIDE'}`);
+          
+          if (isVisible) {
+            drumContainer.classList.add('show');
+            console.log('✅ Drum machine shown');
+            
+            // Force styles with inline CSS as fallback
+            drumContainer.style.opacity = '1';
+            drumContainer.style.visibility = 'visible';
+            drumContainer.style.maxHeight = '800px';
+            drumContainer.style.transform = 'translateY(0)';
+            
+            // Smooth scroll to drum machine after animation
+            setTimeout(() => {
+              drumContainer.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+              });
+            }, 300);
+          } else {
+            drumContainer.classList.remove('show');
+            console.log('✅ Drum machine hidden');
+            
+            // Force hidden styles with inline CSS as fallback
+            drumContainer.style.opacity = '0';
+            drumContainer.style.visibility = 'hidden';
+            drumContainer.style.maxHeight = '0';
+            drumContainer.style.transform = 'translateY(20px)';
+            
+            // Stop any playing drums
+            if (window.drumMachine && window.drumMachine.stop) {
+              window.drumMachine.stop();
+            }
+          }
+          
+          // Reset toggle lock after animation completes
+          setTimeout(() => {
+            isToggling = false;
+          }, 600); // Match CSS transition duration
+        };
+        
+        // Only bind to avatar image to prevent double-firing
+        avatar.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleDrumMachine();
+        });
+      }
+    </script>
+  </body>
+</html>
