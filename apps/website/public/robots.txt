@@ -1,0 +1,42 @@
+# Robots.txt for Lukeus Music Lab (lukeus.app)
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://lukeus.app/sitemap.xml
+
+# Performance: Crawl delay for resource-intensive bots
+User-agent: Baiduspider
+Crawl-delay: 5
+
+User-agent: YandexBot
+Crawl-delay: 5
+
+# Block known bad bots
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Allow social media crawlers
+User-agent: facebookexternalhit/*
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# Audio files - allow but be mindful of bandwidth
+User-agent: *
+Allow: /assets/audio/
+
+# Cache manifest
+User-agent: *
+Allow: /manifest.json

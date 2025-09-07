@@ -1,44 +1,55 @@
 {
-  "name": "lukeus-music-lab",
-  "version": "1.0.0",
-  "description": "Lukeus Music Lab - Experimental Sound & Creative Process website",
-  "main": "~/public/index.html",
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "lint": "eslint src/ --fix",
-    "format": "prettier --write '**/*.{html,css,js,ts,astro,md,mdx}'"
-  },
-  "keywords": [
-    "music",
-    "experimental",
-    "sound",
-    "creative",
-    "portfolio",
-    "website",
-    "github-pages"
+  "name": "@lukeus/music-lab",
+  "version": "2.0.0",
+  "description": "Lukeus Music Lab - A comprehensive music creation and experimentation ecosystem",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "tools/*"
   ],
-  "author": "Lukeus",
-  "license": "MIT",
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/website",
+    "build": "npm run build --workspaces --if-present",
+    "build:website": "npm run build --workspace=apps/website",
+    "preview": "npm run preview --workspace=apps/website",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "npm run format --workspaces --if-present",
+    "type-check": "npm run type-check --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present && rm -rf node_modules",
+    "reset": "npm run clean && npm install",
+    "deploy:website": "npm run deploy --workspace=apps/website",
+    "new-package": "node scripts/create-package.js",
+    "workspace": "npm run --workspace"
+  },
   "devDependencies": {
-    "@astrojs/mdx": "^4.3.4",
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
-    "astro": "^5.13.2",
-    "autoprefixer": "^10.4.21",
     "eslint": "^8.57.1",
-    "postcss": "^8.5.6",
     "prettier": "^3.2.5",
-    "vite": "^5.2.0"
+    "typescript": "^5.0.0",
+    "concurrently": "^8.2.2",
+    "rimraf": "^5.0.0"
   },
-  "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "motion": "^12.23.12"
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/lukeus/music-lab.git"
   },
-  "homepage": "https://lukeus.github.io/music-lab"
+  "author": "Lukeus",
+  "license": "MIT",
+  "keywords": [
+    "music",
+    "experimental",
+    "sound",
+    "creative",
+    "monorepo",
+    "music-production",
+    "web-audio",
+    "typescript"
+  ]
 }

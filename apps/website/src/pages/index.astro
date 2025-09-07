@@ -1,0 +1,120 @@
+---
+// src/pages/index.astro
+
+import Base from "../layouts/base.astro";
+import WelcomeGate from "../components/WelcomeGate.astro";
+import ParallaxBackground from "../components/ParallaxBackground.astro";
+import CinematicBackground from "../components/CinematicBackground.astro";
+import MiniPlayer from "../components/MiniPlayer.astro";
+import DrumMachine from "../components/DrumMachine.astro";
+import Journal from "../components/JournalList.astro";
+import content from "../data/content.json";
+---
+
+<Base>
+<ParallaxBackground />
+<CinematicBackground />
+<WelcomeGate heading={content.welcomeGate.heading} message={content.welcomeGate.message} />
+<MiniPlayer />
+
+<header>
+  <div class="container">
+    <div class="header-content">
+      <span class="logo">Because Music Matters</span>
+      <a href="#" class="logo" id="logo-text">{content.logoText || 'Music Lab'}</a>
+    </div>
+  </div>
+</header>
+
+<section id="main-content" class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="avatar-section">
+        <div class="avatar-container">
+          <img src="/assets/images/lukeus-avatar.png" alt="Lukeus - Music Producer and Songwriter" class="avatar-image" width="256" height="256" loading="eager" id="hero-avatar">
+          <div class="avatar-ring"></div>
+          <div class="avatar-pulse"></div>
+        </div>
+        <div class="avatar-hint">
+          <span>Click to jam! 🥁</span>
+        </div>
+      </div>
+      <div class="hero-text">
+        <h1 id="hero-heading" aria-live="polite">{content.heroSection.heading}</h1>
+        <p id="hero-paragraph">{content.heroSection.paragraph}</p>
+      </div>
+    </div>
+    
+    <!-- Drum Machine - Hidden by default, shows below avatar when clicked -->
+    <div class="drum-machine-container" id="drum-machine-container">
+      <DrumMachine />
+    </div>
+  </div>
+</section>
+
+<section class="lab-dashboard" id="projects">
+  <div class="container">
+    <h2 class="section-title">
+      <div class="section-icon" aria-hidden="true">⚗️</div>
+      <span>Current Projects</span>
+    </h2>
+    <div class="projects-grid">
+      {content.currentProjects.map(project => (
+        <div class="project-card">
+          <div class="project-header">
+            <span class="project-icon">{project.icon}</span>
+            <span class="project-status">{project.status}</span>
+          </div>
+          <div class="project-title">{project.title}</div>
+          <div class="project-description">{project.description}</div>
+          <div class="project-meta">
+            <span>{project.meta}</span>
+            {project.audioUrl && (
+              <span class="audio-ui" style="display:flex;align-items:center;gap:8px;">
+                <button class="play-button" data-audio={project.audioUrl} data-title={project.title} aria-label="Play/Pause" style="flex-shrink:0;width:40px;height:40px;">▶</button>
+                <canvas class="waveform-canvas" height="32" style="flex:1;min-width:80px;max-width:100%;display:inline-block;"></canvas>
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="experiments" id="experiments">
+  <div class="container">
+    <h2 class="section-title">
+      <div class="section-icon" aria-hidden="true">🔬</div>
+      <span>Sound Experiments</span>
+    </h2>
+    <div class="experiments-grid">
+      {content.soundExperiments.map(exp => (
+        <div class="experiment-card">
+          <div class="experiment-header">
+            <span class="experiment-type">{exp.type}</span>
+            <span class="experiment-date">{exp.meta}</span>
+          </div>
+          <h4>{exp.title}</h4>
+          <div class="experiment-description">{exp.description}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="journal" id="journal">
+  <Journal />
+</section>
+
+<footer>
+  <div class="container">
+    <div class="social-links">
+      <a href="https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl?si=pNvmFrLvTFGIBu0KTAYlqQ" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on Spotify">Spotify</a>
+      <a href="https://soundcloud.com/lukeusmusic" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on SoundCloud">SoundCloud</a>
+      <a href="https://www.instagram.com/musiclukeus/" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on Instagram">Instagram</a>
+    </div>
+    <p>&copy; 2025 Lukeus. All experiments are works in progress.</p>
+  </div>
+</footer>
+</Base>

@@ -1,0 +1,53 @@
+{
+  "$ref": "#/definitions/journal",
+  "definitions": {
+    "journal": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "excerpt": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "featuredImage": {
+          "type": "string"
+        },
+        "published": {
+          "type": "boolean",
+          "default": true
+        },
+        "author": {
+          "type": "string",
+          "default": "Lukeus"
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "date"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

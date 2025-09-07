@@ -1,0 +1,24 @@
+{
+  "name": "@lukeus/audio-engine",
+  "version": "1.0.0",
+  "description": "Shared audio processing utilities for Lukeus Music Lab",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": ["audio", "web-audio-api", "music", "sound"],
+  "author": "Lukeus",
+  "license": "MIT",
+  "dependencies": {
+    "@lukeus/shared-types": "file:../shared-types"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist"
+  ]
+}

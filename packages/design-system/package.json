@@ -1,0 +1,22 @@
+{
+  "name": "@lukeus/design-system",
+  "version": "1.0.0",
+  "description": "Shared design system for Lukeus Music Lab",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": ["design-system", "css", "tokens", "theme"],
+  "author": "Lukeus",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "css"
+  ]
+}

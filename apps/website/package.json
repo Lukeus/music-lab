@@ -1,0 +1,47 @@
+{
+  "name": "@lukeus/website",
+  "version": "1.0.0",
+  "description": "Lukeus Music Lab - Main website and portfolio",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "eslint src/ --fix",
+    "format": "prettier --write '**/*.{html,css,js,ts,astro,md,mdx}'",
+    "deploy": "npm run build && firebase deploy",
+    "clean": "rm -rf dist node_modules/.astro",
+    "type-check": "astro check"
+  },
+  "keywords": [
+    "music",
+    "experimental",
+    "sound",
+    "creative",
+    "portfolio",
+    "website",
+    "github-pages"
+  ],
+  "author": "Lukeus",
+  "license": "MIT",
+  "devDependencies": {
+    "@astrojs/mdx": "^4.3.4",
+    "@typescript-eslint/eslint-plugin": "^8.39.1",
+    "@typescript-eslint/parser": "^8.39.1",
+    "astro": "^5.13.2",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "postcss": "^8.5.6",
+    "prettier": "^3.2.5",
+    "vite": "^5.2.0"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "motion": "^12.23.12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukeus/music-lab.git"
+  },
+  "homepage": "https://lukeus.github.io/music-lab"
+}

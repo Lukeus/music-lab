@@ -1,0 +1,21 @@
+{
+  "name": "@lukeus/shared-types",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types for Lukeus Music Lab",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": ["types", "typescript", "music", "audio"],
+  "author": "Lukeus",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist"
+  ]
+}
