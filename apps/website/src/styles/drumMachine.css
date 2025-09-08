@@ -5,7 +5,10 @@
 .drum-ctrls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .drum-grid{display:grid;grid-template-columns:72px repeat(16, var(--step,48px));gap:8px;user-select:none;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding:6px 8px 6px 10px;box-sizing:border-box}
 .drum-wrap{--step:min(48px,7.2vw)}
-.drum-scroll-hint{font-size:.75rem;opacity:.6;margin-top:6px;text-align:center;}
+.drum-scroll-hint{font-size:.75rem;opacity:.7;margin-top:8px;text-align:center;color:var(--text-secondary);transition:opacity 0.3s ease;display:none}
+@media (max-width:700px){
+.drum-scroll-hint{display:block}
+}
 .drum-label{position:sticky;left:0;z-index:2;display:flex;align-items:center;justify-content:flex-end;padding:0 10px 0 12px;min-width:72px;box-sizing:border-box;font-size:.9rem;opacity:.9;background:var(--card-bg,rgba(20,20,20,.5));backdrop-filter:saturate(1.1) blur(2px);overflow:visible}
 .drum-step{width:var(--step,48px);aspect-ratio:1/1;border:1px solid rgba(255,255,255,.12);box-sizing:border-box;border-radius:6px;background:var(--surface-2,#222);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);transition:transform .06s ease, box-shadow .2s cubic-bezier(.4,0,.2,1)}
 .drum-step:active{transform:scale(.96)}
@@ -34,16 +37,18 @@ input[type="range"]::-moz-range-track{height:6px;border-radius:4px;background:rg
 input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--accent,#5ef);border:0;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 @media (max-width:700px){
 .drum-grid{grid-template-columns:64px repeat(16, var(--step,44px));}
-.drum-wrap{--step:min(44px,10.5vw)}
+.drum-wrap{--step:max(44px,10.5vw);padding:12px}
 .drum-label{min-width:64px;font-size:.85rem;padding:0 8px 0 10px}
-.drum-btn{padding:10px 12px}
+.drum-step{min-height:44px;min-width:44px} /* Ensure minimum touch target size */
+.drum-btn{padding:12px 14px;font-size:0.95rem;min-height:44px} /* Better touch targets */
 .drum-btn.tog{width:108px}
 .drum-btn.tog svg{display:inline-block;width:20px;height:20px}
 .drum-btn.tog span{display:none !important}
-.drum-ctrls{gap:6px}
-.drum-bpm,.drum-swing{min-width:0;flex:1 1 100%;width:100%;grid-template-columns:auto 1fr auto}
-#drum-bpm,#drum-swing{width:100%}
+.drum-ctrls{gap:8px;flex-wrap:wrap}
+.drum-bpm,.drum-swing{min-width:0;flex:1 1 100%;width:100%;grid-template-columns:auto 1fr auto;margin:4px 0}
+#drum-bpm,#drum-swing{width:100%;min-height:44px}
 .drum-bpm label,.drum-swing label{font-size:.9rem}
+.drum-grid{padding:8px;touch-action:pan-x} /* Allow horizontal scrolling only */
 }
 .drum-mode{display:flex;gap:6px;align-items:center;margin-right:8px}
 .drum-mode .mode[aria-pressed="true"]{outline:2px solid var(--accent-secondary,#ff6)}

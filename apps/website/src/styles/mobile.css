@@ -121,16 +121,26 @@
   .header-content {
     justify-content: center;
     position: relative;
+    min-height: 44px; /* Ensure minimum touch target height */
+    align-items: center;
   }
 
   .header-content .logo:first-child {
     position: absolute;
     left: 0;
-    font-size: 18px;
+    font-size: 16px;
+    max-width: 120px; /* Prevent overflow */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .header-content .logo:last-child {
-    font-size: 20px;
+    font-size: 18px;
+    max-width: calc(100vw - 160px); /* Leave space for left logo */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* Mobile hero optimizations */
@@ -288,6 +298,37 @@
   .journal,
   footer {
     padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
+  }
+}
+
+/* Extra small screens (phones in portrait) */
+@media (max-width: 480px) {
+  .header-content .logo:first-child {
+    font-size: 14px;
+    max-width: 100px;
+  }
+
+  .header-content .logo:last-child {
+    font-size: 16px;
+    max-width: calc(100vw - 120px);
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+
+  .hero {
+    padding: 40px 0;
+  }
+
+  .avatar-container {
+    width: 160px;
+    height: 160px;
+  }
+
+  .avatar-image {
+    width: 120px;
+    height: 120px;
   }
 }
 
