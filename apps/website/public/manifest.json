@@ -1,0 +1,80 @@
+{
+  "name": "Lukeus Music Lab",
+  "short_name": "Music Lab",
+  "description": "Interactive music creation laboratory with drum machine, audio visualization, and creative journal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0F14",
+  "theme_color": "#7CD2FF",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/images/lukeus-avatar.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/images/lukeus-avatar.png", 
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/lukeus-avatar.png",
+      "sizes": "144x144", 
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/lukeus-avatar.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["music", "entertainment", "multimedia"],
+  "screenshots": [
+    {
+      "src": "/assets/images/lab_bg.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Drum Machine",
+      "short_name": "Drums",
+      "description": "Create beats with the interactive drum machine",
+      "url": "/#drum-machine",
+      "icons": [
+        {
+          "src": "/assets/images/lukeus-avatar.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Audio Player", 
+      "short_name": "Audio",
+      "description": "Listen to current projects",
+      "url": "/#projects",
+      "icons": [
+        {
+          "src": "/assets/images/lukeus-avatar.png", 
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Creative Journal",
+      "short_name": "Journal", 
+      "description": "Browse creative insights and process",
+      "url": "/#journal",
+      "icons": [
+        {
+          "src": "/assets/images/lukeus-avatar.png",
+          "sizes": "96x96" 
+        }
+      ]
+    }
+  ]
+}

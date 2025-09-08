@@ -1,0 +1,32 @@
+{
+  "name": "@lukeus/music-tools",
+  "version": "1.0.0",
+  "description": "Interactive music theory tools and utilities for Lukeus Music Lab",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "music",
+    "music-theory",
+    "chords",
+    "keys",
+    "scales",
+    "interactive-tools"
+  ],
+  "author": "Lukeus",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@lukeus/shared-types": "file:../shared-types"
+  },
+  "files": [
+    "dist"
+  ]
+}

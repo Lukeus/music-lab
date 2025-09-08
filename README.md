@@ -156,7 +156,7 @@ npm run build
 ## 📊 Performance Metrics
 
 ```mermaid
-gitgraph
+gitGraph
     commit id: "Initial Setup"
     branch feature-audio
     checkout feature-audio

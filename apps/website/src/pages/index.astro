@@ -21,7 +21,11 @@ import content from "../data/content.json";
   <div class="container">
     <div class="header-content">
       <span class="logo">Because Music Matters</span>
-      <a href="#" class="logo" id="logo-text">{content.logoText || 'Music Lab'}</a>
+      <nav class="nav-links">
+        <a href="/tools" class="nav-link">🎹 Tools</a>
+        <a href="/#journal" class="nav-link">📝 Journal</a>
+      </nav>
+      <a href="/" class="logo" id="logo-text">{content.logoText || 'Music Lab'}</a>
     </div>
   </div>
 </header>

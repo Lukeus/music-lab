@@ -1,0 +1,222 @@
+---
+// src/pages/tools.astro
+import Base from "../layouts/base.astro";
+---
+
+<Base 
+  title="Music Tools | Lukeus Music Lab"
+  description="Interactive music theory tools and utilities. Explore keys, chords, progressions, and more with Key Friend and other musical tools."
+  keywords="music tools, music theory, chord progressions, key signatures, interactive tools, music education"
+>
+<header>
+  <div class="container">
+    <div class="header-content">
+      <span class="logo">Because Music Matters</span>
+      <nav class="nav-links">
+        <a href="/" class="nav-link">🏠 Home</a>
+        <a href="/#journal" class="nav-link">📝 Journal</a>
+      </nav>
+      <a href="/" class="logo" id="logo-text">Music Lab</a>
+    </div>
+  </div>
+</header>
+
+<section class="tools-hero">
+  <div class="container">
+    <div class="tools-hero-content">
+      <h1 class="tools-title">Music Tools</h1>
+      <p class="tools-description">
+        Interactive tools to explore music theory, discover chord progressions, and enhance your musical creativity
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="tools-grid">
+  <div class="container">
+    <div class="tool-showcase">
+      <div id="key-friend-container" class="tool-container">
+        <!-- Key Friend will be rendered here -->
+      </div>
+    </div>
+    
+    <!-- Future tools placeholder -->
+    <div class="coming-soon">
+      <h3>More Tools Coming Soon</h3>
+      <div class="future-tools">
+        <div class="future-tool">
+          <span class="tool-icon">🎼</span>
+          <span class="tool-name">Scale Explorer</span>
+        </div>
+        <div class="future-tool">
+          <span class="tool-icon">🎯</span>
+          <span class="tool-name">Chord Finder</span>
+        </div>
+        <div class="future-tool">
+          <span class="tool-icon">🎵</span>
+          <span class="tool-name">Progression Generator</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="social-links">
+      <a href="https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl?si=pNvmFrLvTFGIBu0KTAYlqQ" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on Spotify">Spotify</a>
+      <a href="https://soundcloud.com/lukeusmusic" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on SoundCloud">SoundCloud</a>
+      <a href="https://www.instagram.com/musiclukeus/" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on Instagram">Instagram</a>
+    </div>
+    <p>&copy; 2025 Lukeus. All tools are works in progress.</p>
+  </div>
+</footer>
+</Base>
+
+<style>
+/* Tools page specific styles */
+.tools-hero {
+  padding: 80px 0 60px 0;
+  background: linear-gradient(135deg, 
+    rgba(124, 210, 255, 0.1) 0%, 
+    rgba(163, 255, 176, 0.1) 100%);
+  text-align: center;
+}
+
+.tools-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tools-description {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.tools-grid {
+  padding: 60px 0;
+}
+
+.tool-showcase {
+  margin-bottom: 80px;
+}
+
+.tool-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Coming Soon Section */
+.coming-soon {
+  text-align: center;
+  padding: 60px 0;
+  background: rgba(11, 15, 20, 0.5);
+  border-radius: 16px;
+  border: 1px solid rgba(124, 210, 255, 0.1);
+}
+
+.coming-soon h3 {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  color: var(--text-secondary);
+}
+
+.future-tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.future-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  background: rgba(124, 210, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(124, 210, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.future-tool:hover {
+  background: rgba(124, 210, 255, 0.1);
+  border-color: rgba(124, 210, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.future-tool .tool-icon {
+  font-size: 2rem;
+}
+
+.future-tool .tool-name {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .tools-hero {
+    padding: 60px 0 40px 0;
+  }
+  
+  .tools-grid {
+    padding: 40px 0;
+  }
+  
+  .tool-showcase {
+    margin-bottom: 60px;
+  }
+  
+  .coming-soon {
+    padding: 40px 20px;
+  }
+  
+  .future-tools {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<script>
+  // Import and initialize Key Friend when page loads
+  import { createKeyFriend } from '../scripts/keyFriend';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const keyFriendContainer = document.getElementById('key-friend-container');
+    
+    if (keyFriendContainer) {
+      const keyFriend = createKeyFriend(keyFriendContainer);
+      keyFriend.init();
+      
+      // Set up event listeners for interactions
+      keyFriend.on('keyChange', (key) => {
+        console.log('🎵 Key changed to:', key.name);
+        
+        // Add subtle animation to page when key changes
+        document.body.style.transform = 'scale(1.002)';
+        setTimeout(() => {
+          document.body.style.transform = 'scale(1)';
+        }, 200);
+      });
+      
+      keyFriend.on('chordSelect', (chord) => {
+        console.log('🎹 Chord selected:', chord.name);
+      });
+      
+      keyFriend.on('progressionSelect', (progression) => {
+        console.log('🎼 Progression selected:', progression);
+      });
+    }
+  });
+</script>
+</Base>

@@ -93,6 +93,7 @@ export function initializeDrumMachine() {
       </div>
     </div>
     <div class="drum-grid" id="drum-grid" role="grid" aria-label="Step sequencer"></div>
+    <div class="drum-scroll-hint" id="drum-scroll-hint">← Scroll horizontally to see all steps →</div>
     <div id="drum-aria" class="sr-only" aria-live="polite"></div>
   `;
 
@@ -119,9 +120,15 @@ export function initializeDrumMachine() {
       btn.type = 'button';
       btn.className = 'drum-step';
       btn.setAttribute('aria-label', `${instruments[r].key} step ${c + 1}`);
-      btn.addEventListener('pointerdown', () => {
+      btn.addEventListener('pointerdown', (e) => {
+        e.preventDefault(); // Prevent scrolling on mobile
         pattern[r][c] = !pattern[r][c];
         btn.classList.toggle('on', pattern[r][c]);
+        
+        // Add haptic feedback on mobile if available
+        if ('vibrate' in navigator && navigator.vibrate) {
+          navigator.vibrate(10);
+        }
       });
       grid.appendChild(btn);
     }
@@ -240,6 +247,34 @@ export function initializeDrumMachine() {
       state.timer = window.setTimeout(loop, baseStepMs());
     }
   });
+
+  // Hide scroll hint on desktop or after interaction
+  const scrollHint = wrap.querySelector('#drum-scroll-hint') as HTMLElement;
+  if (scrollHint) {
+    // Hide on desktop
+    if (window.innerWidth > 700) {
+      scrollHint.style.display = 'none';
+    }
+    
+    // Hide after first grid interaction
+    let interacted = false;
+    grid.addEventListener('scroll', () => {
+      if (!interacted && scrollHint) {
+        scrollHint.style.opacity = '0';
+        setTimeout(() => scrollHint.style.display = 'none', 300);
+        interacted = true;
+      }
+    }, { once: true });
+    
+    // Also hide on any step click
+    grid.addEventListener('pointerdown', () => {
+      if (!interacted && scrollHint) {
+        scrollHint.style.opacity = '0';
+        setTimeout(() => scrollHint.style.display = 'none', 300);
+        interacted = true;
+      }
+    }, { once: true });
+  }
 
   // Mount into DOM - place inside the #drum-doodle container
   console.log('Mounting drum machine. Host found:', !!host, 'ID:', host?.id);
