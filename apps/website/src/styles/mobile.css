@@ -137,10 +137,20 @@
 
   .header-content .logo:last-child {
     font-size: 18px;
-    max-width: calc(100vw - 160px); /* Leave space for left logo */
+    max-width: calc(100vw - 200px); /* Leave space for left logo and nav */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  /* Mobile navigation */
+  .nav-links {
+    gap: 8px;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+    padding: 6px 12px;
   }
 
   /* Mobile hero optimizations */
