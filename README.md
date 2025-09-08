@@ -18,10 +18,12 @@ graph TD
     A --> D[🎨 Design System]
     A --> E[📝 Content Management]
     
-    B --> B1[🥁 Real-time Drum Machine]
-    B --> B2[🌊 Waveform Visualization]
-    B --> B3[📖 Dynamic Journal]
-    B --> B4[🎸 Audio Playback]
+    B --> B1[🗝️ Key Friend Music Tool]
+    B --> B2[🥁 Real-time Drum Machine]
+    B --> B3[🌊 Waveform Visualization]
+    B --> B4[📖 Dynamic Journal]
+    B --> B5[🎸 Audio Playbook]
+    B --> B6[📱 Mobile-First Experience]
     
     C --> C1[🔊 Web Audio API]
     C --> C2[🎵 Music Theory Utils]
@@ -57,9 +59,10 @@ flowchart LR
     subgraph "📦 Shared Packages"
         P1[🎨 Design System<br/>CSS + Tokens]
         P2[🔊 Audio Engine<br/>Web Audio API]
-        P3[🎵 Music Theory<br/>Algorithms]
+        P3[🎵 Music Tools<br/>Interactive Theory]
         P4[🧩 UI Components<br/>React/Astro]
         P5[📝 Shared Types<br/>TypeScript]
+        P6[📱 Mobile Utils<br/>Touch & PWA]
     end
     
     subgraph "🛠️ Development Tools"
@@ -102,7 +105,28 @@ flowchart LR
 
 ## 🎯 Feature Showcase
 
-### 🎛️ Interactive Drum Machine
+### 🗝️ Key Friend Music Theory Tool
+Interactive **music theory explorer** built with TypeScript, featuring all 12 major and minor keys, chord progression builder, and educational note display. Perfect for songwriters, music students, and theory enthusiasts.
+
+```mermaid
+sequenceDiagram
+    participant U as 🎹 User
+    participant K as 🗝️ Key Friend
+    participant T as 🎵 Theory Engine
+    participant A as 🎨 Animation
+    
+    U->>K: Select Key (e.g., "C Major")
+    K->>T: Generate Chord Patterns
+    T->>K: Return I-ii-iii-IV-V-vi-vii°
+    K->>A: Animate Key Transition
+    U->>K: Click Progression (I-V-vi-IV)
+    K->>A: Staggered Chord Animation
+    A->>U: Visual Feedback & Learning
+    
+    Note over U,A: Learn While Creating
+```
+
+### 🏛️ Interactive Drum Machine
 Built with **Web Audio API** and **TypeScript**, featuring real-time beat creation, pattern sequencing, and professional-grade audio synthesis.
 
 ```mermaid
@@ -221,7 +245,7 @@ music-lab/
 ├── packages/
 │   ├── ui-components/           🧩 Reusable component library
 │   ├── audio-engine/            🔊 Web Audio abstractions
-│   ├── music-theory/            🎵 Music algorithms & utilities
+│   ├── music-tools/             🗝️ Interactive music theory tools
 │   ├── design-system/           🎨 Design tokens & themes
 │   └── shared-types/            📝 TypeScript definitions
 ├── tools/
@@ -249,15 +273,37 @@ This monorepo embodies the principles of **Creative Software Architecture**:
 
 ## 🌟 Advanced Features
 
-### 🎛️ Professional Audio Processing
+### 🗝️ Interactive Music Theory
+```typescript
+// Key Friend - Generate chord progressions for any key
+const generateMajorKey = (tonic: Note) => {
+  const scale = generateScale(tonic, MAJOR_INTERVALS);
+  const chords = CHORD_PATTERNS.map(pattern => ({
+    root: scale[pattern.root],
+    type: pattern.type,
+    numeral: pattern.numeral
+  }));
+  return { tonic, mode: 'major', chords, scale };
+};
+
+// Interactive progression builder with animations
+keyFriend.applyProgression('I-V-vi-IV');
+```
+
+### 🏛️ Professional Audio Processing
 ```typescript
 // Real-time audio synthesis with Web Audio API
 const audioContext = new AudioContext();
 const oscillator = audioContext.createOscillator();
 const gainNode = audioContext.createGain();
 
-// Professional-grade effects processing
+// Professional-grade effects processing with mobile optimization
 oscillator.connect(gainNode).connect(audioContext.destination);
+
+// Haptic feedback on mobile devices
+if ('vibrate' in navigator) {
+  navigator.vibrate(10);
+}
 ```
 
 ### 🎨 Dynamic Theming System
@@ -278,9 +324,11 @@ Canvas-based frequency analysis with requestAnimationFrame optimization for smoo
 **Experience the magic: [music-labs-1d8e1.web.app](https://music-labs-1d8e1.web.app)**
 
 ### 🎯 Try These Features:
-- 🥁 **Click the avatar** to reveal the interactive drum machine
+- 🗝️ **Visit /tools** to explore Key Friend music theory tool - learn chord progressions for any key!
+- 🥁 **Click the avatar** to reveal the interactive drum machine with mobile haptic feedback
 - 🎸 **Play audio tracks** to see real-time waveform visualization  
-- 📖 **Browse the journal** with advanced filtering and search
+- 📖 **Browse the journal** with enhanced social sharing and mobile optimization
+- 📱 **Test on mobile** - now with touch-optimized controls and PWA support
 - 🎨 **Experience the design** with smooth animations and responsive layout
 
 ## 📈 Development Metrics
@@ -324,9 +372,12 @@ npm run deploy:website
 This monorepo showcases:
 - ✅ **Enterprise-grade architecture** with TypeScript throughout
 - ✅ **Cutting-edge audio technology** with Web Audio API
+- ✅ **Interactive music theory tools** with Key Friend chord explorer
 - ✅ **Modern development practices** with monorepo tooling
+- ✅ **Mobile-first design** with touch optimization and PWA features
 - ✅ **Creative user experience** that feels magical
 - ✅ **Performance optimization** for instant interactions
+- ✅ **Social sharing integration** with rich metadata and platform APIs
 - ✅ **Accessibility compliance** for universal access
 
 ## 📄 License
