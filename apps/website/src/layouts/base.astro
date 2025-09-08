@@ -7,26 +7,59 @@ import '../styles/components.css';
 import '../styles/drumMachine.css';
 import '../styles/journal.css';
 import '../styles/mini-player.css';
+import '../styles/mobile.css';
 import '../styles/utilities.css';
 
-const { title = 'Lukeus Music Lab' } = Astro.props;
+interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogType?: string;
+  ogUrl?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  canonicalUrl?: string;
+  keywords?: string;
+}
+
+const {
+  title = 'Lukeus Music Lab',
+  description = 'Step into Lukeus\'s creative laboratory where experimental music, sound design, and musical storytelling come to life. From acoustic sessions to electronic transformations.',
+  ogTitle,
+  ogDescription,
+  ogImage = 'https://music-labs-1d8e1.web.app/assets/images/lukeus-avatar.png',
+  ogType = 'website',
+  ogUrl = 'https://music-labs-1d8e1.web.app/',
+  twitterTitle,
+  twitterDescription,
+  twitterImage,
+  canonicalUrl = 'https://music-labs-1d8e1.web.app/',
+  keywords = 'lukeus, music lab, experimental music, electronic music, acoustic sessions, creative process, music producer, Portland musician'
+} = Astro.props;
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>{title}</title>
-    <meta name="description" content="Step into Lukeus's creative laboratory where experimental music, sound design, and musical storytelling come to life. From acoustic sessions to electronic transformations." />
-    <meta name="keywords" content="lukeus, music lab, experimental music, electronic music, acoustic sessions, creative process, music producer, Portland musician" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
     
     <!-- Canonical and site relationships -->
-    <link rel="canonical" href="https://lukeus.app/" />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="alternate" type="application/rss+xml" title="Lukeus Music Lab Journal" href="/feed.xml" />
     
     <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/lukeus-avatar.png" />
+    <link rel="manifest" href="/manifest.json" />
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,20 +67,20 @@ const { title = 'Lukeus Music Lab' } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
 
     <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="Because Music Matters | Lukeus Music Lab" />
-    <meta property="og:description" content="Step into the creative laboratory where experimental music and sound design come to life. From acoustic storytelling to electronic transformations." />
-    <meta property="og:image" content="https://lukeus.app/assets/images/lukeus-avatar.png" />
+    <meta property="og:title" content={ogTitle || title} />
+    <meta property="og:description" content={ogDescription || description} />
+    <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://lukeus.app/" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={ogUrl} />
     <meta property="og:site_name" content="Lukeus Music Lab" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Because Music Matters | Lukeus Music Lab" />
-    <meta name="twitter:description" content="Step into the creative laboratory where experimental music and sound design come to life." />
-    <meta name="twitter:image" content="https://lukeus.app/assets/images/lukeus-avatar.png" />
+    <meta name="twitter:title" content={twitterTitle || ogTitle || title} />
+    <meta name="twitter:description" content={twitterDescription || ogDescription || description} />
+    <meta name="twitter:image" content={twitterImage || ogImage} />
     <meta name="twitter:creator" content="@lukeus" />
     
     <!-- Theme and app -->
@@ -105,6 +138,7 @@ const { title = 'Lukeus Music Lab' } = Astro.props;
       import { initDashboard } from '../scripts/dashboard';
       import { initCinematicBackground } from '../scripts/cinematic';
       import { initializeDrumMachine } from '../scripts/drumMachine';
+      import { initMobileExperience } from '../scripts/mobile';
 
       window.addEventListener('DOMContentLoaded', () => {
         bindPlayButtons();
@@ -116,6 +150,7 @@ const { title = 'Lukeus Music Lab' } = Astro.props;
         initDashboard();
         initAvatarClickHandler();
         initCinematicBackground();
+        initMobileExperience(); // 🔥 Mobile-first experience
       });
 
       // Avatar click handler to show/hide drum machine
