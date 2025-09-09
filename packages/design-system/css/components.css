@@ -429,6 +429,198 @@
     }
 }
 
+/* Piano Keyboard Styles - Based on Scale Explorer Implementation */
+.keyboard {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+  height: 120px;
+  background: linear-gradient(145deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+  border-radius: var(--radius-3);
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+}
+
+.white-keys {
+  display: flex;
+  height: 120px;
+}
+
+.black-keys {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  height: 80px;
+  display: flex;
+  pointer-events: none;
+}
+
+.key {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  user-select: none;
+  border: none;
+  outline: none;
+}
+
+.white-key {
+  flex: 1;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 8px 8px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.white-key:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.white-key.selected,
+.white-key.in-scale {
+  background: rgba(124, 210, 255, 0.8);
+  border-color: rgba(124, 210, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(124, 210, 255, 0.3);
+}
+
+.white-key.root-note {
+  background: rgba(163, 255, 176, 0.8);
+  border-color: rgba(163, 255, 176, 0.8);
+  box-shadow: 0 6px 16px rgba(163, 255, 176, 0.4);
+}
+
+.black-key {
+  position: absolute;
+  width: 30px;
+  height: 80px;
+  background: rgba(20, 20, 25, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 0 0 4px 4px;
+  cursor: pointer;
+  pointer-events: all;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  z-index: 2;
+}
+
+.black-key:hover {
+  background: rgba(40, 40, 45, 0.9);
+  transform: translateY(-1px);
+}
+
+.black-key.selected,
+.black-key.in-scale {
+  background: rgba(124, 210, 255, 0.8);
+  border-color: rgba(124, 210, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(124, 210, 255, 0.3);
+}
+
+.black-key.root-note {
+  background: rgba(163, 255, 176, 0.8);
+  border-color: rgba(163, 255, 176, 0.8);
+  box-shadow: 0 6px 16px rgba(163, 255, 176, 0.4);
+}
+
+/* Position black keys correctly using percentages like Scale Explorer */
+.black-key:nth-child(1) { left: 7.14%; transform: translateX(-50%); } /* C# */
+.black-key:nth-child(2) { left: 21.43%; transform: translateX(-50%); } /* D# */
+.black-key:nth-child(3) { left: 50%; transform: translateX(-50%); } /* F# */
+.black-key:nth-child(4) { left: 64.29%; transform: translateX(-50%); } /* G# */
+.black-key:nth-child(5) { left: 78.57%; transform: translateX(-50%); } /* A# */
+
+/* Alternative data-attribute positioning for explicit note targeting */
+.black-key[data-note="C#"] { left: 7.14%; transform: translateX(-50%); }
+.black-key[data-note="D#"] { left: 21.43%; transform: translateX(-50%); }
+.black-key[data-note="F#"] { left: 50%; transform: translateX(-50%); }
+.black-key[data-note="G#"] { left: 64.29%; transform: translateX(-50%); }
+.black-key[data-note="A#"] { left: 78.57%; transform: translateX(-50%); }
+
+.key-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.7);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.black-key .key-label {
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.key.in-scale .key-label,
+.key.root-note .key-label,
+.key.selected .key-label {
+  color: rgba(0, 0, 0, 0.9);
+  font-weight: 700;
+}
+
+/* Responsive keyboard */
+@media (max-width: 768px) {
+  .keyboard {
+    max-width: 100%;
+    height: 100px;
+    padding: 15px;
+  }
+  
+  .white-keys {
+    height: 100px;
+  }
+  
+  .white-key {
+    height: 100px;
+    padding-bottom: 8px;
+  }
+  
+  .black-keys {
+    height: 65px;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+  }
+  
+  .black-key {
+    width: 25px;
+    height: 65px;
+    padding-bottom: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .keyboard {
+    height: 80px;
+  }
+  
+  .white-keys {
+    height: 80px;
+  }
+  
+  .white-key {
+    height: 80px;
+  }
+  
+  .black-keys {
+    height: 50px;
+  }
+  
+  .black-key {
+    width: 20px;
+    height: 50px;
+  }
+  
+  .key-label {
+    font-size: 0.7rem;
+  }
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
     .cinematic-background,

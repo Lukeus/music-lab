@@ -14,7 +14,7 @@ import Base from "../layouts/base.astro";
       <span class="logo">Because Music Matters</span>
       <nav class="nav-links">
         <a href="/" class="nav-link">🏠 Home</a>
-        <a href="/#journal" class="nav-link">📝 Journal</a>
+        <a href="/journal" class="nav-link">📝 Journal</a>
       </nav>
       <a href="/" class="logo" id="logo-text">Music Lab</a>
     </div>
@@ -80,6 +80,27 @@ import Base from "../layouts/base.astro";
               <span class="launch-text">Launch Tool →</span>
             </div>
           </a>
+
+          <a href="/tools/chord-finder" class="tool-card available" data-tool="chord-finder">
+            <div class="tool-card-header">
+              <div class="tool-icon-large">🎯</div>
+              <div class="tool-badge available-badge">Ready</div>
+            </div>
+            <div class="tool-card-content">
+              <h3 class="tool-card-title">Chord Finder</h3>
+              <p class="tool-card-description">
+                Identify chords from selected notes, explore inversions, and discover voicings for different instruments.
+              </p>
+              <div class="tool-features">
+                <span class="feature-tag">🔍 Chord ID</span>
+                <span class="feature-tag">🎹 Inversions</span>
+                <span class="feature-tag">🎸 Voicings</span>
+              </div>
+            </div>
+            <div class="tool-card-footer">
+              <span class="launch-text">Launch Tool →</span>
+            </div>
+          </a>
         </div>
       </div>
 
@@ -87,26 +108,6 @@ import Base from "../layouts/base.astro";
       <div class="coming-soon-tools">
         <h2 class="section-title">Coming Soon</h2>
         <div class="tools-grid">
-          <div class="tool-card coming-soon" data-tool="chord-finder">
-            <div class="tool-card-header">
-              <div class="tool-icon-large">🎯</div>
-              <div class="tool-badge coming-soon-badge">Coming Soon</div>
-            </div>
-            <div class="tool-card-content">
-              <h3 class="tool-card-title">Chord Finder</h3>
-              <p class="tool-card-description">
-                Identify chords from notes, find chord inversions, and discover new voicings for your compositions.
-              </p>
-              <div class="tool-features">
-                <span class="feature-tag disabled">🔍 Chord ID</span>
-                <span class="feature-tag disabled">🎹 Inversions</span>
-                <span class="feature-tag disabled">🎧 Voicings</span>
-              </div>
-            </div>
-            <div class="tool-card-footer">
-              <span class="launch-text disabled">In Development...</span>
-            </div>
-          </div>
 
           <div class="tool-card coming-soon" data-tool="progression-generator">
             <div class="tool-card-header">
@@ -156,11 +157,11 @@ import Base from "../layouts/base.astro";
     <!-- Quick Stats -->
     <div class="dashboard-stats">
       <div class="stat-item">
-        <div class="stat-number">2</div>
+        <div class="stat-number">3</div>
         <div class="stat-label">Tools Available</div>
       </div>
       <div class="stat-item">
-        <div class="stat-number">3</div>
+        <div class="stat-number">2</div>
         <div class="stat-label">In Development</div>
       </div>
       <div class="stat-item">

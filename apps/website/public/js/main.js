@@ -1,15 +1,15 @@
-import { scroll, inView, animate } from "https://esm.sh/motion@10.18.0";
+import { scroll, inView, animate } from 'https://esm.sh/motion@10.18.0';
 
 // Shared audio player so only one track plays at a time
 let currentAudio = new Audio();
 currentAudio.preload = 'metadata';
 currentAudio.crossOrigin = 'anonymous';
 let currentButton = null;
-let currentRAF = 0;                // waveform animation frame id
-let audioCtx = null;               // WebAudio context (lazy)
-let analyser = null;               // shared analyser
-let sourceNode = null;             // media element source (bound once to currentAudio)
-let activeCanvas = null;           // canvas for the currently playing card
+let currentRAF = 0; // waveform animation frame id
+let audioCtx = null; // WebAudio context (lazy)
+let analyser = null; // shared analyser
+let sourceNode = null; // media element source (bound once to currentAudio)
+let activeCanvas = null; // canvas for the currently playing card
 // --- Global helpers (icons + toast) ---
 function iconPlaySVG() {
     return '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
@@ -22,10 +22,16 @@ function showToast(msg) {
     if (!host) return;
     const t = document.createElement('div');
     t.textContent = msg;
-    t.style.cssText = 'background:#111;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);font-size:.9rem;max-width:80vw;';
+    t.style.cssText =
+        'background:#111;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);font-size:.9rem;max-width:80vw;';
     host.appendChild(t);
-    setTimeout(() => { t.style.transition = 'opacity .25s'; t.style.opacity = '0'; }, 1600);
-    setTimeout(() => { t.remove(); }, 2000);
+    setTimeout(() => {
+        t.style.transition = 'opacity .25s';
+        t.style.opacity = '0';
+    }, 1600);
+    setTimeout(() => {
+        t.remove();
+    }, 2000);
 }
 // Mobile audio unlock: resume WebAudio & nudge HTMLAudio once on first gesture
 (function setupMobileAudioUnlock() {
@@ -33,9 +39,13 @@ function showToast(msg) {
     async function unlock() {
         if (unlocked) return;
         try {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (!audioCtx)
+                audioCtx = new (window.AudioContext ||
+                    window.webkitAudioContext)();
             if (audioCtx.state !== 'running') {
-                try { await audioCtx.resume(); } catch { }
+                try {
+                    await audioCtx.resume();
+                } catch {}
             }
             // Nudge WebAudio with a 1-frame silent buffer (iOS quirk)
             try {
@@ -45,13 +55,13 @@ function showToast(msg) {
                 src.buffer = buf;
                 src.connect(audioCtx.destination);
                 src.start(0);
-            } catch { }
+            } catch {}
             // Intentionally avoid touching currentAudio here to prevent double-tap-to-play races on first gesture.
             unlocked = true;
             ['touchstart', 'pointerdown', 'mousedown', 'keydown'].forEach(ev =>
                 document.removeEventListener(ev, unlock, { passive: true })
             );
-        } catch { }
+        } catch {}
     }
     ['touchstart', 'pointerdown', 'mousedown', 'keydown'].forEach(ev =>
         document.addEventListener(ev, unlock, { passive: true })
@@ -91,7 +101,7 @@ function getCardElementsFromButton(btn) {
         timeDuration: card.querySelector('.audio-time .duration'),
         progress: card.querySelector('.audio-progress'),
         progressFill: card.querySelector('.audio-progress-fill'),
-        canvas: card.querySelector('canvas.waveform-canvas')
+        canvas: card.querySelector('canvas.waveform-canvas'),
     };
 }
 
@@ -128,7 +138,7 @@ function getMiniElements() {
         timeCurrent: mp.querySelector('.audio-time .current'),
         timeDuration: mp.querySelector('.audio-time .duration'),
         progress: mp.querySelector('.audio-progress'),
-        progressFill: mp.querySelector('.audio-progress-fill')
+        progressFill: mp.querySelector('.audio-progress-fill'),
     };
 }
 
@@ -142,11 +152,15 @@ function bindMiniPlayer() {
             try {
                 // If you use WebAudio, consider:
                 // if (audioCtx && audioCtx.state === 'suspended') { await audioCtx.resume(); }
-                if (currentAudio.paused) { await currentAudio.play(); }
-                else { currentAudio.pause(); }
+                if (currentAudio.paused) {
+                    await currentAudio.play();
+                } else {
+                    currentAudio.pause();
+                }
             } catch (e) {
                 console.warn(e);
-                if (typeof showToast === 'function') showToast('Tap to enable audio');
+                if (typeof showToast === 'function')
+                    showToast('Tap to enable audio');
             }
         });
     }
@@ -167,7 +181,8 @@ function bindMiniPlayer() {
         progress.__bound = true;
 
         // Give it basic slider semantics if not already present
-        if (!progress.hasAttribute('role')) progress.setAttribute('role', 'slider');
+        if (!progress.hasAttribute('role'))
+            progress.setAttribute('role', 'slider');
         progress.setAttribute('aria-valuemin', '0');
         progress.setAttribute('aria-valuemax', '100');
         progress.setAttribute('tabindex', '0');
@@ -178,7 +193,10 @@ function bindMiniPlayer() {
             const ratio = rect.width ? x / rect.width : 0;
             if (isFinite(currentAudio.duration)) {
                 currentAudio.currentTime = ratio * currentAudio.duration;
-                progress.setAttribute('aria-valuenow', String(Math.round(ratio * 100)));
+                progress.setAttribute(
+                    'aria-valuenow',
+                    String(Math.round(ratio * 100))
+                );
             }
         }
 
@@ -201,7 +219,13 @@ function bindMiniPlayer() {
             if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
                 e.preventDefault();
                 const delta = e.key === 'ArrowLeft' ? -step : step;
-                currentAudio.currentTime = Math.max(0, Math.min(currentAudio.duration, currentAudio.currentTime + delta));
+                currentAudio.currentTime = Math.max(
+                    0,
+                    Math.min(
+                        currentAudio.duration,
+                        currentAudio.currentTime + delta
+                    )
+                );
             } else if (e.key === 'Home') {
                 e.preventDefault();
                 currentAudio.currentTime = 0;
@@ -210,7 +234,8 @@ function bindMiniPlayer() {
                 currentAudio.currentTime = currentAudio.duration;
             }
             if (isFinite(currentAudio.duration)) {
-                const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
+                const pct =
+                    (currentAudio.currentTime / currentAudio.duration) * 100;
                 progress.setAttribute('aria-valuenow', String(Math.round(pct)));
             }
         });
@@ -220,9 +245,12 @@ function bindMiniPlayer() {
 function syncMiniTo(button) {
     ensureMiniPlayer();
     const mini = getMiniElements();
-    const title = button.getAttribute('data-title')
-        || button.closest('.project-card, .experiment-card')?.querySelector('h3, h4')?.textContent
-        || 'Untitled';
+    const title =
+        button.getAttribute('data-title') ||
+        button
+            .closest('.project-card, .experiment-card')
+            ?.querySelector('h3, h4')?.textContent ||
+        'Untitled';
     if (mini.title) mini.title.textContent = title;
     if (mini.root) mini.root.classList.add('show');
 }
@@ -272,7 +300,10 @@ async function startWaveform(canvas) {
                 const h = Math.max(2, v * H);
                 const x = i * barWidth;
                 const y = H - h;
-                ctx2d.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#0f0';
+                ctx2d.fillStyle =
+                    getComputedStyle(document.documentElement).getPropertyValue(
+                        '--accent'
+                    ) || '#0f0';
                 ctx2d.fillRect(x, y, barWidth * 0.8, h);
             }
         }
@@ -299,20 +330,29 @@ currentAudio.addEventListener('pause', () => {
 // Update time/progress UI for the active card
 currentAudio.addEventListener('timeupdate', () => {
     if (!currentButton) return;
-    const { progressFill, timeCurrent } = getCardElementsFromButton(currentButton);
+    const { progressFill, timeCurrent } =
+        getCardElementsFromButton(currentButton);
     if (timeCurrent) timeCurrent.textContent = toTime(currentAudio.currentTime);
-    if (progressFill && isFinite(currentAudio.duration) && currentAudio.duration > 0) {
+    if (
+        progressFill &&
+        isFinite(currentAudio.duration) &&
+        currentAudio.duration > 0
+    ) {
         const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
         progressFill.style.width = `${pct}%`;
     }
     const mini = getMiniElements();
-    if (mini.timeCurrent) mini.timeCurrent.textContent = toTime(currentAudio.currentTime);
-    if (mini.progressFill && isFinite(currentAudio.duration) && currentAudio.duration > 0) {
+    if (mini.timeCurrent)
+        mini.timeCurrent.textContent = toTime(currentAudio.currentTime);
+    if (
+        mini.progressFill &&
+        isFinite(currentAudio.duration) &&
+        currentAudio.duration > 0
+    ) {
         const pct2 = (currentAudio.currentTime / currentAudio.duration) * 100;
         mini.progressFill.style.width = `${pct2}%`;
         mini.progress.setAttribute('aria-valuenow', String(Math.round(pct2)));
     }
-
 });
 
 currentAudio.addEventListener('loadedmetadata', () => {
@@ -320,20 +360,29 @@ currentAudio.addEventListener('loadedmetadata', () => {
     const { timeDuration } = getCardElementsFromButton(currentButton);
     if (timeDuration) timeDuration.textContent = toTime(currentAudio.duration);
     const mini = getMiniElements();
-    if (mini.timeDuration) mini.timeDuration.textContent = toTime(currentAudio.duration);
+    if (mini.timeDuration)
+        mini.timeDuration.textContent = toTime(currentAudio.duration);
 });
 
 currentAudio.addEventListener('play', () => {
     if (currentButton) setButtonState(currentButton, true);
     const { play } = getMiniElements();
     // in 'play' listener
-    if (play) { play.innerHTML = iconPauseSVG(); play.setAttribute('aria-pressed', 'true'); play.setAttribute('aria-label', 'Pause audio'); }
+    if (play) {
+        play.innerHTML = iconPauseSVG();
+        play.setAttribute('aria-pressed', 'true');
+        play.setAttribute('aria-label', 'Pause audio');
+    }
 });
 currentAudio.addEventListener('playing', () => {
     // When playback is confirmed (after decoding/first frame), force UI sync
     if (currentButton) setButtonState(currentButton, true);
     const { play } = getMiniElements();
-    if (play) { play.innerHTML = iconPauseSVG(); play.setAttribute('aria-pressed', 'true'); play.setAttribute('aria-label', 'Pause audio'); }
+    if (play) {
+        play.innerHTML = iconPauseSVG();
+        play.setAttribute('aria-pressed', 'true');
+        play.setAttribute('aria-label', 'Pause audio');
+    }
 });
 currentAudio.addEventListener('play', () => {
     if (typeof stopDrumMachine === 'function') {
@@ -343,9 +392,12 @@ currentAudio.addEventListener('play', () => {
 currentAudio.addEventListener('pause', () => {
     const { play } = getMiniElements();
     // in 'pause' listener
-    if (play) { play.innerHTML = iconPlaySVG(); play.setAttribute('aria-pressed', 'false'); play.setAttribute('aria-label', 'Play audio'); }
+    if (play) {
+        play.innerHTML = iconPlaySVG();
+        play.setAttribute('aria-pressed', 'false');
+        play.setAttribute('aria-label', 'Play audio');
+    }
 });
-
 
 // Fix: ensure journal entry headers are not sticky
 function disableStickyJournalHeaders() {
@@ -397,7 +449,9 @@ function initializeDrumMachine() {
 
     // Ensure AudioContext exists (reuse site context)
     if (!audioCtx) {
-        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch { }
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch {}
     }
 
     // Inject styles once
@@ -457,7 +511,10 @@ function initializeDrumMachine() {
     }
 
     // Build container near top of page
-    const host = document.querySelector('#drum-doodle') || document.querySelector('.hero') || document.body;
+    const host =
+        document.querySelector('#drum-doodle') ||
+        document.querySelector('.hero') ||
+        document.body;
     const wrap = document.createElement('section');
     wrap.className = 'drum-wrap';
     wrap.setAttribute('aria-label', 'Drum Machine');
@@ -509,10 +566,12 @@ function initializeDrumMachine() {
         { key: 'Kick', synth: hitKick },
         { key: 'Snare', synth: hitSnare },
         { key: 'Hat', synth: hitHat },
-        { key: 'Clap', synth: hitClap }
+        { key: 'Clap', synth: hitClap },
     ];
     const steps = 16;
-    const pattern = instruments.map(() => Array.from({ length: steps }, () => false));
+    const pattern = instruments.map(() =>
+        Array.from({ length: steps }, () => false)
+    );
 
     // UI grid
     const grid = wrap.querySelector('#drum-grid');
@@ -530,9 +589,21 @@ function initializeDrumMachine() {
         audition.title = `Audition ${inst.key}`;
         audition.addEventListener('click', () => playHit(inst));
         // simple long-press on the label itself
-        let pressT = 0, pressTimer = null;
-        function clearPress() { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } }
-        label.addEventListener('pointerdown', () => { pressT = Date.now(); clearPress(); pressTimer = setTimeout(() => { playHit(inst); }, 320); });
+        let pressT = 0,
+            pressTimer = null;
+        function clearPress() {
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+        }
+        label.addEventListener('pointerdown', () => {
+            pressT = Date.now();
+            clearPress();
+            pressTimer = setTimeout(() => {
+                playHit(inst);
+            }, 320);
+        });
         label.addEventListener('pointerup', clearPress);
         label.addEventListener('pointerleave', clearPress);
         wrapLbl.appendChild(txt);
@@ -540,18 +611,25 @@ function initializeDrumMachine() {
         label.appendChild(wrapLbl);
         grid.appendChild(label);
         // drag-to-paint state (shared across grid)
-        if (!initializeDrumMachine._paintState) { initializeDrumMachine._paintState = { painting: false, value: true }; }
+        if (!initializeDrumMachine._paintState) {
+            initializeDrumMachine._paintState = {
+                painting: false,
+                value: true,
+            };
+        }
         for (let c = 0; c < steps; c++) {
             const btn = document.createElement('button');
             btn.className = 'drum-step';
             btn.setAttribute('aria-label', `${inst.key} step ${c + 1}`);
-            const apply = (val) => {
+            const apply = val => {
                 pattern[r][c] = val;
                 btn.classList.toggle('on', val);
-                try { if (navigator.vibrate) navigator.vibrate(5); } catch { }
+                try {
+                    if (navigator.vibrate) navigator.vibrate(5);
+                } catch {}
                 persistPattern();
             };
-            btn.addEventListener('pointerdown', (e) => {
+            btn.addEventListener('pointerdown', e => {
                 btn.setPointerCapture?.(e.pointerId);
                 const targetVal = !pattern[r][c];
                 initializeDrumMachine._paintState.painting = true;
@@ -563,9 +641,15 @@ function initializeDrumMachine() {
                     apply(initializeDrumMachine._paintState.value);
                 }
             });
-            btn.addEventListener('pointerup', () => { initializeDrumMachine._paintState.painting = false; });
-            btn.addEventListener('lostpointercapture', () => { initializeDrumMachine._paintState.painting = false; });
-            btn.addEventListener('click', (e) => { e.preventDefault(); /* handled in pointerdown */ });
+            btn.addEventListener('pointerup', () => {
+                initializeDrumMachine._paintState.painting = false;
+            });
+            btn.addEventListener('lostpointercapture', () => {
+                initializeDrumMachine._paintState.painting = false;
+            });
+            btn.addEventListener('click', e => {
+                e.preventDefault(); /* handled in pointerdown */
+            });
             grid.appendChild(btn);
         }
     });
@@ -574,7 +658,8 @@ function initializeDrumMachine() {
     const playBtn = wrap.querySelector('#drum-play');
     // Replace Play button content to use span+svg for label/icon
     if (playBtn) {
-        playBtn.innerHTML = '<span>▶ Play</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+        playBtn.innerHTML =
+            '<span>▶ Play</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
     }
     const bpmSlider = wrap.querySelector('#drum-bpm');
     const bpmVal = wrap.querySelector('#drum-bpm-val');
@@ -586,46 +671,95 @@ function initializeDrumMachine() {
     const modeSynthBtn = wrap.querySelector('#drum-mode-synth');
     const mode808Btn = wrap.querySelector('#drum-mode-808');
 
-    const state = { playing: false, step: 0, bpm: parseInt(bpmSlider.value, 10) || 110, swing: parseInt(swingSlider.value, 10) || 0, timer: null, mode: 'synth', samples: null };
+    const state = {
+        playing: false,
+        step: 0,
+        bpm: parseInt(bpmSlider.value, 10) || 110,
+        swing: parseInt(swingSlider.value, 10) || 0,
+        timer: null,
+        mode: 'synth',
+        samples: null,
+    };
 
     // --- Persistence helpers ---
     const STORAGE_KEY = 'mlab_drum_v1';
     function persistPattern() {
         try {
-            const data = { pattern, bpm: state.bpm, swing: state.swing, mode: state.mode };
+            const data = {
+                pattern,
+                bpm: state.bpm,
+                swing: state.swing,
+                mode: state.mode,
+            };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        } catch { }
+        } catch {}
     }
     function restorePattern() {
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
             if (!raw) return;
             const { pattern: p, bpm, swing, mode } = JSON.parse(raw);
-            if (Array.isArray(p) && p.length === instruments.length && Array.isArray(p[0]) && p[0].length === steps) {
-                for (let r = 0; r < instruments.length; r++) for (let c = 0; c < steps; c++) { pattern[r][c] = !!p[r][c]; }
+            if (
+                Array.isArray(p) &&
+                p.length === instruments.length &&
+                Array.isArray(p[0]) &&
+                p[0].length === steps
+            ) {
+                for (let r = 0; r < instruments.length; r++)
+                    for (let c = 0; c < steps; c++) {
+                        pattern[r][c] = !!p[r][c];
+                    }
             }
-            if (typeof bpm === 'number') { state.bpm = bpm; bpmSlider.value = String(bpm); bpmVal.textContent = String(bpm); }
-            if (typeof swing === 'number') { state.swing = swing; swingSlider.value = String(swing); swingVal.textContent = `${swing}%`; }
-            if (mode === '808' || mode === 'synth') { setMode(mode); }
-        } catch { }
+            if (typeof bpm === 'number') {
+                state.bpm = bpm;
+                bpmSlider.value = String(bpm);
+                bpmVal.textContent = String(bpm);
+            }
+            if (typeof swing === 'number') {
+                state.swing = swing;
+                swingSlider.value = String(swing);
+                swingVal.textContent = `${swing}%`;
+            }
+            if (mode === '808' || mode === 'synth') {
+                setMode(mode);
+            }
+        } catch {}
     }
     restorePattern();
 
-    bpmSlider.addEventListener('input', () => { state.bpm = parseInt(bpmSlider.value, 10); bpmVal.textContent = String(state.bpm); if (state.playing) restartLoop(); persistPattern(); });
+    bpmSlider.addEventListener('input', () => {
+        state.bpm = parseInt(bpmSlider.value, 10);
+        bpmVal.textContent = String(state.bpm);
+        if (state.playing) restartLoop();
+        persistPattern();
+    });
 
-    swingSlider.addEventListener('input', () => { state.swing = parseInt(swingSlider.value, 10); swingVal.textContent = `${state.swing}%`; if (state.playing) restartLoop(); persistPattern(); });
+    swingSlider.addEventListener('input', () => {
+        state.swing = parseInt(swingSlider.value, 10);
+        swingVal.textContent = `${state.swing}%`;
+        if (state.playing) restartLoop();
+        persistPattern();
+    });
 
     function setMode(mode) {
         state.mode = mode;
-        modeSynthBtn.setAttribute('aria-pressed', mode === 'synth' ? 'true' : 'false');
-        mode808Btn.setAttribute('aria-pressed', mode === '808' ? 'true' : 'false');
+        modeSynthBtn.setAttribute(
+            'aria-pressed',
+            mode === 'synth' ? 'true' : 'false'
+        );
+        mode808Btn.setAttribute(
+            'aria-pressed',
+            mode === '808' ? 'true' : 'false'
+        );
         persistPattern();
     }
 
     modeSynthBtn.addEventListener('click', () => setMode('synth'));
     mode808Btn.addEventListener('click', async () => {
         setMode('808');
-        if (!state.samples) { state.samples = await load808Samples(); }
+        if (!state.samples) {
+            state.samples = await load808Samples();
+        }
     });
 
     function advance() {
@@ -646,17 +780,25 @@ function initializeDrumMachine() {
     function ensurePlayheadVisible(col) {
         if (!window.matchMedia('(max-width: 700px)').matches) return;
         const cell = grid.querySelectorAll('.drum-step')[col];
-        if (cell) { cell.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); }
+        if (cell) {
+            cell.scrollIntoView({
+                behavior: 'smooth',
+                inline: 'center',
+                block: 'nearest',
+            });
+        }
     }
 
-    function baseStepMs() { return (60 / state.bpm / 4) * 1000; }
+    function baseStepMs() {
+        return (60 / state.bpm / 4) * 1000;
+    }
 
     function nextDelayFor(step) {
         // Swing applies to off-beats (odd steps in 0-based indexing)
         const swingAmt = (state.swing / 100) * 0.5; // max shift 50% of 16th
         const base = baseStepMs();
         if (state.swing <= 0) return base;
-        return (step % 2 === 1) ? base * (1 + swingAmt) : base * (1 - swingAmt);
+        return step % 2 === 1 ? base * (1 + swingAmt) : base * (1 - swingAmt);
     }
 
     function loop() {
@@ -670,16 +812,23 @@ function initializeDrumMachine() {
     }
 
     function restartLoop() {
-        if (state.timer) { clearTimeout(state.timer); state.timer = null; }
+        if (state.timer) {
+            clearTimeout(state.timer);
+            state.timer = null;
+        }
         if (state.playing && wrap.style.display !== 'none') {
             state.timer = setTimeout(loop, nextDelayFor(state.step));
         }
     }
 
     function start() {
-        try { if (currentAudio && !currentAudio.paused) currentAudio.pause(); } catch { }
+        try {
+            if (currentAudio && !currentAudio.paused) currentAudio.pause();
+        } catch {}
         announce('Drum machine playing');
-        if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume().catch(() => { }); }
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(() => {});
+        }
         if (state.timer) return;
         state.playing = true;
         if (wrap.style.display === 'none') {
@@ -687,7 +836,9 @@ function initializeDrumMachine() {
             if (playBtn) playBtn.querySelector('span').textContent = '▶ Play';
             // Swap SVG to play icon for mobile
             const svgElEarly = playBtn.querySelector('svg');
-            if (svgElEarly) { svgElEarly.outerHTML = iconPlaySVG(); }
+            if (svgElEarly) {
+                svgElEarly.outerHTML = iconPlaySVG();
+            }
             playBtn.setAttribute('aria-pressed', 'false');
             return;
         }
@@ -695,7 +846,9 @@ function initializeDrumMachine() {
         playBtn.setAttribute('aria-pressed', 'true');
         // Swap SVG to pause icon for mobile
         const svgElStart = playBtn.querySelector('svg');
-        if (svgElStart) { svgElStart.outerHTML = iconPauseSVG(); }
+        if (svgElStart) {
+            svgElStart.outerHTML = iconPauseSVG();
+        }
         markPlayhead(state.step);
         state.timer = setTimeout(loop, nextDelayFor(state.step));
     }
@@ -705,20 +858,30 @@ function initializeDrumMachine() {
         if (playBtn) playBtn.querySelector('span').textContent = '▶ Play';
         // Swap SVG to play icon for mobile
         const svgElStop = playBtn.querySelector('svg');
-        if (svgElStop) { svgElStop.outerHTML = iconPlaySVG(); }
+        if (svgElStop) {
+            svgElStop.outerHTML = iconPlaySVG();
+        }
         playBtn.setAttribute('aria-pressed', 'false');
-        if (state.timer) { clearTimeout(state.timer); state.timer = null; }
+        if (state.timer) {
+            clearTimeout(state.timer);
+            state.timer = null;
+        }
         announce('Drum machine stopped');
     }
 
     playBtn.addEventListener('click', async () => {
-        try { if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume(); } catch { }
+        try {
+            if (audioCtx && audioCtx.state === 'suspended')
+                await audioCtx.resume();
+        } catch {}
         state.playing ? stop() : start();
     });
 
     clearBtn.addEventListener('click', () => {
         pattern.forEach(row => row.fill(false));
-        grid.querySelectorAll('.drum-step').forEach(el => el.classList.remove('on'));
+        grid.querySelectorAll('.drum-step').forEach(el =>
+            el.classList.remove('on')
+        );
         persistPattern();
     });
 
@@ -743,11 +906,15 @@ function initializeDrumMachine() {
     wrap.style.display = 'none';
 
     function findHeroAvatar() {
-        return document.querySelector('#hero-avatar, .avatar-container img, .hero img');
+        return document.querySelector(
+            '#hero-avatar, .avatar-container img, .hero img'
+        );
     }
     function toggleDrumVisibility() {
-        const willShow = (wrap.style.display === 'none');
-        if (!willShow && state.playing) { stop(); }
+        const willShow = wrap.style.display === 'none';
+        if (!willShow && state.playing) {
+            stop();
+        }
         wrap.style.display = willShow ? 'block' : 'none';
     }
     const heroImg = findHeroAvatar();
@@ -757,12 +924,19 @@ function initializeDrumMachine() {
         heroImg.addEventListener('click', toggleDrumVisibility);
         // Stop playing if doodle not visible on screen or tab hidden
         try {
-            const obs = new IntersectionObserver((entries) => {
-                const e = entries[0];
-                if (!e || !e.isIntersecting) { if (state.playing) stop(); }
-            }, { threshold: 0.0 });
+            const obs = new IntersectionObserver(
+                entries => {
+                    const e = entries[0];
+                    if (!e || !e.isIntersecting) {
+                        if (state.playing) stop();
+                    }
+                },
+                { threshold: 0.0 }
+            );
             obs.observe(wrap);
-        } catch { /* no IO support */ }
+        } catch {
+            /* no IO support */
+        }
 
         document.addEventListener('visibilitychange', () => {
             if (document.hidden && state.playing) stop();
@@ -771,14 +945,25 @@ function initializeDrumMachine() {
 
     // focusable wrapper for keyboard control
     wrap.tabIndex = 0;
-    wrap.addEventListener('keydown', (e) => {
-        if (e.code === 'Space') { e.preventDefault(); state.playing ? stop() : start(); }
-        else if ((e.key === 'r' || e.key === 'R')) { e.preventDefault(); randBtn.click(); }
-        else if ((e.key === 'c' || e.key === 'C')) { e.preventDefault(); clearBtn.click(); }
-        else if (e.key === '1') { playHit(instruments[0]); }
-        else if (e.key === '2') { playHit(instruments[1]); }
-        else if (e.key === '3') { playHit(instruments[2]); }
-        else if (e.key === '4') { playHit(instruments[3]); }
+    wrap.addEventListener('keydown', e => {
+        if (e.code === 'Space') {
+            e.preventDefault();
+            state.playing ? stop() : start();
+        } else if (e.key === 'r' || e.key === 'R') {
+            e.preventDefault();
+            randBtn.click();
+        } else if (e.key === 'c' || e.key === 'C') {
+            e.preventDefault();
+            clearBtn.click();
+        } else if (e.key === '1') {
+            playHit(instruments[0]);
+        } else if (e.key === '2') {
+            playHit(instruments[1]);
+        } else if (e.key === '3') {
+            playHit(instruments[2]);
+        } else if (e.key === '4') {
+            playHit(instruments[3]);
+        }
     });
 
     function playHit(inst) {
@@ -808,7 +993,8 @@ function initializeDrumMachine() {
     function mkKick808() {
         // 808-style sine drop with exponential amp decay ~160Hz -> 50Hz
         const dur = 0.35;
-        const f0 = 160, f1 = 50;
+        const f0 = 160,
+            f1 = 50;
         const tau = 0.18; // amplitude decay seconds
         return createBufferFromFn(dur, (i, sr) => {
             const t = i / sr;
@@ -822,11 +1008,13 @@ function initializeDrumMachine() {
         // noise + short body tone, fast decay
         const dur = 0.22;
         const toneF = 180;
-        const tauN = 0.12, tauT = 0.08;
+        const tauN = 0.12,
+            tauT = 0.08;
         return createBufferFromFn(dur, (i, sr) => {
             const t = i / sr;
             const n = (Math.random() * 2 - 1) * Math.exp(-t / tauN);
-            const tone = Math.sin(2 * Math.PI * toneF * t) * Math.exp(-t / tauT) * 0.35;
+            const tone =
+                Math.sin(2 * Math.PI * toneF * t) * Math.exp(-t / tauT) * 0.35;
             return (n * 0.7 + tone) * 0.9;
         });
     }
@@ -838,7 +1026,7 @@ function initializeDrumMachine() {
         return createBufferFromFn(dur, (i, sr) => {
             const t = i / sr;
             // emphasis of highs via simple HP-ish curve
-            const n = (Math.random() * 2 - 1);
+            const n = Math.random() * 2 - 1;
             const hp = n - 0.6 * (Math.random() * 2 - 1);
             const env = Math.exp(-t / tau);
             return hp * env * 0.5;
@@ -856,7 +1044,7 @@ function initializeDrumMachine() {
             for (const o of taps) {
                 const tt = Math.max(0, t - o);
                 const env = Math.exp(-tt / tau);
-                const n = (Math.random() * 2 - 1);
+                const n = Math.random() * 2 - 1;
                 v += n * env;
             }
             return (v / taps.length) * 0.6;
@@ -865,10 +1053,10 @@ function initializeDrumMachine() {
 
     function buildEmbedded808() {
         return {
-            'Kick': mkKick808(),
-            'Snare': mkSnare808(),
-            'Hat': mkHat808(),
-            'Clap': mkClap808()
+            Kick: mkKick808(),
+            Snare: mkSnare808(),
+            Hat: mkHat808(),
+            Clap: mkClap808(),
         };
     }
 
@@ -877,17 +1065,32 @@ function initializeDrumMachine() {
 
         // If no explicit base path is provided, default to embedded kit to avoid 404s
         const requestedBase = window.DRUM_SAMPLE_BASE;
-        if (requestedBase === 'embedded' || requestedBase === false || typeof requestedBase === 'undefined' || requestedBase === null) {
+        if (
+            requestedBase === 'embedded' ||
+            requestedBase === false ||
+            typeof requestedBase === 'undefined' ||
+            requestedBase === null
+        ) {
             return buildEmbedded808();
         }
 
         // Otherwise, try to load from the provided base path and fall back per-file
         const base = String(requestedBase).replace(/\/$/, '/');
         if (!load808Samples._logged && base) {
-            console.info('[Drum]', 'Trying external 808 samples from', base, '(set window.DRUM_SAMPLE_BASE = "embedded" to force offline kit)');
+            console.info(
+                '[Drum]',
+                'Trying external 808 samples from',
+                base,
+                '(set window.DRUM_SAMPLE_BASE = "embedded" to force offline kit)'
+            );
             load808Samples._logged = true;
         }
-        const names = { 'Kick': 'kick', 'Snare': 'snare', 'Hat': 'hihat', 'Clap': 'clap' };
+        const names = {
+            Kick: 'kick',
+            Snare: 'snare',
+            Hat: 'hihat',
+            Clap: 'clap',
+        };
         const tryExt = ['.wav', '.mp3', '.ogg'];
 
         async function fetchDecodeOne(stem) {
@@ -895,18 +1098,24 @@ function initializeDrumMachine() {
                 const url = base + stem + ext;
                 try {
                     const res = await fetch(url, { cache: 'force-cache' });
-                    if (!res.ok) { continue; }
+                    if (!res.ok) {
+                        continue;
+                    }
                     const arr = await res.arrayBuffer();
                     return await audioCtx.decodeAudioData(arr);
-                } catch (e) { /* try next */ }
+                } catch (e) {
+                    /* try next */
+                }
             }
             return null;
         }
 
         const out = {};
-        await Promise.all(Object.entries(names).map(async ([label, stem]) => {
-            out[label] = await fetchDecodeOne(stem);
-        }));
+        await Promise.all(
+            Object.entries(names).map(async ([label, stem]) => {
+                out[label] = await fetchDecodeOne(stem);
+            })
+        );
 
         // Fill any missing with embedded kit
         const embedded = buildEmbedded808();
@@ -918,7 +1127,9 @@ function initializeDrumMachine() {
 
     // ARIA live announcer
     const ariaLive = wrap.querySelector('#drum-aria');
-    function announce(msg) { if (ariaLive) ariaLive.textContent = msg; }
+    function announce(msg) {
+        if (ariaLive) ariaLive.textContent = msg;
+    }
 
     persistPattern();
     drumMachine = { start, stop, state };
@@ -938,33 +1149,58 @@ function hitKick() {
     gain.gain.setValueAtTime(0.9, t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
     osc.connect(gain).connect(audioCtx.destination);
-    osc.start(t); osc.stop(t + 0.16);
+    osc.start(t);
+    osc.stop(t + 0.16);
 }
 function hitSnare() {
     if (!audioCtx) return;
     const t = audioCtx.currentTime;
     const noise = audioCtx.createBufferSource();
-    const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.2, audioCtx.sampleRate);
+    const buffer = audioCtx.createBuffer(
+        1,
+        audioCtx.sampleRate * 0.2,
+        audioCtx.sampleRate
+    );
     const data = buffer.getChannelData(0);
-    for (let i = 0; i < data.length; i++) { data[i] = (Math.random() * 2 - 1) * (1 - i / data.length); }
+    for (let i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+    }
     noise.buffer = buffer;
-    const bp = audioCtx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1800; bp.Q.value = 0.5;
-    const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.7, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+    const bp = audioCtx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = 1800;
+    bp.Q.value = 0.5;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.7, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
     noise.connect(bp).connect(gain).connect(audioCtx.destination);
-    noise.start(t); noise.stop(t + 0.2);
+    noise.start(t);
+    noise.stop(t + 0.2);
 }
 function hitHat() {
     if (!audioCtx) return;
     const t = audioCtx.currentTime;
     const noise = audioCtx.createBufferSource();
-    const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.05, audioCtx.sampleRate);
+    const buffer = audioCtx.createBuffer(
+        1,
+        audioCtx.sampleRate * 0.05,
+        audioCtx.sampleRate
+    );
     const data = buffer.getChannelData(0);
-    for (let i = 0; i < data.length; i++) { data[i] = Math.random() * 2 - 1; }
+    for (let i = 0; i < data.length; i++) {
+        data[i] = Math.random() * 2 - 1;
+    }
     noise.buffer = buffer;
-    const hp = audioCtx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 6000; hp.Q.value = 0.7;
-    const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.4, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+    const hp = audioCtx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 6000;
+    hp.Q.value = 0.7;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.4, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
     noise.connect(hp).connect(gain).connect(audioCtx.destination);
-    noise.start(t); noise.stop(t + 0.06);
+    noise.start(t);
+    noise.stop(t + 0.06);
 }
 function hitClap() {
     if (!audioCtx) return;
@@ -972,14 +1208,26 @@ function hitClap() {
     // cluster of short noise bursts
     [0, 0.012, 0.025].forEach(offset => {
         const n = audioCtx.createBufferSource();
-        const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.06, audioCtx.sampleRate);
+        const buffer = audioCtx.createBuffer(
+            1,
+            audioCtx.sampleRate * 0.06,
+            audioCtx.sampleRate
+        );
         const data = buffer.getChannelData(0);
-        for (let i = 0; i < data.length; i++) { data[i] = Math.random() * 2 - 1; }
+        for (let i = 0; i < data.length; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
         n.buffer = buffer;
-        const hp = audioCtx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1200; hp.Q.value = 0.8;
-        const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.5, t + offset); gain.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.08);
+        const hp = audioCtx.createBiquadFilter();
+        hp.type = 'highpass';
+        hp.frequency.value = 1200;
+        hp.Q.value = 0.8;
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.5, t + offset);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.08);
         n.connect(hp).connect(gain).connect(audioCtx.destination);
-        n.start(t + offset); n.stop(t + offset + 0.09);
+        n.start(t + offset);
+        n.stop(t + offset + 0.09);
     });
 }
 // === End Drum Machine ===
@@ -994,28 +1242,28 @@ class CinematicParticleSystem {
         this.isActive = false;
         this.audioIntensity = 0;
         this.lastSpawnTime = 0;
-        
+
         // Particle types with weights
         this.particleTypes = [
             { type: 'musical-note', weight: 0.4 },
             { type: 'waveform', weight: 0.3 },
             { type: 'frequency-bar', weight: 0.2 },
-            { type: 'dot', weight: 0.1 }
+            { type: 'dot', weight: 0.1 },
         ];
-        
+
         this.init();
     }
-    
+
     init() {
         if (!this.container) return;
-        
+
         // Start the particle system
         this.isActive = true;
         this.startParticleGeneration();
-        
+
         // Connect to existing audio analysis if available
         this.connectAudioAnalysis();
-        
+
         // Handle page visibility
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
@@ -1024,51 +1272,51 @@ class CinematicParticleSystem {
                 this.resume();
             }
         });
-        
+
         // Adjust intensity based on scroll position for cinematic effect
         this.setupScrollEffects();
-        
+
         // Random dramatic moments
         this.scheduleRandomDramaticMoments();
     }
-    
+
     connectAudioAnalysis() {
         // Hook into existing audio analysis
         const originalTimeUpdate = currentAudio.ontimeupdate;
         currentAudio.addEventListener('timeupdate', () => {
             this.onAudioTimeUpdate();
         });
-        
+
         currentAudio.addEventListener('play', () => {
             this.setAudioPlaying(true);
         });
-        
+
         currentAudio.addEventListener('pause', () => {
             this.setAudioPlaying(false);
         });
-        
+
         currentAudio.addEventListener('ended', () => {
             this.setAudioPlaying(false);
         });
     }
-    
+
     onAudioTimeUpdate() {
         if (!analyser || !currentAudio || currentAudio.paused) {
             this.audioIntensity = 0;
             return;
         }
-        
+
         try {
             const dataArray = new Uint8Array(analyser.frequencyBinCount);
             analyser.getByteFrequencyData(dataArray);
-            
+
             // Calculate average intensity from frequency data
             const sum = dataArray.reduce((acc, val) => acc + val, 0);
             const avgIntensity = sum / dataArray.length / 255; // normalize to 0-1
-            
+
             this.audioIntensity = avgIntensity;
             this.updateIntensityClasses();
-            
+
             // More particles during intense audio moments
             if (avgIntensity > 0.3) {
                 this.spawnExtraParticles(Math.floor(avgIntensity * 3));
@@ -1078,12 +1326,16 @@ class CinematicParticleSystem {
             this.audioIntensity = 0;
         }
     }
-    
+
     updateIntensityClasses() {
         if (!this.cinematicBg) return;
-        
-        this.cinematicBg.classList.remove('intensity-low', 'intensity-medium', 'intensity-high');
-        
+
+        this.cinematicBg.classList.remove(
+            'intensity-low',
+            'intensity-medium',
+            'intensity-high'
+        );
+
         if (this.audioIntensity < 0.2) {
             this.cinematicBg.classList.add('intensity-low');
         } else if (this.audioIntensity < 0.6) {
@@ -1092,10 +1344,10 @@ class CinematicParticleSystem {
             this.cinematicBg.classList.add('intensity-high');
         }
     }
-    
+
     setAudioPlaying(isPlaying) {
         if (!this.cinematicBg) return;
-        
+
         if (isPlaying) {
             this.cinematicBg.classList.add('audio-playing');
             this.increaseParticleRate();
@@ -1104,24 +1356,32 @@ class CinematicParticleSystem {
             this.normalParticleRate();
         }
     }
-    
+
     setupScrollEffects() {
         if (typeof window.scroll === 'undefined') return;
-        
+
         // Use scroll position to vary background intensity
         const updateScrollEffect = () => {
-            const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-            
+            const scrollPercent =
+                window.scrollY /
+                (document.documentElement.scrollHeight - window.innerHeight);
+
             if (this.cinematicBg) {
                 // Subtle intensity variation based on scroll
-                const intensity = 0.5 + (Math.sin(scrollPercent * Math.PI * 2) * 0.3);
-                this.cinematicBg.style.setProperty('--scroll-intensity', intensity.toString());
+                const intensity =
+                    0.5 + Math.sin(scrollPercent * Math.PI * 2) * 0.3;
+                this.cinematicBg.style.setProperty(
+                    '--scroll-intensity',
+                    intensity.toString()
+                );
             }
         };
-        
-        document.addEventListener('scroll', updateScrollEffect, { passive: true });
+
+        document.addEventListener('scroll', updateScrollEffect, {
+            passive: true,
+        });
     }
-    
+
     scheduleRandomDramaticMoments() {
         const scheduleNext = () => {
             // Random dramatic spotlight every 2-5 minutes
@@ -1131,145 +1391,152 @@ class CinematicParticleSystem {
                 scheduleNext();
             }, delay);
         };
-        
+
         scheduleNext();
     }
-    
+
     triggerDramaticMoment() {
         if (!this.cinematicBg) return;
-        
+
         this.cinematicBg.classList.add('dramatic');
-        
+
         // Spawn burst of particles
         this.spawnParticleBurst(15);
-        
+
         setTimeout(() => {
             this.cinematicBg.classList.remove('dramatic');
         }, 8000);
     }
-    
+
     getWeightedRandomType() {
         const random = Math.random();
         let weightSum = 0;
-        
+
         for (const { type, weight } of this.particleTypes) {
             weightSum += weight;
             if (random <= weightSum) {
                 return type;
             }
         }
-        
+
         return 'musical-note'; // fallback
     }
-    
+
     createParticle() {
         if (!this.container) return;
-        
+
         const particle = document.createElement('div');
         particle.className = `particle ${this.getWeightedRandomType()}`;
-        
+
         // Random starting position (bottom of screen)
         const startX = Math.random() * window.innerWidth;
         particle.style.left = `${startX}px`;
         particle.style.top = `${window.innerHeight + 20}px`;
-        
+
         // Random animation delay and duration variation
         const delay = Math.random() * 2; // 0-2s delay
-        const duration = 15 + (Math.random() * 10); // 15-25s duration
-        
+        const duration = 15 + Math.random() * 10; // 15-25s duration
+
         particle.style.animationDelay = `${delay}s`;
         particle.style.animationDuration = `${duration}s`;
-        
+
         // Audio-reactive properties
         if (this.audioIntensity > 0.4) {
             particle.style.animationDuration = `${duration * 0.7}s`; // Faster during intense audio
-            particle.style.filter = `brightness(${1 + this.audioIntensity})`;;
+            particle.style.filter = `brightness(${1 + this.audioIntensity})`;
         }
-        
+
         // Random horizontal drift
         const drift = (Math.random() - 0.5) * 200; // -100 to +100px drift
         particle.style.setProperty('--drift', `${drift}px`);
-        
+
         this.container.appendChild(particle);
-        
+
         // Clean up after animation
-        setTimeout(() => {
-            if (particle && particle.parentNode) {
-                particle.parentNode.removeChild(particle);
-            }
-        }, (duration + delay) * 1000);
-        
+        setTimeout(
+            () => {
+                if (particle && particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            },
+            (duration + delay) * 1000
+        );
+
         return particle;
     }
-    
+
     spawnExtraParticles(count = 1) {
         for (let i = 0; i < count; i++) {
             setTimeout(() => this.createParticle(), i * 100);
         }
     }
-    
+
     spawnParticleBurst(count = 10) {
         for (let i = 0; i < count; i++) {
             setTimeout(() => {
                 const particle = this.createParticle();
                 if (particle) {
                     // Make burst particles more dramatic
-                    particle.style.filter = 'brightness(1.5) drop-shadow(0 0 6px currentColor)';
+                    particle.style.filter =
+                        'brightness(1.5) drop-shadow(0 0 6px currentColor)';
                     particle.style.animationDuration = '8s';
                 }
             }, i * 50);
         }
     }
-    
+
     startParticleGeneration() {
         if (!this.isActive) return;
-        
+
         const spawnParticle = () => {
             if (!this.isActive || document.hidden) {
                 setTimeout(spawnParticle, 2000); // Check again in 2s
                 return;
             }
-            
+
             // Base spawn rate: 1 particle every 1-3 seconds
             let baseDelay = 1000 + Math.random() * 2000;
-            
+
             // Increase rate during audio playback
-            if (this.cinematicBg && this.cinematicBg.classList.contains('audio-playing')) {
+            if (
+                this.cinematicBg &&
+                this.cinematicBg.classList.contains('audio-playing')
+            ) {
                 baseDelay *= 0.4; // Much faster during audio
-                
+
                 // Even faster during high intensity
                 if (this.audioIntensity > 0.5) {
                     baseDelay *= 0.6;
                 }
             }
-            
+
             this.createParticle();
-            
+
             setTimeout(spawnParticle, baseDelay);
         };
-        
+
         // Start spawning
         setTimeout(spawnParticle, 1000);
     }
-    
+
     increaseParticleRate() {
         // Called when audio starts - spawn immediate burst
         this.spawnParticleBurst(8);
     }
-    
+
     normalParticleRate() {
         // Return to normal rate when audio stops
         this.audioIntensity = 0;
         this.updateIntensityClasses();
     }
-    
+
     pause() {
         this.isActive = false;
         if (this.cinematicBg) {
             this.cinematicBg.style.animationPlayState = 'paused';
         }
     }
-    
+
     resume() {
         this.isActive = true;
         if (this.cinematicBg) {
@@ -1277,7 +1544,7 @@ class CinematicParticleSystem {
         }
         this.startParticleGeneration();
     }
-    
+
     destroy() {
         this.isActive = false;
         if (this.container) {
@@ -1291,13 +1558,13 @@ let cinematicSystem = null;
 
 function initializeCinematicBackground() {
     if (cinematicSystem) return; // Avoid double initialization
-    
+
     // Only initialize if elements exist
     const container = document.getElementById('particle-field');
     if (!container) return;
-    
+
     cinematicSystem = new CinematicParticleSystem();
-    
+
     // Expose for debugging
     if (typeof window !== 'undefined') {
         window.cinematicSystem = cinematicSystem;
@@ -1329,7 +1596,7 @@ function initializeHeaderLink() {
     const welcomeGate = document.querySelector('.welcome-gate');
 
     if (logoLink && welcomeGate) {
-        logoLink.addEventListener('click', (event) => {
+        logoLink.addEventListener('click', event => {
             event.preventDefault();
             welcomeGate.style.display = 'flex';
             setTimeout(() => {
@@ -1362,9 +1629,13 @@ async function loadContent() {
         const logoTextEl = document.getElementById('logo-text');
         if (logoTextEl) logoTextEl.textContent = content.logoText || '';
         const heroHeadingEl = document.getElementById('hero-heading');
-        if (heroHeadingEl) heroHeadingEl.textContent = (content.heroSection && content.heroSection.heading) || '';
+        if (heroHeadingEl)
+            heroHeadingEl.textContent =
+                (content.heroSection && content.heroSection.heading) || '';
         const heroParagraphEl = document.getElementById('hero-paragraph');
-        if (heroParagraphEl) heroParagraphEl.textContent = (content.heroSection && content.heroSection.paragraph) || '';
+        if (heroParagraphEl)
+            heroParagraphEl.textContent =
+                (content.heroSection && content.heroSection.paragraph) || '';
 
         populateProjects(content.currentProjects || []);
         populateExperiments(content.soundExperiments || []);
@@ -1382,8 +1653,10 @@ function initializePlayButtons() {
         button.__hasListener = true;
 
         // Accessibility defaults
-        if (!button.hasAttribute('aria-pressed')) button.setAttribute('aria-pressed', 'false');
-        if (!button.hasAttribute('aria-label')) button.setAttribute('aria-label', 'Play audio');
+        if (!button.hasAttribute('aria-pressed'))
+            button.setAttribute('aria-pressed', 'false');
+        if (!button.hasAttribute('aria-label'))
+            button.setAttribute('aria-label', 'Play audio');
 
         // Disable if no audio URL
         const url = button.getAttribute('data-audio');
@@ -1422,35 +1695,57 @@ function initializePlayButtons() {
 
                 if (currentAudio.src !== src) {
                     // Ensure CORS is enabled before setting a new HTTPS source
-                    if (!currentAudio.crossOrigin) currentAudio.crossOrigin = 'anonymous';
+                    if (!currentAudio.crossOrigin)
+                        currentAudio.crossOrigin = 'anonymous';
                     currentAudio.src = src;
                     // Hint Safari to create a new decoder pipeline before play
-                    if (currentAudio.readyState < 2) { try { currentAudio.load(); } catch { /* no-op */ } }
+                    if (currentAudio.readyState < 2) {
+                        try {
+                            currentAudio.load();
+                        } catch {
+                            /* no-op */
+                        }
+                    }
                     const type = this.getAttribute('data-type');
                     // Optionally set type via canPlayType hint
                     if (type && !currentAudio.canPlayType(type)) {
-                        console.warn('Browser may not support audio type:', type);
+                        console.warn(
+                            'Browser may not support audio type:',
+                            type
+                        );
                     }
                 }
 
                 currentAudio.currentTime = 0; // start fresh
                 // Ensure WebAudio context is running before play (fixes iOS/Safari resume)
-                if (audioCtx && audioCtx.state === 'suspended') { try { await audioCtx.resume(); } catch { /* ignore */ } }
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    try {
+                        await audioCtx.resume();
+                    } catch {
+                        /* ignore */
+                    }
+                }
                 await currentAudio.play();
                 const els = getCardElementsFromButton(this);
                 if (els.timeDuration && isFinite(currentAudio.duration)) {
-                    els.timeDuration.textContent = toTime(currentAudio.duration);
+                    els.timeDuration.textContent = toTime(
+                        currentAudio.duration
+                    );
                 }
                 if (els.progress) {
                     // make progress bar seekable
                     if (!els.progress.__bound) {
                         els.progress.__bound = true;
-                        els.progress.addEventListener('click', (e) => {
+                        els.progress.addEventListener('click', e => {
                             const rect = els.progress.getBoundingClientRect();
-                            const x = Math.min(Math.max(0, e.clientX - rect.left), rect.width);
+                            const x = Math.min(
+                                Math.max(0, e.clientX - rect.left),
+                                rect.width
+                            );
                             const ratio = x / rect.width;
                             if (isFinite(currentAudio.duration)) {
-                                currentAudio.currentTime = ratio * currentAudio.duration;
+                                currentAudio.currentTime =
+                                    ratio * currentAudio.duration;
                             }
                         });
                     }
@@ -1489,7 +1784,9 @@ function populateProjects(projects) {
                         <div class="project-icon">${project.icon ?? ''}</div>
                         <h3 class="project-title">${project.title ?? ''}</h3>
                     </div>
-                    <span class="project-status ${String(project.status || '').toLowerCase().replace(' ', '-')}">${project.status ?? ''}</span>
+                    <span class="project-status ${String(project.status || '')
+                        .toLowerCase()
+                        .replace(' ', '-')}">${project.status ?? ''}</span>
                 </div>
                 <p class="project-description">${project.description ?? ''}</p>
                 <div class="progress-bar"><div class="progress-fill" style="width: ${project.progress ?? 0}%"></div></div>
@@ -1539,7 +1836,9 @@ function populateExperiments(experiments) {
 }
 
 function populateJournalEntries(entries) {
-    const journalEntriesContainer = document.getElementById('creative-journal-entries');
+    const journalEntriesContainer = document.getElementById(
+        'creative-journal-entries'
+    );
     if (!journalEntriesContainer) return;
 
     // Helper: make a short teaser + remainder
@@ -1548,7 +1847,10 @@ function populateJournalEntries(entries) {
         const t = String(text).trim();
         if (t.length <= max) return { snippet: t, rest: '' };
         const cut = t.indexOf(' ', max);
-        return { snippet: t.slice(0, cut === -1 ? max : cut) + '…', rest: cut === -1 ? '' : t.slice(cut + 1) };
+        return {
+            snippet: t.slice(0, cut === -1 ? max : cut) + '…',
+            rest: cut === -1 ? '' : t.slice(cut + 1),
+        };
     }
 
     journalEntriesContainer.innerHTML = '';
@@ -1556,9 +1858,13 @@ function populateJournalEntries(entries) {
         const { snippet, rest } = splitSnippet(entry.content || '', 200);
         const tags = Array.isArray(entry.tags) ? entry.tags : [];
         const tagList = tags.join(' ');
-        const pill = tags.includes('song-idea') ? '🎶 Song Idea' :
-                     tags.includes('lyric-sketch') ? '✍️ Lyric Sketch' :
-                     tags.includes('studio-note') ? '🧪 Studio Note' : '🗒️ Note';
+        const pill = tags.includes('song-idea')
+            ? '🎶 Song Idea'
+            : tags.includes('lyric-sketch')
+              ? '✍️ Lyric Sketch'
+              : tags.includes('studio-note')
+                ? '🧪 Studio Note'
+                : '🗒️ Note';
 
         const card = document.createElement('article');
         card.className = 'journal-card';
@@ -1601,14 +1907,21 @@ function initializeScrollAnimations() {
         });
     });
 
-    const cards = document.querySelectorAll('.project-card, .experiment-card, .journal-entry');
+    const cards = document.querySelectorAll(
+        '.project-card, .experiment-card, .journal-entry'
+    );
     cards.forEach(card => {
         // Ensure initial state in case CSS wasn't loaded yet
         card.style.opacity = '0';
         card.style.transform = 'translateY(16px)';
-        inView(card,
+        inView(
+            card,
             () => {
-                animate(card, { opacity: 1, transform: 'translateY(0)' }, { duration: 0.5, delay: 0.1 });
+                animate(
+                    card,
+                    { opacity: 1, transform: 'translateY(0)' },
+                    { duration: 0.5, delay: 0.1 }
+                );
             },
             { amount: 0.2 }
         );
@@ -1621,7 +1934,7 @@ function initializeParallax() {
         const scrollY = window.scrollY;
         icons.forEach(icon => {
             const speed = parseFloat(icon.dataset.speed || '1');
-            const yPos = -(scrollY * speed / 10);
+            const yPos = -((scrollY * speed) / 10);
             icon.style.transform = `translateY(${yPos}px)`;
         });
     });
@@ -1657,7 +1970,9 @@ window.dispatchEvent(new Event('resize'));
 
     function applyFilter() {
         const q = (search?.value || '').trim().toLowerCase();
-        const activeBtn = tagButtons.find(b => b.classList.contains('is-active'));
+        const activeBtn = tagButtons.find(b =>
+            b.classList.contains('is-active')
+        );
         const tag = activeBtn ? activeBtn.getAttribute('data-tag') : 'all';
         const items = Array.from(entriesWrap.querySelectorAll('.journal-card'));
         entriesWrap.setAttribute('aria-busy', 'true');
@@ -1669,7 +1984,7 @@ window.dispatchEvent(new Event('resize'));
     }
 
     // Read-more toggles
-    entriesWrap.addEventListener('click', (e) => {
+    entriesWrap.addEventListener('click', e => {
         const btn = e.target.closest('.read-more');
         if (!btn) return;
         const card = btn.closest('.journal-card');
@@ -1688,12 +2003,17 @@ window.dispatchEvent(new Event('resize'));
     });
 
     // Tag filters
-    tagButtons.forEach(b => b.addEventListener('click', () => {
-        tagButtons.forEach(x => { x.classList.remove('is-active'); x.setAttribute('aria-pressed', 'false'); });
-        b.classList.add('is-active');
-        b.setAttribute('aria-pressed', 'true');
-        applyFilter();
-    }));
+    tagButtons.forEach(b =>
+        b.addEventListener('click', () => {
+            tagButtons.forEach(x => {
+                x.classList.remove('is-active');
+                x.setAttribute('aria-pressed', 'false');
+            });
+            b.classList.add('is-active');
+            b.setAttribute('aria-pressed', 'true');
+            applyFilter();
+        })
+    );
 
     // Search
     search?.addEventListener('input', applyFilter);
@@ -1701,6 +2021,13 @@ window.dispatchEvent(new Event('resize'));
     if (entriesWrap.querySelector('.journal-card')) {
         applyFilter();
     } else {
-        entriesWrap.addEventListener('journal:rendered', () => { applyFilter(); disableStickyJournalHeaders(); }, { once: true });
+        entriesWrap.addEventListener(
+            'journal:rendered',
+            () => {
+                applyFilter();
+                disableStickyJournalHeaders();
+            },
+            { once: true }
+        );
     }
 })();

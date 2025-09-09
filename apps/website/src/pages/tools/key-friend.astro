@@ -3,9 +3,13 @@ import Base from "../../layouts/base.astro";
 ---
 
 <Base 
-  title="Key Friend | Music Tools"
-  description="Explore keys, chords, and progressions interactively with Key Friend."
-  keywords="key friend, chord progressions, keys, music theory"
+  title="Key Friend - Interactive Chord Progression Builder | Lukeus Music Tools"
+  description="Discover chord progressions and relationships with Key Friend, a free interactive music theory tool. Explore keys, build progressions, and learn music theory through hands-on experimentation."
+  keywords="key friend, chord progressions, music theory, interactive piano, chord builder, harmonic relationships, music education, free music tools"
+  ogTitle="Key Friend - Interactive Chord Progression Builder"
+  ogDescription="Free interactive music tool for exploring chord progressions, keys, and harmonic relationships. Perfect for songwriters, musicians, and music students."
+  ogUrl="https://lukeus.app/tools/key-friend"
+  canonicalUrl="https://lukeus.app/tools/key-friend"
 >
 <header>
   <div class="container">
@@ -15,6 +19,141 @@ import Base from "../../layouts/base.astro";
     </div>
   </div>
 </header>
+
+<!-- Key Friend Specific JSON-LD -->
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": ["SoftwareApplication", "WebApplication"],
+    "@id": "https://lukeus.app/tools/key-friend#application",
+    "name": "Key Friend",
+    "alternateName": "Key Friend Chord Progression Builder",
+    "description": "Interactive chord progression builder and music theory exploration tool. Discover harmonic relationships, build progressions, and learn music theory through hands-on experimentation.",
+    "url": "https://lukeus.app/tools/key-friend",
+    "applicationCategory": ["MusicApplication", "EducationApplication"],
+    "applicationSubCategory": "Music Theory Tool",
+    "operatingSystem": "Web Browser",
+    "browserRequirements": "Modern web browser with JavaScript support",
+    "memoryRequirements": "256MB RAM",
+    "featureList": [
+      "Interactive Piano Keyboard",
+      "Chord Progression Builder",
+      "Key Selection (Major/Minor)",
+      "Roman Numeral Analysis",
+      "Audio Playback",
+      "Popular Progression Examples",
+      "Real-time Chord Updates",
+      "Mobile Responsive Interface"
+    ],
+    "screenshot": "https://lukeus.app/assets/images/key-friend-screenshot.png",
+    "author": {
+      "@type": "Person",
+      "name": "Lukeus",
+      "url": "https://lukeus.com/"
+    },
+    "creator": {
+      "@type": "Person",
+      "name": "Lukeus",
+      "url": "https://lukeus.com/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Lukeus Music Lab",
+      "url": "https://lukeus.app/"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "category": "Music Education Software"
+    },
+    "isAccessibleForFree": true,
+    "usageInfo": "https://lukeus.app/tools/key-friend#help",
+    "softwareHelp": {
+      "@type": "CreativeWork",
+      "name": "Key Friend User Guide",
+      "description": "Comprehensive guide for using Key Friend chord progression builder",
+      "url": "https://lukeus.app/tools/key-friend#help"
+    },
+    "audience": {
+      "@type": "Audience",
+      "audienceType": "Musicians, Songwriters, Music Students, Music Teachers, Music Producers"
+    },
+    "educationalUse": "Music Theory Education",
+    "teaches": [
+      "Chord Progressions",
+      "Harmonic Relationships",
+      "Roman Numeral Analysis",
+      "Key Signatures",
+      "Music Theory Fundamentals"
+    ],
+    "interactionStatistic": {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/UseAction",
+      "name": "Tool Usage"
+    },
+    "sameAs": [
+      "https://lukeus.app/tools#key-friend",
+      "https://lukeus.art/tools/key-friend"
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Use Key Friend Chord Progression Builder",
+    "description": "Step-by-step guide to building chord progressions with Key Friend",
+    "image": "https://lukeus.app/assets/images/key-friend-tutorial.png",
+    "totalTime": "PT5M",
+    "supply": [
+      {
+        "@type": "HowToSupply",
+        "name": "Web Browser"
+      },
+      {
+        "@type": "HowToSupply",
+        "name": "Audio Speakers or Headphones"
+      }
+    ],
+    "tool": {
+      "@type": "HowToTool",
+      "name": "Key Friend Application"
+    },
+    "step": [
+      {
+        "@type": "HowToStep",
+        "position": 1,
+        "name": "Select Your Musical Key",
+        "text": "Choose a root note (C, D, E, etc.) and select between Major or Minor mode. The chord progression will update automatically to show the diatonic chords for your chosen key."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 2,
+        "name": "Build Your Progression",
+        "text": "Click on chord cards to add them to your progression. Use Roman numeral notation (I, ii, V, etc.) to understand chord relationships and functions within the key."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 3,
+        "name": "Listen to Your Creation",
+        "text": "Click the play button to hear your progression. Adjust tempo and playback settings as needed. Individual chord playback is also available for detailed listening."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 4,
+        "name": "Experiment with Popular Patterns",
+        "text": "Try common progressions like I-V-vi-IV (the 'Pop' progression) or ii-V-I (jazz standard). These patterns are used in countless songs across all genres."
+      }
+    ],
+    "author": {
+      "@type": "Person",
+      "name": "Lukeus",
+      "url": "https://lukeus.com/"
+    }
+  }
+]
+</script>
 
 <section class="tool-hero">
   <div class="container">
@@ -29,11 +168,84 @@ import Base from "../../layouts/base.astro";
 
 <section class="tool-runtime">
   <div class="container">
+    <!-- Help Button - Fixed positioned -->
+    <button id="help-toggle" class="floating-help-btn" aria-expanded="false">
+      <span class="help-icon">❓</span>
+      <span class="help-text">Help</span>
+    </button>
+    
     <div id="key-friend-container" class="tool-container">
       <!-- Key Friend will render here -->
     </div>
   </div>
 </section>
+
+<!-- Help Panel -->
+<div id="help-panel" class="help-panel">
+  <div class="help-panel-header">
+    <h3>🎹 How to Use Key Friend</h3>
+    <button id="help-close" class="help-close-btn" aria-label="Close help">
+      <span>×</span>
+    </button>
+  </div>
+  
+  <div class="help-panel-content">
+    <div class="help-section-item">
+      <h4>🎵 Select a Key</h4>
+      <p>Start by choosing your musical key:</p>
+      <ul>
+        <li><strong>Root Note:</strong> Pick the tonic (C, D, E, etc.)</li>
+        <li><strong>Mode:</strong> Choose between Major and Minor keys</li>
+        <li>The chord progression will update automatically</li>
+      </ul>
+    </div>
+
+    <div class="help-section-item">
+      <h4>🎯 Build Progressions</h4>
+      <p>Create chord progressions easily:</p>
+      <ul>
+        <li>Click chord cards to add them to your progression</li>
+        <li>Use Roman numeral notation (I, ii, V, etc.)</li>
+        <li>See chord relationships and functions</li>
+      </ul>
+    </div>
+
+    <div class="help-section-item">
+      <h4>🎧 Audio Playback</h4>
+      <p>Listen to your progressions:</p>
+      <ul>
+        <li>Click the play button to hear your progression</li>
+        <li>Adjustable tempo and playback settings</li>
+        <li>Individual chord playback available</li>
+      </ul>
+    </div>
+
+    <div class="help-section-item">
+      <h4>💡 Popular Progressions</h4>
+      <div class="example-progressions">
+        <div class="example-progression">
+          <strong>I - V - vi - IV</strong>
+          The "Pop" progression (C - G - Am - F)
+        </div>
+        <div class="example-progression">
+          <strong>ii - V - I</strong>
+          Jazz standard turnaround
+        </div>
+        <div class="example-progression">
+          <strong>vi - IV - I - V</strong>
+          Alternative pop progression
+        </div>
+        <div class="example-progression">
+          <strong>I - vi - ii - V</strong>
+          Classic doo-wop progression
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Help Panel Overlay -->
+<div id="help-overlay" class="help-overlay"></div>
 
 <style>
 .tool-hero {
@@ -56,10 +268,271 @@ import Base from "../../layouts/base.astro";
 </style>
 
 <script>
-  import { createKeyFriend } from '../../scripts/keyFriend';
+import { createKeyFriend } from '../../scripts/keyFriend';
+  import { addTooltip, MusicTooltips } from '../../scripts/tooltips';
+  
   document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Key Friend
     const el = document.getElementById('key-friend-container');
-    if (el) { const app = createKeyFriend(el); app.init(); }
+    if (el) { 
+      const app = createKeyFriend(el); 
+      app.init(); 
+    }
+    
+    // Help panel functionality
+    const helpToggle = document.getElementById('help-toggle');
+    const helpPanel = document.getElementById('help-panel');
+    const helpOverlay = document.getElementById('help-overlay');
+    const helpClose = document.getElementById('help-close');
+
+    function openHelpPanel() {
+      helpPanel?.classList.add('active');
+      helpOverlay?.classList.add('active');
+      helpToggle?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeHelpPanel() {
+      helpPanel?.classList.remove('active');
+      helpOverlay?.classList.remove('active');
+      helpToggle?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    helpToggle?.addEventListener('click', openHelpPanel);
+    helpClose?.addEventListener('click', closeHelpPanel);
+    helpOverlay?.addEventListener('click', closeHelpPanel);
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && helpPanel?.classList.contains('active')) {
+        closeHelpPanel();
+      }
+    });
+    
+    // Add enhanced tooltips for Key Friend
+    const toolContainer = document.getElementById('key-friend-container');
+    if (toolContainer) {
+      addTooltip(toolContainer, {
+        content: 'TITLE:Key Friend\nDESC:Select a musical key to explore chord progressions and relationships\nKEY:Click key names and chord buttons',
+        type: 'chord',
+        position: 'top',
+        multiLine: true
+      });
+    }
+    
+    // Add tooltips to example progressions in help panel with detailed explanations
+    const exampleProgressions = document.querySelectorAll('.example-progression');
+    exampleProgressions.forEach(progression => {
+      const title = progression.querySelector('strong')?.textContent?.trim() || '';
+      
+      // Enhanced progression explanations for help panel
+      const helpPanelTooltips: Record<string, { description: string, examples: string, theory: string }> = {
+        'I - V - vi - IV': {
+          description: 'The most beloved progression in popular music',
+          examples: '"Let It Be" (Beatles), "Don\'t Stop Believin\'" (Journey), "Someone Like You" (Adele)',
+          theory: 'Creates a perfect balance of stability (I), tension (V), emotion (vi), and support (IV)'
+        },
+        'ii - V - I': {
+          description: 'The cornerstone of jazz harmony',
+          examples: '"Autumn Leaves", "All The Things You Are", "Take Five"',
+          theory: 'Creates the strongest possible resolution through circle of fifths movement'
+        },
+        'vi - IV - I - V': {
+          description: 'The introspective alternative to pop progression', 
+          examples: '"Creep" (Radiohead), "Basket Case" (Green Day)',
+          theory: 'Starting with minor vi creates emotional depth before resolving optimistically'
+        },
+        'I - vi - ii - V': {
+          description: 'The classic doo-wop and early rock progression',
+          examples: '"Earth Angel", "In the Still of the Night", "Heart and Soul"',
+          theory: 'Gentle descent through the circle of fifths with nostalgic 1950s sound'
+        }
+      };
+      
+      const tooltipData = helpPanelTooltips[title];
+      if (tooltipData) {
+        addTooltip(progression as HTMLElement, {
+          content: `TITLE:${title}\nDESC:${tooltipData.description}\n\nEXAMPLES: ${tooltipData.examples}\n\nTHEORY: ${tooltipData.theory}`,
+          type: 'chord',
+          position: 'left', // Left position since it's in the right-side help panel
+          multiLine: true
+        });
+      } else {
+        // Fallback for unmatched progressions
+        const description = progression.textContent?.replace(title, '').trim() || '';
+        addTooltip(progression as HTMLElement, {
+          content: `TITLE:${title}\nDESC:${description}\nClick to try this progression pattern`,
+          type: 'chord',
+          position: 'left',
+          multiLine: true
+        });
+      }
+    });
+    
+    // Add tooltips to dynamically created elements (with delay)
+    setTimeout(() => {
+      // Add tooltips to Common Progressions section
+      const commonProgressions = document.querySelectorAll('.common-progression, .progression-card, [data-progression]');
+      commonProgressions.forEach(progression => {
+        const progressionText = progression.textContent?.trim() || progression.getAttribute('data-progression') || '';
+        
+        // Create detailed tooltips for common progressions
+        const progressionTooltips: Record<string, { title: string, description: string, usage: string }> = {
+          'I-V-vi-IV': {
+            title: 'The Pop Progression',
+            description: 'The most popular chord progression in modern music',
+            usage: 'Used in thousands of hits: "Let It Be", "Don\'t Stop Believin\'" "Someone Like You"'
+          },
+          'I V vi IV': {
+            title: 'The Pop Progression', 
+            description: 'The most popular chord progression in modern music',
+            usage: 'Used in thousands of hits: "Let It Be", "Don\'t Stop Believin\'" "Someone Like You"'
+          },
+          'vi-IV-I-V': {
+            title: 'The Alternative Pop Progression',
+            description: 'Emotional and introspective variation of the pop progression',
+            usage: 'Common in alternative rock and indie music: "Creep" by Radiohead'
+          },
+          'vi IV I V': {
+            title: 'The Alternative Pop Progression',
+            description: 'Emotional and introspective variation of the pop progression', 
+            usage: 'Common in alternative rock and indie music: "Creep" by Radiohead'
+          },
+          'ii-V-I': {
+            title: 'The Jazz Turnaround',
+            description: 'The foundation of jazz harmony - creates strong resolution',
+            usage: 'Essential in jazz standards: "Autumn Leaves", "All The Things You Are"'
+          },
+          'ii V I': {
+            title: 'The Jazz Turnaround',
+            description: 'The foundation of jazz harmony - creates strong resolution',
+            usage: 'Essential in jazz standards: "Autumn Leaves", "All The Things You Are"'
+          },
+          'I-vi-ii-V': {
+            title: 'The Doo-Wop Progression',
+            description: 'Classic 1950s progression with nostalgic feel',
+            usage: 'Doo-wop classics: "Earth Angel", "In the Still of the Night"'
+          },
+          'I vi ii V': {
+            title: 'The Doo-Wop Progression',
+            description: 'Classic 1950s progression with nostalgic feel',
+            usage: 'Doo-wop classics: "Earth Angel", "In the Still of the Night"'
+          },
+          'I-vi-IV-V': {
+            title: 'The 50s Progression',
+            description: 'Upbeat and optimistic - classic American sound',
+            usage: 'Early rock \'n\' roll: "Stand By Me", "Blue Moon"'
+          },
+          'I vi IV V': {
+            title: 'The 50s Progression',
+            description: 'Upbeat and optimistic - classic American sound', 
+            usage: 'Early rock \'n\' roll: "Stand By Me", "Blue Moon"'
+          },
+          'vi-vi-IV-IV-I-I-V-V': {
+            title: 'The Pachelbel Canon',
+            description: 'Baroque masterpiece progression - timeless and elegant',
+            usage: 'Classical music and countless variations: "Canon in D", "Basket Case"'
+          },
+          'I-bVII-IV-I': {
+            title: 'The Mixolydian Vamp',
+            description: 'Modal progression with a modern, slightly unresolved feel',
+            usage: 'Rock and pop: "Sweet Child O\' Mine", "Clocks" by Coldplay'
+          },
+          'i-VI-III-VII': {
+            title: 'The Minor Descending',
+            description: 'Dramatic minor progression - creates epic, cinematic feel',
+            usage: 'Film music and symphonic metal: often in minor keys'
+          },
+          'i-bVII-bVI-bVII': {
+            title: 'The Andalusian Cadence',
+            description: 'Spanish/Flamenco progression - passionate and exotic',
+            usage: 'Flamenco guitar, "Sultans of Swing", "Hit the Road Jack"'
+          }
+        };
+        
+        // Try to match the progression text to our tooltip data
+        let tooltipData = null;
+        for (const [key, data] of Object.entries(progressionTooltips)) {
+          if (progressionText.includes(key) || progressionText.replace(/[-\s]/g, '').includes(key.replace(/[-\s]/g, ''))) {
+            tooltipData = data;
+            break;
+          }
+        }
+        
+        if (tooltipData) {
+          addTooltip(progression as HTMLElement, {
+            content: `TITLE:${tooltipData.title}\nDESC:${tooltipData.description}\n\n${tooltipData.usage}`,
+            type: 'chord',
+            position: 'top',
+            multiLine: true
+          });
+        } else if (progressionText) {
+          // Fallback tooltip for unmatched progressions
+          addTooltip(progression as HTMLElement, {
+            content: `TITLE:${progressionText}\nDESC:Click to try this chord progression\nExplore how these chords work together`,
+            type: 'chord',
+            position: 'top',
+            multiLine: true
+          });
+        }
+      });
+      // Add tooltips to key selector buttons
+      const keyButtons = document.querySelectorAll('.key-btn, .key-selector button');
+      keyButtons.forEach(btn => {
+        const keyName = btn.textContent?.trim() || '';
+        const keyDescriptions: Record<string, string> = {
+          'C': 'No sharps or flats - easiest to play on piano',
+          'G': 'One sharp (F#) - bright, uplifting sound',
+          'D': 'Two sharps (F#, C#) - great for guitar',
+          'A': 'Three sharps - warm, folk-like quality',
+          'E': 'Four sharps - powerful rock key',
+          'B': 'Five sharps - uncommon but distinctive',
+          'F#': 'Six sharps - rarely used key',
+          'F': 'One flat (Bb) - mellow, contemplative',
+          'Bb': 'Two flats - popular in jazz and brass',
+          'Eb': 'Three flats - rich, deep sound',
+          'Ab': 'Four flats - lush, romantic quality',
+          'Db': 'Five flats - exotic, rare key',
+          'Gb': 'Six flats - theoretical equivalent to F#'
+        };
+        
+        const description = keyDescriptions[keyName] || 'Musical key center';
+        
+        addTooltip(btn as HTMLElement, {
+          content: `TITLE:Key of ${keyName}\nDESC:${description}`,
+          type: 'musical',
+          position: 'bottom'
+        });
+      });
+      
+      // Add tooltips to chord cards
+      const chordCards = document.querySelectorAll('.chord-card, .chord-button');
+      chordCards.forEach(card => {
+        const chordSymbol = card.querySelector('.chord-symbol, .roman-numeral')?.textContent?.trim() || '';
+        const chordName = card.querySelector('.chord-name')?.textContent?.trim() || '';
+        
+        if (chordSymbol || chordName) {
+          const romanNumerals: Record<string, string> = {
+            'I': 'Tonic - home chord, stable and resolved',
+            'ii': 'Supertonic - often leads to V, creates tension',
+            'iii': 'Mediant - bridge between I and vi',
+            'IV': 'Subdominant - strong, supportive harmony',
+            'V': 'Dominant - creates tension, wants to resolve to I',
+            'vi': 'Submediant - relative minor, emotional depth',
+            'vii°': 'Leading tone - strong pull back to I'
+          };
+          
+          const description = romanNumerals[chordSymbol] || 'Click to add to progression';
+          
+          addTooltip(card as HTMLElement, {
+            content: `TITLE:${chordName || chordSymbol}\nDESC:${description}`,
+            type: 'chord',
+            position: 'top'
+          });
+        }
+      });
+    }, 1500); // Wait for Key Friend to fully render
   });
 </script>
 </Base>

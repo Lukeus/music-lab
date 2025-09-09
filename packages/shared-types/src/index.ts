@@ -81,7 +81,7 @@ export interface ButtonProps {
   disabled?: boolean;
   loading?: boolean;
   onClick?: () => void;
-  children: React.ReactNode;
+  children: any; // React.ReactNode or any UI framework children
 }
 
 export interface AudioPlayerProps {

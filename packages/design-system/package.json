@@ -5,9 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "clean": "rm -rf dist"
+    "build": "echo 'Design system uses CSS files directly - no build step needed'",
+    "clean": "echo 'Nothing to clean for CSS-only package'"
   },
   "keywords": ["design-system", "css", "tokens", "theme"],
   "author": "Lukeus",

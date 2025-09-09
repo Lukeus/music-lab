@@ -1,0 +1,493 @@
+---
+import Base from '../../layouts/base.astro';
+import ToolNavigation from '../../components/ToolNavigation.astro';
+---
+
+<Base title="Chord Finder | Music Tools" description="Interactive chord identification tool. Select notes to discover chords, explore inversions, and find voicings for piano and guitar.">
+  <div class="tool-page">
+    <div class="tool-page-header">
+      <div class="tool-header-content">
+        <div class="tool-breadcrumb">
+          <a href="/music-tools" class="breadcrumb-link">Music Tools</a>
+          <span class="breadcrumb-separator">›</span>
+          <span class="breadcrumb-current">Chord Finder</span>
+        </div>
+        
+        <div class="tool-title-section">
+          <h1 class="tool-page-title">
+            <span class="tool-icon">🎯</span>
+            Chord Finder
+          </h1>
+          <p class="tool-page-description">
+            Identify chords from selected notes, explore inversions, and discover voicings for different instruments
+          </p>
+        </div>
+
+        <ToolNavigation currentTool="chord-finder" />
+      </div>
+    </div>
+
+    <main class="tool-page-content">
+      <!-- Chord Finder Container -->
+      <div class="chord-finder-container">
+        <div id="chord-finder-container" class="tool-interface">
+          <!-- ChordFinder will be rendered here -->
+          <div class="tool-loading">
+            <div class="loading-spinner"></div>
+            <p>Loading Chord Finder...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help Section -->
+      <section class="tool-help-section">
+        <div class="help-toggle">
+          <button id="help-toggle" class="help-toggle-btn" aria-expanded="false">
+            <span class="help-icon">❓</span>
+            How to Use Chord Finder
+            <span class="toggle-arrow">▼</span>
+          </button>
+        </div>
+        
+        <div id="help-content" class="help-content" hidden>
+          <div class="help-grid">
+            <div class="help-card">
+              <h3>🎹 Select Notes</h3>
+              <p>Choose your input method:</p>
+              <ul>
+                <li><strong>Keyboard Mode:</strong> Click on piano keys to select notes</li>
+                <li><strong>Note Selector:</strong> Use buttons to pick notes directly</li>
+              </ul>
+              <p>Selected notes appear highlighted and update the note counter.</p>
+            </div>
+
+            <div class="help-card">
+              <h3>🎯 Identify Chords</h3>
+              <p>As you select notes (minimum 2), the tool automatically:</p>
+              <ul>
+                <li>Identifies all possible chord interpretations</li>
+                <li>Shows chord quality (major, minor, diminished, etc.)</li>
+                <li>Displays inversion information</li>
+                <li>Highlights the root note and chord structure</li>
+              </ul>
+            </div>
+
+            <div class="help-card">
+              <h3>🔍 Explore Details</h3>
+              <p>Click on any identified chord to see:</p>
+              <ul>
+                <li><strong>Note Roles:</strong> Root, 3rd, 5th, 7th, extensions</li>
+                <li><strong>Inversions:</strong> All possible inversions with names</li>
+                <li><strong>Voicings:</strong> Common fingerings for piano or guitar</li>
+                <li><strong>Theory:</strong> Chord description and harmonic function</li>
+              </ul>
+            </div>
+
+            <div class="help-card">
+              <h3>🎸 Instrument Voicings</h3>
+              <p>Switch between instruments to see specific voicings:</p>
+              <ul>
+                <li><strong>Piano:</strong> Common keyboard voicings and hand positions</li>
+                <li><strong>Guitar:</strong> Chord shapes, fingerings, and fret positions</li>
+              </ul>
+              <p>Voicings are marked by difficulty: Easy, Medium, Advanced.</p>
+            </div>
+
+            <div class="help-card">
+              <h3>🔗 Share & Save</h3>
+              <p>Your selections are automatically saved:</p>
+              <ul>
+                <li><strong>URL Sharing:</strong> Selected notes are saved in the URL</li>
+                <li><strong>Preferences:</strong> Instrument choice is remembered</li>
+                <li><strong>Quick Access:</strong> Use browser bookmarks to save specific chords</li>
+              </ul>
+            </div>
+
+            <div class="help-card">
+              <h3>💡 Tips & Tricks</h3>
+              <ul>
+                <li><strong>Chord Building:</strong> Start with a triad (3 notes) and add extensions</li>
+                <li><strong>Inversions:</strong> Same notes, different bass note = different inversion</li>
+                <li><strong>Enharmonics:</strong> Try both C# and Db if one doesn't work</li>
+                <li><strong>Clear & Reset:</strong> Use the clear button to start fresh</li>
+                <li><strong>Multiple Results:</strong> Some note combinations form multiple chords</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="help-examples">
+            <h3>Try These Popular Chords:</h3>
+            <div class="example-chords">
+              <div class="example-chord">
+                <strong>C Major:</strong> C, E, G
+                <span class="example-notes">Basic triad</span>
+              </div>
+              <div class="example-chord">
+                <strong>G7:</strong> G, B, D, F
+                <span class="example-notes">Dominant seventh</span>
+              </div>
+              <div class="example-chord">
+                <strong>Am:</strong> A, C, E
+                <span class="example-notes">Minor chord</span>
+              </div>
+              <div class="example-chord">
+                <strong>Cmaj7:</strong> C, E, G, B
+                <span class="example-notes">Major seventh</span>
+              </div>
+              <div class="example-chord">
+                <strong>F#dim:</strong> F#, A, C
+                <span class="example-notes">Diminished triad</span>
+              </div>
+              <div class="example-chord">
+                <strong>Dsus4:</strong> D, G, A
+                <span class="example-notes">Suspended chord</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    import { createWebChordFinder } from '../../scripts/chordFinder';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Chord Finder
+      const el = document.getElementById('chord-finder-container');
+      let chordFinder = null;
+      
+      if (el) { 
+        chordFinder = createWebChordFinder(el); 
+        chordFinder.init();
+      }
+
+      // Help toggle functionality
+      const helpToggle = document.getElementById('help-toggle');
+      const helpContent = document.getElementById('help-content');
+      const toggleArrow = helpToggle?.querySelector('.toggle-arrow');
+
+      helpToggle?.addEventListener('click', () => {
+        const isExpanded = helpToggle.getAttribute('aria-expanded') === 'true';
+        
+        helpToggle.setAttribute('aria-expanded', (!isExpanded).toString());
+        helpContent?.toggleAttribute('hidden');
+        
+        if (toggleArrow) {
+          toggleArrow.textContent = isExpanded ? '▼' : '▲';
+        }
+        
+        if (!isExpanded) {
+          helpToggle.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      });
+
+      // Example chord click handlers
+      const exampleChords = document.querySelectorAll('.example-chord');
+      exampleChords.forEach(chord => {
+        chord.addEventListener('click', () => {
+          const notes = chord.textContent.match(/[CDEFGAB][#b]?/g) || [];
+          
+          if (chordFinder && notes.length > 0) {
+            chordFinder.clearNotes();
+            notes.forEach(note => chordFinder.toggleNote(note));
+            
+            document.getElementById('chord-finder-container')?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center'
+            });
+          }
+        });
+      });
+
+      // Track page view
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'page_view', {
+          page_title: 'Chord Finder',
+          page_location: window.location.href,
+          content_group1: 'Music Tools'
+        });
+      }
+    });
+  </script>
+
+  <!-- Import design system styles -->
+  <link rel="stylesheet" href="/packages/design-system/css/chord-finder.css">
+  
+  <!-- Page-specific styles -->
+  <style>
+    /* Remove the old styling and use the new design system */
+
+    .tool-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .breadcrumb-link {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .breadcrumb-link:hover {
+      color: white;
+    }
+
+    .breadcrumb-separator {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .breadcrumb-current {
+      color: white;
+      font-weight: 500;
+    }
+
+    .tool-title-section {
+      margin-bottom: 2rem;
+    }
+
+    .tool-page-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+      margin: 0 0 0.5rem 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .tool-icon {
+      font-size: 2.25rem;
+    }
+
+    .tool-page-description {
+      font-size: 1.125rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0;
+      max-width: 600px;
+    }
+
+    .tool-page-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .chord-finder-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      margin-bottom: 3rem;
+      overflow: hidden;
+    }
+
+    .tool-interface {
+      min-height: 600px;
+    }
+
+    .tool-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+      color: #666;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .tool-error {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+      padding: 2rem;
+      text-align: center;
+      color: #666;
+    }
+
+    .error-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .retry-btn {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .retry-btn:hover {
+      background: #5a67d8;
+    }
+
+    .tool-help-section {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .help-toggle-btn {
+      width: 100%;
+      padding: 1.5rem;
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .help-toggle-btn:hover {
+      background: rgba(102, 126, 234, 0.05);
+    }
+
+    .help-icon {
+      font-size: 1.25rem;
+    }
+
+    .toggle-arrow {
+      margin-left: auto;
+      transition: transform 0.2s ease;
+      color: #667eea;
+    }
+
+    .help-content {
+      padding: 0 1.5rem 1.5rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .help-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .help-card {
+      padding: 1.5rem;
+      background: #f8fafc;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .help-card h3 {
+      margin: 0 0 1rem 0;
+      color: #333;
+      font-size: 1.125rem;
+    }
+
+    .help-card p {
+      margin: 0 0 0.75rem 0;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .help-card ul {
+      margin: 0;
+      padding-left: 1.25rem;
+      color: #666;
+    }
+
+    .help-card li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .help-examples {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .help-examples h3 {
+      margin: 0 0 1rem 0;
+      color: #333;
+      font-size: 1.125rem;
+    }
+
+    .example-chords {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .example-chord {
+      padding: 1rem;
+      background: #f1f5f9;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+    }
+
+    .example-chord:hover {
+      background: #e2e8f0;
+      border-color: #667eea;
+      transform: translateY(-1px);
+    }
+
+    .example-chord strong {
+      display: block;
+      color: #333;
+      margin-bottom: 0.25rem;
+    }
+
+    .example-notes {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .tool-page-title {
+        font-size: 2rem;
+      }
+
+      .tool-icon {
+        font-size: 1.75rem;
+      }
+
+      .help-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .example-chords {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</Base>

@@ -1,0 +1,1150 @@
+---
+// src/pages/journal.astro
+import Base from "../layouts/base.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { formatDate, calculateReadingTime, generateExcerpt, createSlug } from "../utils/blog";
+import content from "../data/content.json";
+
+// Get journal entries from JSON data
+// First try to get MDX entries, but if none exist, use JSON data
+let journalEntries: any[] = [];
+try {
+  journalEntries = await getCollection("journal");
+} catch (e) {
+  // Content collection might not exist, that's fine
+}
+
+// Create entries from JSON data
+const jsonEntries = content.creativeJournal.map((entry, index) => ({
+  slug: createSlug(entry.title),
+  data: {
+    title: entry.title,
+    date: entry.date,
+    tags: entry.tags,
+    published: true,
+    excerpt: entry.content.slice(0, 200) + "..."
+  },
+  body: entry.content,
+  id: `json-${index}`,
+  collection: 'journal' as const
+}));
+
+// Use MDX entries if they exist, otherwise use JSON entries
+// This prevents duplication
+const allEntries = journalEntries.length > 0 ? journalEntries : jsonEntries;
+const sortedEntries = allEntries
+  .filter((entry: any) => entry.data.published !== false)
+  .sort((a: any, b: any) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+// Get unique tags for filtering
+const allTags = [...new Set(sortedEntries.flatMap((entry: any) => entry.data.tags || []))];
+---
+
+<Base 
+  title="Creative Journal | Lukeus Music Lab"
+  description="Explore the creative process through studio notes, lyric sketches, and musical reflections. Insights into experimental music creation, songwriting, and sound design."
+  keywords="creative journal, music blog, studio notes, songwriting process, music creation, creative process, experimental music, music production insights"
+  ogTitle="Creative Journal - Behind the Music"
+  ogDescription="Dive into the creative process with studio notes, lyric sketches, and musical reflections from Lukeus Music Lab."
+  ogUrl="https://lukeus.app/journal"
+  canonicalUrl="https://lukeus.app/journal"
+>
+
+<!-- Journal Specific JSON-LD -->
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": "https://lukeus.app/journal#blog",
+    "name": "Lukeus Music Lab - Creative Journal",
+    "alternateName": "Creative Journal",
+    "description": "Insights into the creative process, studio notes, lyric sketches, and musical reflections from experimental music creation.",
+    "url": "https://lukeus.app/journal",
+    "mainEntityOfPage": "https://lukeus.app/journal",
+    "inLanguage": "en-US",
+    "dateCreated": "2025-01-01",
+    "dateModified": "2025-01-20",
+    "author": {
+      "@type": "Person",
+      "@id": "https://lukeus.com/#person",
+      "name": "Lukeus",
+      "url": "https://lukeus.com/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "@id": "https://lukeus.app/#organization",
+      "name": "Lukeus Music Lab",
+      "url": "https://lukeus.app/"
+    },
+    "image": "https://lukeus.app/assets/images/lukeus-avatar.png",
+    "sameAs": [
+      "https://lukeus.art/journal"
+    ],
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "Music Production"
+      },
+      {
+        "@type": "Thing", 
+        "name": "Creative Process"
+      },
+      {
+        "@type": "Thing",
+        "name": "Songwriting"
+      },
+      {
+        "@type": "Thing",
+        "name": "Sound Design"
+      }
+    ],
+    "keywords": "creative journal, music production, songwriting, studio notes, creative process, experimental music",
+    "blogPost": {sortedEntries.slice(0, 5).map((entry: any) => ({
+      "@type": "BlogPosting",
+      "@id": `https://lukeus.app/journal/${entry.slug}`,
+      "headline": entry.data.title,
+      "description": entry.data.excerpt || generateExcerpt(entry.body),
+      "datePublished": entry.data.date,
+      "dateModified": entry.data.date,
+      "author": {
+        "@id": "https://lukeus.com/#person"
+      },
+      "publisher": {
+        "@id": "https://lukeus.app/#organization"
+      },
+      "mainEntityOfPage": `https://lukeus.app/journal/${entry.slug}`,
+      "url": `https://lukeus.app/journal/${entry.slug}`,
+      "image": "https://lukeus.app/assets/images/lukeus-avatar.png",
+      "articleSection": "Creative Journal",
+      "wordCount": calculateReadingTime(entry.body) * 250, // Estimate words
+      "timeRequired": `PT${calculateReadingTime(entry.body)}M`,
+      "keywords": (entry.data.tags || []).join(", ")
+    }))}
+  }
+]
+</script>
+
+<header>
+  <div class="container">
+    <div class="header-content">
+      <span class="logo">Because Music Matters</span>
+      <nav class="nav-links">
+        <a href="/" class="nav-link">🏠 Home</a>
+        <a href="/tools" class="nav-link">🎹 Tools</a>
+      </nav>
+      <a href="/" class="logo" id="logo-text">Music Lab</a>
+    </div>
+  </div>
+</header>
+
+<section class="journal-hero">
+  <div class="container">
+    <div class="journal-hero-content">
+      <div class="hero-badge">
+        <span class="badge-icon">✍️</span>
+        <span>Creative Journal</span>
+      </div>
+      <h1 class="journal-hero-title">Behind the Music</h1>
+      <p class="journal-hero-description">
+        Dive into the creative process with studio notes, lyric sketches, and reflections on experimental music creation. Where ideas become sound and sound becomes story.
+      </p>
+      <div class="journal-stats">
+        <div class="stat-item">
+          <div class="stat-number">{sortedEntries.length}</div>
+          <div class="stat-label">Journal Entries</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{allTags.length}</div>
+          <div class="stat-label">Topics Covered</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{sortedEntries.reduce((acc: number, entry: any) => acc + calculateReadingTime(entry.body), 0)}</div>
+          <div class="stat-label">Minutes of Content</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="journal-content">
+  <div class="container">
+    <!-- Enhanced Search and Filter Controls -->
+    <div class="journal-controls">
+      <div class="search-section">
+        <div class="search-container">
+          <div class="search-icon">🔍</div>
+          <input 
+            id="journal-search" 
+            class="journal-search" 
+            type="search" 
+            placeholder="Search ideas, lyrics, studio notes..." 
+            aria-label="Search journal entries"
+            autocomplete="off"
+          >
+          <div class="search-clear" id="search-clear">×</div>
+        </div>
+        <div class="search-suggestions" id="search-suggestions"></div>
+      </div>
+      
+      <div class="filter-section">
+        <div class="filter-header">
+          <span class="filter-title">Filter by Topic</span>
+          <span class="filter-count" id="filter-count">{sortedEntries.length} entries</span>
+        </div>
+        <div class="journal-tags" role="listbox" aria-label="Filter by tag">
+          <button class="tag-filter is-active" data-tag="all" aria-pressed="true">
+            <span class="tag-icon">🎯</span>
+            <span>All Topics</span>
+          </button>
+          <button class="tag-filter" data-tag="song-idea" aria-pressed="false">
+            <span class="tag-icon">🎶</span>
+            <span>Song Ideas</span>
+          </button>
+          <button class="tag-filter" data-tag="lyric-sketch" aria-pressed="false">
+            <span class="tag-icon">✍️</span>
+            <span>Lyric Sketches</span>
+          </button>
+          <button class="tag-filter" data-tag="studio-note" aria-pressed="false">
+            <span class="tag-icon">🧪</span>
+            <span>Studio Notes</span>
+          </button>
+          <button class="tag-filter" data-tag="reflection" aria-pressed="false">
+            <span class="tag-icon">💭</span>
+            <span>Reflections</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sort Options -->
+    <div class="sort-controls">
+      <div class="sort-section">
+        <label for="sort-select" class="sort-label">Sort by:</label>
+        <select id="sort-select" class="sort-select">
+          <option value="date-desc">Newest First</option>
+          <option value="date-asc">Oldest First</option>
+          <option value="title-asc">Title A-Z</option>
+          <option value="reading-time">Reading Time</option>
+        </select>
+      </div>
+      <div class="view-controls">
+        <button class="view-toggle active" data-view="grid" aria-pressed="true" title="Grid View">
+          <span>⊞</span>
+        </button>
+        <button class="view-toggle" data-view="list" aria-pressed="false" title="List View">
+          <span>☰</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Journal Entries Grid -->
+    <div class="journal-entries" id="journal-entries" aria-live="polite">
+      {allEntries.map((entry: any) => (
+        <article 
+          class="journal-card" 
+          data-tags={(entry.data.tags || []).join(" ")}
+          data-date={entry.data.date}
+          data-reading-time={calculateReadingTime(entry.body)}
+          data-title={entry.data.title.toLowerCase()}
+        >
+          <div class="journal-card-inner">
+            <header class="journal-head">
+              <div class="journal-meta">
+                <time class="journal-date" datetime={entry.data.date}>
+                  {formatDate(entry.data.date)}
+                </time>
+                <span class="journal-reading-time">
+                  <span class="time-icon">⏱️</span>
+                  {calculateReadingTime(entry.body)} min read
+                </span>
+              </div>
+              
+              <div class="journal-tags-display">
+                {(entry.data.tags || []).map((tag: string) => (
+                  <span class="journal-tag" data-tag={tag}>
+                    {tag === "song-idea" && <span class="tag-emoji">🎶</span>}
+                    {tag === "lyric-sketch" && <span class="tag-emoji">✍️</span>}
+                    {tag === "studio-note" && <span class="tag-emoji">🧪</span>}
+                    {tag === "reflection" && <span class="tag-emoji">💭</span>}
+                    {!['song-idea', 'lyric-sketch', 'studio-note', 'reflection'].includes(tag) && 
+                      <span class="tag-emoji">#</span>}
+                    <span class="tag-text">{tag.replace('-', ' ')}</span>
+                  </span>
+                ))}
+              </div>
+              
+              <h3 class="journal-title">
+                <a href={`/journal/${entry.slug}`} class="journal-title-link">
+                  {entry.data.title}
+                </a>
+              </h3>
+            </header>
+
+            <div class="journal-body">
+              <p class="journal-snippet">
+                {entry.data.excerpt || generateExcerpt(entry.body)}
+              </p>
+              <div class="journal-footer">
+                <a 
+                  href={`/journal/${entry.slug}`} 
+                  class="read-more" 
+                  aria-label={`Read full post: ${entry.data.title}`}
+                >
+                  <span>Read Full Entry</span>
+                  <span class="arrow">→</span>
+                </a>
+                <div class="journal-engagement">
+                  <button class="like-btn" data-entry={entry.slug} title="Like this entry">
+                    <span class="heart">♡</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Load More / Pagination -->
+    <div class="journal-pagination">
+      <button class="load-more-btn" id="load-more" style="display: none;">
+        <span class="load-text">Load More Entries</span>
+        <span class="load-icon">↓</span>
+      </button>
+    </div>
+
+    <!-- Empty State -->
+    <div class="journal-empty" id="empty-state" style="display: none;">
+      <div class="empty-icon">📝</div>
+      <h3>No entries found</h3>
+      <p>Try adjusting your search or filter criteria.</p>
+      <button class="reset-filters-btn" id="reset-filters">Clear All Filters</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="social-links">
+      <a href="https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl?si=pNvmFrLvTFGIBu0KTAYlqQ" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on Spotify">Spotify</a>
+      <a href="https://soundcloud.com/lukeusmusic" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on SoundCloud">SoundCloud</a>
+      <a href="https://www.instagram.com/musiclukeus/" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on Instagram">Instagram</a>
+    </div>
+    <p>&copy; 2025 Lukeus. All reflections are works in progress.</p>
+  </div>
+</footer>
+</Base>
+
+<style>
+/* Journal Landing Page Styles */
+
+.journal-hero {
+  padding: 100px 0 80px 0;
+  background: linear-gradient(135deg, 
+    rgba(124, 210, 255, 0.1) 0%, 
+    rgba(163, 255, 176, 0.1) 50%,
+    rgba(255, 187, 124, 0.1) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.journal-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.03"><circle cx="30" cy="30" r="1"/></g></svg>');
+  pointer-events: none;
+}
+
+.journal-hero-content {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(124, 210, 255, 0.15);
+  border: 1px solid rgba(124, 210, 255, 0.3);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.badge-icon {
+  font-size: 1.1rem;
+}
+
+.journal-hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--text), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+
+.journal-hero-description {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+.journal-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.journal-content {
+  padding: 80px 0;
+}
+
+.journal-controls {
+  margin-bottom: 40px;
+  display: grid;
+  gap: 30px;
+}
+
+.search-section {
+  position: relative;
+}
+
+.search-container {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.journal-search {
+  width: 100%;
+  padding: 16px 50px 16px 50px;
+  border: 2px solid var(--border);
+  border-radius: 25px;
+  background: var(--bg-secondary);
+  color: var(--text);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.journal-search:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 210, 255, 0.1);
+}
+
+.search-clear {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 4px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.search-clear:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+.search-clear.visible {
+  opacity: 1;
+}
+
+.filter-section {
+  text-align: center;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.filter-title {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.filter-count {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: 4px 10px;
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.journal-tags {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tag-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.tag-filter:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.tag-filter.is-active,
+.tag-filter[aria-pressed="true"] {
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.tag-icon {
+  font-size: 1rem;
+}
+
+.sort-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.sort-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sort-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sort-select {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.view-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.view-toggle {
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.view-toggle:hover,
+.view-toggle.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.journal-entries {
+  display: grid;
+  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  margin-bottom: 50px;
+}
+
+.journal-entries.list-view {
+  grid-template-columns: 1fr;
+}
+
+.journal-entries.list-view .journal-card {
+  display: flex;
+  padding: 20px;
+}
+
+.journal-entries.list-view .journal-head {
+  flex: 0 0 200px;
+  margin-right: 30px;
+}
+
+.journal-entries.list-view .journal-body {
+  flex: 1;
+}
+
+.journal-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 0;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.journal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.journal-card:hover::before {
+  transform: scaleX(1);
+}
+
+.journal-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(124, 210, 255, 0.15);
+  border-color: var(--accent);
+}
+
+.journal-card-inner {
+  padding: 30px;
+}
+
+.journal-head {
+  margin-bottom: 20px;
+}
+
+.journal-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.journal-date {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.journal-reading-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.time-icon {
+  opacity: 0.7;
+}
+
+.journal-tags-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.journal-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.tag-emoji {
+  font-size: 0.9rem;
+}
+
+.tag-text {
+  text-transform: capitalize;
+}
+
+.journal-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.3;
+}
+
+.journal-title-link {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.journal-title-link:hover {
+  color: var(--accent);
+}
+
+.journal-snippet {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.journal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  color: var(--bg);
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.read-more:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 15px rgba(124, 210, 255, 0.3);
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+}
+
+.read-more:hover .arrow {
+  transform: translateX(2px);
+}
+
+.journal-engagement {
+  display: flex;
+  gap: 8px;
+}
+
+.like-btn {
+  padding: 8px;
+  background: transparent;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.like-btn:hover {
+  border-color: #ff6b9d;
+  color: #ff6b9d;
+  transform: scale(1.1);
+}
+
+.like-btn.liked {
+  background: #ff6b9d;
+  border-color: #ff6b9d;
+  color: white;
+}
+
+.like-btn.liked .heart {
+  content: '♥';
+}
+
+.journal-pagination {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.load-more-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.load-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.load-more-btn:hover .load-icon {
+  transform: translateY(2px);
+}
+
+.journal-empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-secondary);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.journal-empty h3 {
+  font-size: 1.5rem;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.reset-filters-btn {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-filters-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(124, 210, 255, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .journal-hero {
+    padding: 60px 0 50px 0;
+  }
+  
+  .journal-stats {
+    gap: 20px;
+  }
+  
+  .sort-controls {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .journal-entries {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .journal-card-inner {
+    padding: 20px;
+  }
+  
+  .journal-footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+}
+
+/* Animation for entries appearing */
+.journal-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.journal-card:nth-child(1) { animation-delay: 0.1s; }
+.journal-card:nth-child(2) { animation-delay: 0.2s; }
+.journal-card:nth-child(3) { animation-delay: 0.3s; }
+.journal-card:nth-child(4) { animation-delay: 0.4s; }
+.journal-card:nth-child(5) { animation-delay: 0.5s; }
+.journal-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+<script>
+// Enhanced Journal Page Interactions
+import { bindJournalFeatures } from '../scripts/journal';
+
+document.addEventListener('DOMContentLoaded', () => {
+  bindJournalFeatures();
+  initJournalPage();
+});
+
+function initJournalPage(): void {
+  const searchInput = document.getElementById('journal-search') as HTMLInputElement;
+  const searchClear = document.getElementById('search-clear') as HTMLElement;
+  const tagFilters = document.querySelectorAll('.tag-filter');
+  const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+  const viewToggles = document.querySelectorAll('.view-toggle');
+  const journalEntries = document.getElementById('journal-entries') as HTMLElement;
+  const filterCount = document.getElementById('filter-count') as HTMLElement;
+  const emptyState = document.getElementById('empty-state') as HTMLElement;
+  const resetFilters = document.getElementById('reset-filters') as HTMLElement;
+  const likeButtons = document.querySelectorAll('.like-btn');
+
+  let currentFilters = { tag: 'all', search: '', sort: 'date-desc', view: 'grid' };
+  let allCards = Array.from(document.querySelectorAll('.journal-card')) as HTMLElement[];
+
+  // Search functionality with real-time filtering
+  searchInput?.addEventListener('input', (e) => {
+    const query = (e.target as HTMLInputElement).value.toLowerCase();
+    currentFilters.search = query;
+    
+    if (query.length > 0) {
+      searchClear?.classList.add('visible');
+    } else {
+      searchClear?.classList.remove('visible');
+    }
+    
+    filterAndSort();
+  });
+
+  // Clear search
+  searchClear?.addEventListener('click', () => {
+    searchInput.value = '';
+    currentFilters.search = '';
+    searchClear.classList.remove('visible');
+    filterAndSort();
+  });
+
+  // Tag filtering
+  tagFilters.forEach(filter => {
+    filter.addEventListener('click', () => {
+      // Remove active from all
+      tagFilters.forEach(f => {
+        f.classList.remove('is-active');
+        f.setAttribute('aria-pressed', 'false');
+      });
+      
+      // Add active to clicked
+      filter.classList.add('is-active');
+      filter.setAttribute('aria-pressed', 'true');
+      
+      currentFilters.tag = filter.getAttribute('data-tag') || 'all';
+      filterAndSort();
+    });
+  });
+
+  // Sort functionality
+  sortSelect?.addEventListener('change', (e) => {
+    currentFilters.sort = (e.target as HTMLSelectElement).value;
+    filterAndSort();
+  });
+
+  // View toggle
+  viewToggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      viewToggles.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-pressed', 'false');
+      });
+      
+      toggle.classList.add('active');
+      toggle.setAttribute('aria-pressed', 'true');
+      
+      const view = toggle.getAttribute('data-view');
+      currentFilters.view = view || 'grid';
+      
+      if (view === 'list') {
+        journalEntries?.classList.add('list-view');
+      } else {
+        journalEntries?.classList.remove('list-view');
+      }
+    });
+  });
+
+  // Like functionality
+  likeButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      btn.classList.toggle('liked');
+      
+      // Add heart animation
+      const heart = btn.querySelector('.heart') as HTMLElement;
+      if (heart) {
+        heart.style.animation = 'heartBeat 0.6s ease';
+        setTimeout(() => {
+          heart.style.animation = '';
+        }, 600);
+      }
+    });
+  });
+
+  // Reset filters
+  resetFilters?.addEventListener('click', () => {
+    searchInput.value = '';
+    currentFilters = { tag: 'all', search: '', sort: 'date-desc', view: 'grid' };
+    
+    // Reset UI
+    searchClear?.classList.remove('visible');
+    tagFilters.forEach(f => {
+      f.classList.remove('is-active');
+      f.setAttribute('aria-pressed', 'false');
+    });
+    document.querySelector('[data-tag="all"]')?.classList.add('is-active');
+    document.querySelector('[data-tag="all"]')?.setAttribute('aria-pressed', 'true');
+    
+    sortSelect.value = 'date-desc';
+    journalEntries?.classList.remove('list-view');
+    
+    filterAndSort();
+  });
+
+  function filterAndSort(): void {
+    let visibleCards = allCards.filter(card => {
+      // Tag filter
+      const cardTags = card.getAttribute('data-tags') || '';
+      const tagMatch = currentFilters.tag === 'all' || cardTags.includes(currentFilters.tag);
+      
+      // Search filter
+      const cardTitle = card.getAttribute('data-title') || '';
+      const cardSnippet = card.querySelector('.journal-snippet')?.textContent?.toLowerCase() || '';
+      const searchMatch = currentFilters.search === '' || 
+        cardTitle.includes(currentFilters.search) || 
+        cardSnippet.includes(currentFilters.search);
+      
+      return tagMatch && searchMatch;
+    });
+
+    // Sort
+    visibleCards.sort((a, b) => {
+      switch (currentFilters.sort) {
+        case 'date-desc':
+          return new Date(b.getAttribute('data-date') || '').getTime() - 
+                 new Date(a.getAttribute('data-date') || '').getTime();
+        case 'date-asc':
+          return new Date(a.getAttribute('data-date') || '').getTime() - 
+                 new Date(b.getAttribute('data-date') || '').getTime();
+        case 'title-asc':
+          return (a.getAttribute('data-title') || '').localeCompare(b.getAttribute('data-title') || '');
+        case 'reading-time':
+          return parseInt(a.getAttribute('data-reading-time') || '0') - 
+                 parseInt(b.getAttribute('data-reading-time') || '0');
+        default:
+          return 0;
+      }
+    });
+
+    // Hide all cards first
+    allCards.forEach(card => card.style.display = 'none');
+    
+    // Show filtered cards
+    if (visibleCards.length > 0) {
+      visibleCards.forEach((card, index) => {
+        card.style.display = 'block';
+        card.style.animationDelay = `${index * 0.1}s`;
+      });
+      emptyState.style.display = 'none';
+    } else {
+      emptyState.style.display = 'block';
+    }
+    
+    // Update count
+    if (filterCount) {
+      filterCount.textContent = `${visibleCards.length} ${visibleCards.length === 1 ? 'entry' : 'entries'}`;
+    }
+  }
+
+  // Initialize
+  filterAndSort();
+}
+
+// Add heart beat animation
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(1.1); }
+    75% { transform: scale(1.2); }
+  }
+`;
+document.head.appendChild(style);
+</script>

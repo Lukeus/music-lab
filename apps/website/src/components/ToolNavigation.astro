@@ -1,0 +1,190 @@
+---
+// Tool Navigation Component
+// Provides navigation between different music tools
+
+export interface Props {
+  currentTool: 'key-friend' | 'scale-explorer' | 'chord-finder';
+}
+
+const { currentTool } = Astro.props;
+
+const tools = [
+  {
+    id: 'key-friend',
+    name: 'Key Friend',
+    href: '/tools/key-friend',
+    icon: '🗝️',
+    description: 'Chord progressions & songwriting'
+  },
+  {
+    id: 'scale-explorer',
+    name: 'Scale Explorer',
+    href: '/tools/scale-explorer', 
+    icon: '🎼',
+    description: 'Discover scales & modes'
+  },
+  {
+    id: 'chord-finder',
+    name: 'Chord Finder',
+    href: '/tools/chord-finder',
+    icon: '🎯',
+    description: 'Identify chords & inversions'
+  }
+];
+---
+
+<nav class="tool-navigation">
+  <div class="tool-nav-header">
+    <h3>Music Tools</h3>
+    <a href="/tools" class="back-link">← All Tools</a>
+  </div>
+  
+  <div class="tool-nav-links">
+    {tools.map(tool => (
+      <a 
+        href={tool.href} 
+        class={`tool-nav-link ${tool.id === currentTool ? 'active' : ''}`}
+        data-tool={tool.id}
+      >
+        <span class="tool-nav-icon">{tool.icon}</span>
+        <div class="tool-nav-content">
+          <span class="tool-nav-name">{tool.name}</span>
+          <span class="tool-nav-desc">{tool.description}</span>
+        </div>
+      </a>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .tool-navigation {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .tool-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .tool-nav-header h3 {
+    margin: 0;
+    color: white;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .back-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: white;
+  }
+
+  .tool-nav-links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .tool-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.2s ease;
+    min-width: 160px;
+  }
+
+  .tool-nav-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .tool-nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: white;
+  }
+
+  .tool-nav-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .tool-nav-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .tool-nav-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .tool-nav-desc {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.2;
+  }
+
+  .tool-nav-link.active .tool-nav-desc {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .tool-navigation {
+      padding: 1rem;
+    }
+    
+    .tool-nav-links {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .tool-nav-link {
+      min-width: unset;
+      width: 100%;
+    }
+    
+    .tool-nav-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tool-nav-content {
+      gap: 0.1rem;
+    }
+    
+    .tool-nav-name {
+      font-size: 0.85rem;
+    }
+    
+    .tool-nav-desc {
+      font-size: 0.7rem;
+    }
+  }
+</style>

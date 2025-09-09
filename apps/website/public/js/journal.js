@@ -1,2 +1,93 @@
-function h(){const e=document,s=e.getElementById("creative-journal-entries");if(!s)return;m();const i=e.getElementById("journal-search"),l=Array.from(e.querySelectorAll(".tag-filter"));function A(n,t,r){var d,p,y,f;const o=((p=(d=n.querySelector(".journal-title"))==null?void 0:d.textContent)==null?void 0:p.toLowerCase())||"",a=((f=(y=n.querySelector(".journal-snippet"))==null?void 0:y.textContent)==null?void 0:f.toLowerCase())||"",u=(n.getAttribute("data-tags")||"").toLowerCase(),b=!t||o.includes(t)||a.includes(t),g=r==="all"||u.includes(r);return b&&g}function c(){const n=(i&&"value"in i?i.value:"").toLowerCase(),t=l.find(a=>a.classList.contains("is-active")),r=t&&t.getAttribute("data-tag")||"all";if(!s)return;const o=Array.from(s.querySelectorAll(".journal-card"));s.setAttribute("aria-busy","true");for(const a of o){const u=A(a,n,r);a.style.display=u?"":"none"}s.setAttribute("aria-busy","false")}s.addEventListener("click",n=>{const t=n.target.closest(".read-more");if(!t)return;const r=t.closest(".journal-card"),o=r==null?void 0:r.querySelector(".journal-more");if(!o)return;!o.hasAttribute("hidden")?(o.setAttribute("hidden",""),t.setAttribute("aria-expanded","false"),t.textContent="Read more"):(o.removeAttribute("hidden"),t.setAttribute("aria-expanded","true"),t.textContent="Show less")}),l.forEach(n=>n.addEventListener("click",()=>{l.forEach(t=>{t.classList.remove("is-active"),t.setAttribute("aria-pressed","false")}),n.classList.add("is-active"),n.setAttribute("aria-pressed","true"),c()})),i==null||i.addEventListener("input",c),s.querySelector(".journal-card")?c():s.addEventListener("journal:rendered",()=>{c(),m()},{once:!0})}function m(){if(!document.getElementById("journal-sticky-fix")){const e=document.createElement("style");e.id="journal-sticky-fix",e.textContent=".journal-head { position: static !important; top: auto !important; }",document.head.appendChild(e)}document.querySelectorAll(".journal-head").forEach(e=>{(getComputedStyle(e).position==="sticky"||e.style.position==="sticky")&&(e.style.position="static",e.style.top="auto")})}export{h as b};
+function h() {
+    const e = document,
+        s = e.getElementById('creative-journal-entries');
+    if (!s) return;
+    m();
+    const i = e.getElementById('journal-search'),
+        l = Array.from(e.querySelectorAll('.tag-filter'));
+    function A(n, t, r) {
+        var d, p, y, f;
+        const o =
+                ((p =
+                    (d = n.querySelector('.journal-title')) == null
+                        ? void 0
+                        : d.textContent) == null
+                    ? void 0
+                    : p.toLowerCase()) || '',
+            a =
+                ((f =
+                    (y = n.querySelector('.journal-snippet')) == null
+                        ? void 0
+                        : y.textContent) == null
+                    ? void 0
+                    : f.toLowerCase()) || '',
+            u = (n.getAttribute('data-tags') || '').toLowerCase(),
+            b = !t || o.includes(t) || a.includes(t),
+            g = r === 'all' || u.includes(r);
+        return b && g;
+    }
+    function c() {
+        const n = (i && 'value' in i ? i.value : '').toLowerCase(),
+            t = l.find(a => a.classList.contains('is-active')),
+            r = (t && t.getAttribute('data-tag')) || 'all';
+        if (!s) return;
+        const o = Array.from(s.querySelectorAll('.journal-card'));
+        s.setAttribute('aria-busy', 'true');
+        for (const a of o) {
+            const u = A(a, n, r);
+            a.style.display = u ? '' : 'none';
+        }
+        s.setAttribute('aria-busy', 'false');
+    }
+    (s.addEventListener('click', n => {
+        const t = n.target.closest('.read-more');
+        if (!t) return;
+        const r = t.closest('.journal-card'),
+            o = r == null ? void 0 : r.querySelector('.journal-more');
+        if (!o) return;
+        !o.hasAttribute('hidden')
+            ? (o.setAttribute('hidden', ''),
+              t.setAttribute('aria-expanded', 'false'),
+              (t.textContent = 'Read more'))
+            : (o.removeAttribute('hidden'),
+              t.setAttribute('aria-expanded', 'true'),
+              (t.textContent = 'Show less'));
+    }),
+        l.forEach(n =>
+            n.addEventListener('click', () => {
+                (l.forEach(t => {
+                    (t.classList.remove('is-active'),
+                        t.setAttribute('aria-pressed', 'false'));
+                }),
+                    n.classList.add('is-active'),
+                    n.setAttribute('aria-pressed', 'true'),
+                    c());
+            })
+        ),
+        i == null || i.addEventListener('input', c),
+        s.querySelector('.journal-card')
+            ? c()
+            : s.addEventListener(
+                  'journal:rendered',
+                  () => {
+                      (c(), m());
+                  },
+                  { once: !0 }
+              ));
+}
+function m() {
+    if (!document.getElementById('journal-sticky-fix')) {
+        const e = document.createElement('style');
+        ((e.id = 'journal-sticky-fix'),
+            (e.textContent =
+                '.journal-head { position: static !important; top: auto !important; }'),
+            document.head.appendChild(e));
+    }
+    document.querySelectorAll('.journal-head').forEach(e => {
+        (getComputedStyle(e).position === 'sticky' ||
+            e.style.position === 'sticky') &&
+            ((e.style.position = 'static'), (e.style.top = 'auto'));
+    });
+}
+export { h as b };
 //# sourceMappingURL=journal.js.map

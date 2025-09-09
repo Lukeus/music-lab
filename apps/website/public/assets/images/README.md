@@ -5,19 +5,22 @@ This directory contains image assets for the Lukeus Music Lab website.
 ## Current Images
 
 ### Avatar
+
 - **`lukeus-avatar.jpg`** - Main profile image (400x400px recommended)
-  - Used in hero section with animated effects
-  - Should be professional music producer photo
-  - Square aspect ratio for circular display
+    - Used in hero section with animated effects
+    - Should be professional music producer photo
+    - Square aspect ratio for circular display
 
 ## Recommended Image Types
 
 ### Project Images
+
 - **project-covers/**: Album artwork or project visualization images
 - **screenshots/**: Screenshots of music software or creative process
 - **waveforms/**: Visual representations of audio waveforms
 
 ### General Assets
+
 - **backgrounds/**: Background images for sections
 - **icons/**: Custom icon files
 - **social/**: Social media preview images
@@ -32,6 +35,7 @@ This directory contains image assets for the Lukeus Music Lab website.
 ## Avatar Specifications
 
 **For best results with the avatar:**
+
 - Minimum: 400x400 pixels
 - Recommended: 800x800 pixels (for retina displays)
 - Format: JPG or PNG
