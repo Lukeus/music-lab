@@ -1,0 +1,66 @@
+---
+import Base from "../../layouts/base.astro";
+---
+
+<Base 
+  title="Key Friend | Music Tools"
+  description="Explore keys, chords, and progressions interactively with Key Friend."
+  keywords="key friend, chord progressions, keys, music theory"
+>
+<header>
+  <div class="container">
+    <div class="header-content">
+      <a href="/tools" class="nav-link">← Back to Tools</a>
+      <a href="/" class="logo" id="logo-text">Music Lab</a>
+    </div>
+  </div>
+</header>
+
+<section class="tool-hero">
+  <div class="container">
+    <div class="tool-hero-content">
+      <h1 class="tool-title">Key Friend</h1>
+      <p class="tool-description">
+        Discover chord patterns and progressions for any key
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="tool-runtime">
+  <div class="container">
+    <div id="key-friend-container" class="tool-container">
+      <!-- Key Friend will render here -->
+    </div>
+  </div>
+</section>
+
+<style>
+.tool-hero {
+  padding: 60px 0 40px 0;
+  text-align: center;
+}
+.tool-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.tool-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+.tool-runtime { padding: 20px 0 80px 0; }
+</style>
+
+<script>
+  import { createKeyFriend } from '../../scripts/keyFriend';
+  document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById('key-friend-container');
+    if (el) { const app = createKeyFriend(el); app.init(); }
+  });
+</script>
+</Base>
+

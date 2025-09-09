@@ -105,84 +105,160 @@
 
 /* Mobile-specific layout improvements */
 @media (max-width: 768px) {
-  /* Full-width mobile experience */
+  /* Enhanced mobile experience with better spacing */
   .container {
-    padding: 0 16px;
+    padding: 0 20px;
+    max-width: 100%;
+  }
+  
+  /* Global mobile typography improvements */
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 16px;
   }
 
-  /* Sticky mobile header with blur */
+  /* Clean mobile header design */
   header {
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    background: rgba(11, 15, 20, 0.9);
-    border-bottom: 1px solid rgba(124, 210, 255, 0.1);
+    background: rgba(11, 15, 20, 0.95);
+    border-bottom: 1px solid rgba(124, 210, 255, 0.2);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    padding: 8px 0;
   }
 
   .header-content {
-    justify-content: center;
-    position: relative;
-    min-height: 44px; /* Ensure minimum touch target height */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    padding: 0;
+    min-height: 48px;
+    gap: 16px;
   }
 
   .header-content .logo:first-child {
-    position: absolute;
-    left: 0;
+    order: 1;
     font-size: 16px;
-    max-width: 120px; /* Prevent overflow */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-weight: 600;
+    opacity: 1;
+    flex-shrink: 0;
   }
 
   .header-content .logo:last-child {
-    font-size: 18px;
-    max-width: calc(100vw - 200px); /* Leave space for left logo and nav */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: none; /* Hide secondary logo on mobile */
   }
 
-  /* Mobile navigation */
+  /* Mobile navigation - horizontal layout */
   .nav-links {
+    order: 2;
+    display: flex;
     gap: 8px;
+    justify-content: flex-end;
+    flex-shrink: 0;
   }
 
   .nav-link {
     font-size: 0.8rem;
-    padding: 6px 12px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: rgba(124, 210, 255, 0.1);
+    border: 1px solid rgba(124, 210, 255, 0.2);
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  
+  .nav-link:hover {
+    background: rgba(124, 210, 255, 0.2);
+    transform: none; /* Remove transform on mobile */
   }
 
-  /* Mobile hero optimizations */
+  /* Mobile hero - complete redesign */
   .hero {
-    padding: 60px 0;
-    min-height: calc(100vh - 80px);
+    padding: 40px 0 60px 0;
+    min-height: calc(100vh - 60px);
     display: flex;
     align-items: center;
+    text-align: center;
   }
 
   .hero-content {
-    gap: 30px;
+    flex-direction: column;
+    gap: 40px;
     width: 100%;
+    max-width: none;
+    align-items: center;
+  }
+  
+  .avatar-section {
+    flex: none;
+    order: 1;
   }
 
   .avatar-container {
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
   }
 
   .avatar-image {
-    width: 140px;
-    height: 140px;
+    width: 160px;
+    height: 160px;
+    border: 3px solid var(--accent);
+  }
+  
+  .avatar-ring {
+    width: 190px;
+    height: 190px;
+  }
+  
+  .avatar-pulse {
+    width: 220px;
+    height: 220px;
   }
 
   .avatar-hint {
-    margin-top: 16px;
+    margin-top: 20px;
   }
 
   .avatar-hint span {
-    font-size: 0.85rem;
-    padding: 8px 14px;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+    border-radius: 25px;
+  }
+  
+  .hero-text {
+    flex: none;
+    order: 2;
+    text-align: center;
+    max-width: 100%;
+  }
+  
+  .hero-text h1 {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    line-height: 1.1;
+    margin: 0 0 20px 0;
+    text-align: center;
+  }
+  
+  .hero-text p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-align: center;
+    max-width: 90%;
+    margin: 0 auto;
+    color: var(--text-secondary);
   }
 
   /* Mobile drum machine */
@@ -228,7 +304,192 @@
     border-radius: 12px;
     font-size: 0.9rem;
   }
-
+  
+  /* Mobile section improvements */
+  .lab-dashboard, .experiments, .journal {
+    padding: 40px 0;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  
+  .section-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  /* Mobile project cards */
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .project-card {
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--card-bg);
+    border: 1px solid rgba(124, 210, 255, 0.1);
+  }
+  
+  .project-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .project-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+  }
+  
+  /* Mobile play buttons and audio UI */
+  .play-button {
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+  }
+  
+  .audio-ui {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .waveform-canvas {
+    height: 40px;
+    border-radius: 8px;
+  }
+  
+  /* Mobile experiment cards */
+  .experiments-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .experiment-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .experiment-card h4 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+  
+  /* Mobile footer */
+  footer {
+    padding: 30px 0;
+    text-align: center;
+  }
+  
+  .social-links {
+    flex-direction: row;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .social-link {
+    font-size: 1rem;
+    padding: 8px 0;
+  }
+  
+  /* Mobile journal improvements */
+  .journal-entries {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .journal-card {
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--card-bg);
+    border: 1px solid rgba(124, 210, 255, 0.1);
+  }
+  
+  .journal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  
+  .journal-excerpt {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+  }
+  
+  .journal-meta {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+  }
+  
+  .journal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  .journal-tag {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: rgba(124, 210, 255, 0.1);
+    color: var(--accent);
+  }
+  
+  .read-more-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .read-more-btn:hover {
+    background: var(--accent-secondary);
+    transform: translateY(-1px);
+  }
+  
+  /* Mobile filter buttons */
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+    justify-content: center;
+  }
+  
+  .tag-filter {
+    padding: 8px 14px;
+    border-radius: 12px;
+    background: rgba(124, 210, 255, 0.1);
+    border: 1px solid rgba(124, 210, 255, 0.2);
+    color: var(--text);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .tag-filter.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  
   /* Mobile audio controls */
   .play-button {
     width: 48px !important;
@@ -253,18 +514,15 @@
     border-radius: 50%;
   }
 
-  /* Mobile project cards */
+  /* Additional mobile project cards styling */
   .project-card,
   .experiment-card {
-    padding: 20px;
-    border-radius: 16px;
-    border: 1px solid rgba(124, 210, 255, 0.1);
     background: rgba(11, 15, 20, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
-  /* Mobile journal improvements */
+  /* Mobile search and filters */
   .journal-search {
     height: 48px;
     border-radius: 12px;
@@ -272,36 +530,8 @@
     font-size: 16px; /* Prevent zoom on iOS */
   }
 
-  .tag-filter {
-    height: 40px;
-    padding: 0 16px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-  }
-
-  .journal-card {
-    padding: 20px;
-    border-radius: 16px;
-    margin-bottom: 16px;
-  }
-
   .journal-title-link {
     font-size: 1.1rem;
-  }
-
-  /* Mobile typography */
-  .hero-text h1 {
-    font-size: clamp(1.8rem, 6vw, 2.5rem);
-    line-height: 1.1;
-  }
-
-  .hero-text p {
-    font-size: 1rem;
-    line-height: 1.5;
-  }
-
-  .section-title span {
-    font-size: 1.25rem;
   }
 
   /* Bottom spacing for mobile */
