@@ -58,27 +58,7 @@ export function initializeDrumMachine() {
   wrap.className = 'drum-wrap';
   wrap.setAttribute('aria-label', 'Drum Machine');
 
-  // Inject minimal styles once (keep most CSS in /css/drumMachine.css)
-  if (!document.getElementById('drum-style')) {
-    const style = document.createElement('style');
-    style.id = 'drum-style';
-    style.textContent = `
-      .drum-wrap{position:relative;margin:24px auto;max-width:960px;padding:16px;border-radius:12px;background:var(--card-bg,rgba(255,255,255,.06));backdrop-filter:saturate(1.2) blur(6px);box-shadow:0 6px 24px rgba(0,0,0,.12)}
-      .drum-head{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
-      .drum-title{font-weight:700}
-      .drum-ctrls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-      .drum-grid{display:grid;grid-template-columns:72px repeat(16, var(--step,48px));gap:8px;user-select:none;overflow:auto;padding:6px 8px;box-sizing:border-box}
-      .drum-wrap{--step:min(48px,7.2vw)}
-      .drum-label{position:sticky;left:0;z-index:2;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;min-width:72px;box-sizing:border-box;font-size:.9rem;opacity:.9;background:var(--card-bg,rgba(20,20,20,.5));backdrop-filter:saturate(1.1) blur(2px)}
-      .drum-step{width:var(--step,48px);aspect-ratio:1/1;border:1px solid rgba(255,255,255,.12);box-sizing:border-box;border-radius:6px;background:var(--surface-2,#222);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);transition:transform .06s ease}
-      .drum-step.on{background:var(--accent,#5ef);border-color:rgba(255,255,255,.22)}
-      .drum-step.playing{box-shadow:inset 0 0 0 2px var(--accent-secondary,#ff6)}
-      .drum-btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border:0;border-radius:8px;background:var(--accent,#5ef);color:#000;font-weight:600;cursor:pointer}
-      .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,1px,1px);white-space:nowrap;border:0}
-      @media (max-width:700px){ .drum-wrap{--step:min(44px,10vw)} .drum-grid{grid-template-columns:64px repeat(16, var(--step,44px));} }
-    `;
-    document.head.appendChild(style);
-  }
+  // Note: All drum machine styles are now in drumMachine.css
 
   // Controls UI
   wrap.innerHTML = `
@@ -87,9 +67,9 @@ export function initializeDrumMachine() {
       <div class="drum-ctrls">
         <button class="drum-btn" id="drum-play"><span>▶ Play</span></button>
         <button class="drum-btn" id="drum-stop">■ Stop</button>
-        <button class="drum-btn" id="drum-rand">🎲 Randomize</button>
         <button class="drum-btn" id="drum-clear">🧹 Clear</button>
-        <label class="drum-bpm">BPM: <input type="number" id="drum-bpm" value="120" min="60" max="220" /></label>
+        <button class="drum-btn" id="drum-rand">🎲 Randomize</button>
+        <label class="drum-bpm">BPM <input type="number" id="drum-bpm" value="120" min="60" max="220" /></label>
       </div>
     </div>
     <div class="drum-grid" id="drum-grid" role="grid" aria-label="Step sequencer"></div>

@@ -1,8 +1,8 @@
 /* Header */
 header{ padding:20px 0; border-bottom:1px solid var(--border);
   backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-  border-bottom-color:rgba(255,255,255,.08); position:sticky; top:0; z-index:100;
-  background:rgba(10,10,10,.8);
+  border-bottom-color:rgba(255,255,255,.08); position:sticky; top:0; z-index:1000;
+  background:rgba(10,10,10,.95);
 }
 .header-content{ display:flex; justify-content:space-between; align-items:center; gap:var(--space-4); }
 .logo{ font-size:24px; font-weight:bold; color:var(--accent); text-decoration:none; }

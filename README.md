@@ -19,11 +19,12 @@ graph TD
     A --> E[📝 Content Management]
     
     B --> B1[🗝️ Key Friend Music Tool]
-    B --> B2[🥁 Real-time Drum Machine]
-    B --> B3[🌊 Waveform Visualization]
-    B --> B4[📖 Dynamic Journal]
-    B --> B5[🎸 Audio Playbook]
-    B --> B6[📱 Mobile-First Experience]
+    B --> B2[🎼 Scale Explorer Dashboard]
+    B --> B3[🥁 Real-time Drum Machine]
+    B --> B4[🌊 Waveform Visualization]
+    B --> B5[📖 Dynamic Journal]
+    B --> B6[🎸 Audio Playbook]
+    B --> B7[📱 Mobile-First Experience]
     
     C --> C1[🔊 Web Audio API]
     C --> C2[🎵 Music Theory Utils]
@@ -105,25 +106,40 @@ flowchart LR
 
 ## 🎯 Feature Showcase
 
-### 🗝️ Key Friend Music Theory Tool
+### 🎼 Music Tools Dashboard
+**Revolutionary music theory exploration** with a beautiful dashboard interface featuring two powerful tools:
+
+#### 🗝️ Key Friend Music Theory Tool
 Interactive **music theory explorer** built with TypeScript, featuring all 12 major and minor keys, chord progression builder, and educational note display. Perfect for songwriters, music students, and theory enthusiasts.
+
+#### 🎼 Scale Explorer
+Comprehensive **scale discovery tool** with multiple visualization modes:
+- **🎹 Keyboard View** - Interactive piano keyboard with scale highlighting
+- **🎸 Fretboard View** - Guitar fretboard visualization across 6 strings
+- **⭕ Circle View** - Circle of fifths representation
+- **🔍 Scale Finder** - Find scales containing specific notes
+- **14 Scale Types** - Major modes, pentatonic, blues, minor variations, and exotic scales
 
 ```mermaid
 sequenceDiagram
     participant U as 🎹 User
+    participant D as 🎼 Dashboard
     participant K as 🗝️ Key Friend
+    participant S as 🎼 Scale Explorer
     participant T as 🎵 Theory Engine
-    participant A as 🎨 Animation
     
-    U->>K: Select Key (e.g., "C Major")
-    K->>T: Generate Chord Patterns
-    T->>K: Return I-ii-iii-IV-V-vi-vii°
-    K->>A: Animate Key Transition
-    U->>K: Click Progression (I-V-vi-IV)
-    K->>A: Staggered Chord Animation
-    A->>U: Visual Feedback & Learning
+    U->>D: Visit Tools Dashboard
+    D->>U: Show Beautiful Tool Cards
+    U->>D: Click "Key Friend"
+    D->>K: Navigate to Tool
+    K->>T: Generate Chord Progressions
+    U->>D: Back to Dashboard
+    U->>D: Click "Scale Explorer"
+    D->>S: Navigate to Scale Tool
+    S->>T: Generate Scale Patterns
+    S->>U: Multi-Modal Visualization
     
-    Note over U,A: Learn While Creating
+    Note over U,S: Seamless Creative Flow
 ```
 
 ### 🏛️ Interactive Drum Machine
@@ -324,7 +340,9 @@ Canvas-based frequency analysis with requestAnimationFrame optimization for smoo
 **Experience the magic: [music-labs-1d8e1.web.app](https://music-labs-1d8e1.web.app)**
 
 ### 🎯 Try These Features:
-- 🗝️ **Visit /tools** to explore Key Friend music theory tool - learn chord progressions for any key!
+- 🎼 **Visit /tools** to explore the beautiful Music Tools Dashboard with interactive cards and animations!
+- 🗝️ **Launch Key Friend** at /tools/key-friend to learn chord progressions for any key
+- 🎼 **Try Scale Explorer** at /tools/scale-explorer with keyboard, fretboard, and circle visualizations
 - 🥁 **Click the avatar** to reveal the interactive drum machine with mobile haptic feedback
 - 🎸 **Play audio tracks** to see real-time waveform visualization  
 - 📖 **Browse the journal** with enhanced social sharing and mobile optimization
@@ -372,7 +390,9 @@ npm run deploy:website
 This monorepo showcases:
 - ✅ **Enterprise-grade architecture** with TypeScript throughout
 - ✅ **Cutting-edge audio technology** with Web Audio API
-- ✅ **Interactive music theory tools** with Key Friend chord explorer
+- ✅ **Interactive music theory tools** with Key Friend chord explorer and Scale Explorer
+- ✅ **Beautiful dashboard experience** with animated tool cards and seamless navigation
+- ✅ **Multiple visualization modes** including keyboard, fretboard, and circle representations
 - ✅ **Modern development practices** with monorepo tooling
 - ✅ **Mobile-first design** with touch optimization and PWA features
 - ✅ **Creative user experience** that feels magical

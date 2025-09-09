@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@lukeus/music-tools": "file:../../packages/music-tools",
     "motion": "^12.23.12"
   },
   "repository": {
