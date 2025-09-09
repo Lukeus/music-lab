@@ -201,6 +201,25 @@ export class ScaleExplorer {
 
           <!-- Visual Scale Display -->
           <div class="scale-visual-display">
+            <!-- Color Legend -->
+            <div class="scale-legend">
+              <h4>Key Legend</h4>
+              <div class="legend-items">
+                <div class="legend-item">
+                  <div class="legend-color root-note-color"></div>
+                  <span class="legend-label">Root Note - The foundation of the scale</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color in-scale-color"></div>
+                  <span class="legend-label">In Scale - Notes that belong to this scale</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color not-in-scale-color"></div>
+                  <span class="legend-label">Not in Scale - Notes outside this scale</span>
+                </div>
+              </div>
+            </div>
+            
             <div id="scale-visual" class="scale-visual ${this.state.visualMode}">
               ${this.renderVisualDisplay()}
             </div>

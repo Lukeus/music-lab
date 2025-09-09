@@ -5,8 +5,7 @@
     { "path": "./packages/shared-types" },
     { "path": "./packages/design-system" },
     { "path": "./packages/audio-engine" },
-    { "path": "./packages/ui-components" },
-    { "path": "./packages/music-theory" }
+    { "path": "./packages/music-tools" }
   ],
   "compilerOptions": {
     "composite": true,

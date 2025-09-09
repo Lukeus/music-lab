@@ -68,7 +68,7 @@
       "name": "Creative Journal",
       "short_name": "Journal", 
       "description": "Browse creative insights and process",
-      "url": "/#journal",
+      "url": "/journal",
       "icons": [
         {
           "src": "/assets/images/lukeus-avatar.png",

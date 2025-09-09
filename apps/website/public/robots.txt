@@ -1,19 +1,38 @@
-# Robots.txt for Lukeus Music Lab (lukeus.app)
+# Robots.txt for Lukeus Music Lab
+# Domains: lukeus.app, lukeus.art (both point to this site)
+# Artist site: lukeus.com (separate site)
 
 User-agent: *
 Allow: /
 
-# Sitemaps
+# Sitemaps for both domains
 Sitemap: https://lukeus.app/sitemap.xml
+Sitemap: https://lukeus.art/sitemap.xml
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
 
 # Performance: Crawl delay for resource-intensive bots
 User-agent: Baiduspider
-Crawl-delay: 5
+Crawl-delay: 10
 
 User-agent: YandexBot
+Crawl-delay: 10
+
+User-agent: Slurp
 Crawl-delay: 5
 
-# Block known bad bots
+# Block known problematic bots
 User-agent: SemrushBot
 Disallow: /
 
@@ -23,20 +42,71 @@ Disallow: /
 User-agent: MJ12bot
 Disallow: /
 
-# Allow social media crawlers
+User-agent: DotBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+# Allow social media and messaging platform crawlers
 User-agent: facebookexternalhit/*
 Allow: /
+Crawl-delay: 1
 
 User-agent: Twitterbot
 Allow: /
+Crawl-delay: 1
 
 User-agent: LinkedInBot
 Allow: /
+Crawl-delay: 1
 
-# Audio files - allow but be mindful of bandwidth
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+# Allow music platform crawlers
+User-agent: Applebot
+Allow: /
+
+User-agent: SpotifyBot
+Allow: /
+
+# Audio and media files - allow but with consideration for bandwidth
 User-agent: *
 Allow: /assets/audio/
+Allow: /assets/images/
+Allow: /assets/video/
 
-# Cache manifest
+# Progressive Web App files
 User-agent: *
 Allow: /manifest.json
+Allow: /sw.js
+Allow: /workbox-*.js
+
+# SEO and analytics
+User-agent: *
+Allow: /sitemap.xml
+Allow: /feed.xml
+Allow: /robots.txt
+
+# Tools pages (high value for SEO)
+User-agent: *
+Allow: /tools/
+Allow: /tools/key-friend
+Allow: /tools/scale-explorer
+Allow: /tools/chord-finder
+
+# Journal/Blog content
+User-agent: *
+Allow: /journal/
+
+# Disallow admin or private areas (if any exist in future)
+# User-agent: *
+# Disallow: /admin/
+# Disallow: /private/

@@ -7,7 +7,6 @@ import ParallaxBackground from "../components/ParallaxBackground.astro";
 import CinematicBackground from "../components/CinematicBackground.astro";
 import MiniPlayer from "../components/MiniPlayer.astro";
 import DrumMachine from "../components/DrumMachine.astro";
-import Journal from "../components/JournalList.astro";
 import content from "../data/content.json";
 ---
 
@@ -23,7 +22,7 @@ import content from "../data/content.json";
       <span class="logo">Because Music Matters</span>
       <nav class="nav-links">
         <a href="/tools" class="nav-link">🎹 Tools</a>
-        <a href="/#journal" class="nav-link">📝 Journal</a>
+        <a href="/journal" class="nav-link">📝 Journal</a>
       </nav>
       <a href="/" class="logo" id="logo-text">{content.logoText || 'Music Lab'}</a>
     </div>
@@ -107,8 +106,20 @@ import content from "../data/content.json";
   </div>
 </section>
 
-<section class="journal" id="journal">
-  <Journal />
+<section class="journal-teaser" id="journal">
+  <div class="container">
+    <h2 class="section-title">
+      <div class="section-icon" aria-hidden="true">✍️</div>
+      <span>Creative Journal</span>
+    </h2>
+    <p class="journal-teaser-description">
+      Dive into the creative process with studio notes, lyric sketches, and reflections on experimental music creation. Where ideas become sound and sound becomes story.
+    </p>
+    <a href="/journal" class="journal-cta">
+      <span>Explore All Entries</span>
+      <span class="arrow">→</span>
+    </a>
+  </div>
 </section>
 
 <footer>
@@ -122,3 +133,53 @@ import content from "../data/content.json";
   </div>
 </footer>
 </Base>
+
+<style>
+.journal-teaser {
+  padding: 80px 0;
+  background: linear-gradient(135deg, 
+    rgba(124, 210, 255, 0.05) 0%, 
+    rgba(163, 255, 176, 0.05) 50%,
+    rgba(255, 187, 124, 0.05) 100%);
+  text-align: center;
+  border-radius: 20px;
+  margin: 40px 0;
+}
+
+.journal-teaser-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.journal-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  color: var(--bg);
+  padding: 16px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(124, 210, 255, 0.2);
+}
+
+.journal-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(124, 210, 255, 0.3);
+}
+
+.journal-cta .arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.journal-cta:hover .arrow {
+  transform: translateX(4px);
+}
+</style>

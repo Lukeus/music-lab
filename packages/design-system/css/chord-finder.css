@@ -1,0 +1,884 @@
+/* Chord Finder Styles */
+/* Interactive chord identification and discovery tool */
+
+/* === CHORD FINDER STYLES === */
+:root {
+  --chord-finder-bg: rgba(11, 15, 20, 0.95);
+  --chord-finder-border: rgba(124, 210, 255, 0.2);
+  --chord-finder-accent: var(--accent);
+  --chord-finder-secondary: var(--accent-secondary);
+}
+
+/* === MAIN CONTAINER === */
+.chord-finder {
+  background: var(--chord-finder-bg);
+  border: 1px solid var(--chord-finder-border);
+  border-radius: 16px;
+  padding: 32px;
+  margin: 32px 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text-primary);
+}
+
+.chord-finder:hover {
+  border-color: rgba(124, 210, 255, 0.4);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+}
+
+/* === HEADER === */
+.chord-finder-header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--chord-finder-border);
+}
+
+.chord-finder-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--chord-finder-accent), var(--chord-finder-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.chord-finder-title .tool-icon {
+  font-size: 1.2em;
+  opacity: 0.9;
+}
+
+.chord-finder-description {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* === CONTENT SECTIONS === */
+.chord-finder-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* === VISUAL CONTROLS === */
+.visual-mode-controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 20px;
+  background: rgba(11, 15, 20, 0.5);
+  border-radius: 12px;
+  border: 1px solid var(--chord-finder-border);
+}
+
+.visual-mode-selector {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.visual-mode-controls label {
+  color: var(--text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.mode-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.mode-btn {
+  padding: 8px 16px;
+  background: rgba(11, 15, 20, 0.8);
+  border: 1px solid var(--chord-finder-border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mode-btn:hover {
+  background: rgba(124, 210, 255, 0.1);
+  border-color: var(--chord-finder-accent);
+  color: var(--text-primary);
+}
+
+.mode-btn.active {
+  background: var(--chord-finder-accent);
+  border-color: var(--chord-finder-accent);
+  color: var(--background-primary);
+  font-weight: 600;
+}
+
+/* === NOTE INPUT SECTION === */
+.note-input-section h3 {
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.input-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.clear-notes-btn {
+  padding: 8px 16px;
+  background: rgba(11, 15, 20, 0.8);
+  border: 1px solid var(--chord-finder-border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-notes-btn:hover {
+  border-color: var(--chord-finder-accent);
+  background: rgba(124, 210, 255, 0.1);
+}
+
+.clear-notes-btn:focus {
+  outline: none;
+  border-color: var(--chord-finder-accent);
+  box-shadow: 0 0 0 2px rgba(124, 210, 255, 0.2);
+}
+
+.selected-notes-count {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: var(--text-secondary);
+  gap: 8px;
+}
+
+#notes-count {
+  color: var(--chord-finder-accent);
+  font-weight: 700;
+}
+
+/* Keyboard styles are now handled by the design system in components.css */
+
+/* Note Selector Input */
+.note-selector-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-3);
+  backdrop-filter: blur(5px);
+}
+
+.note-btn {
+  width: 50px;
+  height: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-2);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.note-btn:hover {
+  border-color: rgba(124, 210, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(124, 210, 255, 0.2);
+}
+
+.note-btn.selected {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  color: var(--bg);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(124, 210, 255, 0.4);
+}
+
+/* Chord Results Section */
+.chord-results-section {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-3);
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-1);
+}
+
+.chord-results-section h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Empty State */
+.empty-state,
+.no-results {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-secondary);
+}
+
+.empty-icon,
+.no-results-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.empty-state p,
+.no-results p {
+  margin: 0.5rem 0;
+  font-size: 1.125rem;
+}
+
+.suggestion {
+  font-size: 1rem !important;
+  color: #a0aec0 !important;
+}
+
+/* Chord Results Grid */
+.chord-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.chord-result-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-3);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.chord-result-card:hover {
+  border-color: rgba(124, 210, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(124, 210, 255, 0.2);
+}
+
+.chord-result-card.active {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, rgba(124, 210, 255, 0.2), rgba(163, 255, 176, 0.2));
+  color: var(--text-primary);
+  box-shadow: 0 8px 32px rgba(124, 210, 255, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.chord-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.chord-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.chord-quality {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.chord-quality.major {
+  background: linear-gradient(135deg, rgba(163, 255, 176, 0.3), rgba(163, 255, 176, 0.1));
+  color: var(--accent-secondary);
+  border: 1px solid rgba(163, 255, 176, 0.3);
+}
+
+.chord-quality.minor {
+  background: linear-gradient(135deg, rgba(124, 210, 255, 0.3), rgba(124, 210, 255, 0.1));
+  color: var(--accent);
+  border: 1px solid rgba(124, 210, 255, 0.3);
+}
+
+.chord-quality.diminished {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.3), rgba(255, 107, 107, 0.1));
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.chord-quality.augmented {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.3), rgba(255, 193, 7, 0.1));
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.chord-quality.suspended {
+  background: linear-gradient(135deg, rgba(156, 39, 176, 0.3), rgba(156, 39, 176, 0.1));
+  color: #9c27b0;
+  border: 1px solid rgba(156, 39, 176, 0.3);
+}
+
+.chord-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chord-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chord-note {
+  background: rgba(124, 210, 255, 0.2);
+  color: var(--accent);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid rgba(124, 210, 255, 0.3);
+}
+
+.chord-result-card.active .chord-note {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.chord-inversion {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.chord-result-card.active .chord-inversion {
+  color: var(--text-primary);
+  opacity: 0.9;
+}
+
+/* Chord Details Section */
+.chord-details-section {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-3);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-1);
+}
+
+.no-active-chord {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.no-active-chord h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+}
+
+.chord-details.active {
+  padding: 1.5rem;
+}
+
+.chord-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chord-details-header h3 {
+  margin: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.chord-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.instrument-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.instrument-selector label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.instrument-select {
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-2);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+}
+
+.toggle-inversions-btn,
+.toggle-voicings-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-2);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.toggle-inversions-btn:hover,
+.toggle-voicings-btn:hover {
+  border-color: rgba(124, 210, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.toggle-inversions-btn.active,
+.toggle-voicings-btn.active {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  color: var(--bg);
+  box-shadow: 0 4px 15px rgba(124, 210, 255, 0.3);
+}
+
+/* Chord Info */
+.chord-info {
+  margin-bottom: 2rem;
+}
+
+.chord-description p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+.chord-notes-display h4 {
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.notes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.note-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-3);
+  min-width: 80px;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.note-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.note-item.root-note {
+  border-color: var(--accent-secondary);
+  background: linear-gradient(135deg, rgba(163, 255, 176, 0.2), rgba(163, 255, 176, 0.1));
+  box-shadow: 0 4px 15px rgba(163, 255, 176, 0.3);
+}
+
+.note-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.note-role {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.note-item.root-note .note-role {
+  color: var(--accent-secondary);
+  font-weight: 600;
+}
+
+/* Inversions Section */
+.inversions-section {
+  margin-bottom: 2rem;
+}
+
+.inversions-section h4 {
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.inversions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.inversion-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-3);
+  padding: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.inversion-card:hover {
+  border-color: rgba(124, 210, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124, 210, 255, 0.2);
+}
+
+.inversion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.inversion-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.inversion-symbol {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.inversion-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.inversion-note {
+  background: rgba(124, 210, 255, 0.2);
+  color: var(--accent);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid rgba(124, 210, 255, 0.3);
+}
+
+/* Voicings Section */
+.voicings-section {
+  margin-bottom: 2rem;
+}
+
+.voicings-section h4 {
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.voicings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.voicing-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-3);
+  padding: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.voicing-card:hover {
+  border-color: rgba(163, 255, 176, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(163, 255, 176, 0.2);
+}
+
+.voicing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.voicing-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.voicing-difficulty {
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.voicing-difficulty.easy {
+  background: linear-gradient(135deg, rgba(163, 255, 176, 0.3), rgba(163, 255, 176, 0.1));
+  color: var(--accent-secondary);
+  border: 1px solid rgba(163, 255, 176, 0.3);
+}
+
+.voicing-difficulty.medium {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.3), rgba(255, 193, 7, 0.1));
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.voicing-difficulty.advanced {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.3), rgba(255, 107, 107, 0.1));
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.voicing-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.voicing-note {
+  background: rgba(163, 255, 176, 0.2);
+  color: var(--accent-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-2);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid rgba(163, 255, 176, 0.3);
+}
+
+.voicing-fingering {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+/* Error States */
+.chord-finder-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  background: #fed7d7;
+  border: 1px solid #fc8181;
+  border-radius: 8px;
+  color: #742a2a;
+}
+
+.error-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.chord-finder-error h3 {
+  margin: 0 0 1rem 0;
+  color: #742a2a;
+}
+
+.retry-button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retry-button:hover {
+  background: #c53030;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .chord-finder {
+    padding: 1rem;
+  }
+  
+  .chord-details-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .chord-controls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .chord-finder-title {
+    font-size: 2rem;
+  }
+  
+  .visual-mode-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .input-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  /* Keyboard responsive styles handled by design system */
+  
+  .chord-results-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .inversions-grid,
+  .voicings-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .notes-list {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .mode-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .mode-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .note-selector-input {
+    justify-content: center;
+  }
+  
+  .note-btn {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .chord-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .instrument-selector {
+    justify-content: space-between;
+  }
+  
+  .instrument-select {
+    flex: 1;
+    margin-left: 1rem;
+  }
+}
+
+/* Animation and Transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chord-result-card,
+.inversion-card,
+.voicing-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.chord-result-card:nth-child(1) { animation-delay: 0.05s; }
+.chord-result-card:nth-child(2) { animation-delay: 0.1s; }
+.chord-result-card:nth-child(3) { animation-delay: 0.15s; }
+.chord-result-card:nth-child(4) { animation-delay: 0.2s; }
+
+/* Focus Styles for Accessibility */
+.key:focus,
+.note-btn:focus,
+.mode-btn:focus,
+.chord-result-card:focus,
+.toggle-inversions-btn:focus,
+.toggle-voicings-btn:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .chord-finder {
+    background: #ffffff;
+    color: #000000;
+  }
+  
+  .key, .note-btn {
+    border-width: 2px;
+  }
+  
+  .chord-result-card {
+    border-width: 2px;
+  }
+}

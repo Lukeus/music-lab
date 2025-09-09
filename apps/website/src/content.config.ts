@@ -9,10 +9,10 @@ const journalCollection = defineCollection({
         categories: z.array(z.string()).default([]),
         featuredImage: z.string().optional(),
         published: z.boolean().default(true),
-        author: z.string().default('Lukeus')
-    })
+        author: z.string().default('Lukeus'),
+    }),
 });
 
 export const collections = {
-    journal: journalCollection
+    journal: journalCollection,
 };

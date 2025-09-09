@@ -5,6 +5,7 @@ This directory will contain audio samples and tracks for the Lukeus Music Lab we
 ## Audio Structure
 
 ### Project Audio
+
 - **projects/**: Full tracks or longer compositions
 - **experiments/**: Short audio experiments and tests
 - **samples/**: Audio samples and loops

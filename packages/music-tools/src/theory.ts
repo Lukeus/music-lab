@@ -324,3 +324,249 @@ export function findScalesContainingNotes(notes: Note[], root?: Note): Scale[] {
   
   return results;
 }
+
+// === CHORD FINDER TYPES AND CONSTANTS ===
+
+// Extended chord types for Chord Finder
+export type ExtendedChordType = ChordType | 'major7' | 'minor7' | 'dominant7' | 'diminished7' | 'augmented' | 'sus2' | 'sus4';
+
+export type ChordInversion = 'root' | 'first' | 'second' | 'third';
+
+export interface ChordIdentification {
+  root: Note;
+  type: ExtendedChordType;
+  name: string;
+  notes: Note[];
+  intervals: number[];
+  inversion: ChordInversion;
+  quality: 'major' | 'minor' | 'diminished' | 'augmented' | 'dominant' | 'suspended';
+  description: string;
+}
+
+export interface ChordVoicing {
+  name: string;
+  notes: Note[];
+  fingering?: string;
+  difficulty: 'easy' | 'intermediate' | 'advanced';
+  instrument: 'piano' | 'guitar' | 'general';
+}
+
+// Chord interval patterns (semitones from root)
+export const CHORD_INTERVALS: Record<ExtendedChordType, number[]> = {
+  // Basic triads
+  'major': [0, 4, 7],
+  'minor': [0, 3, 7],
+  'diminished': [0, 3, 6],
+  'augmented': [0, 4, 8],
+  
+  // Seventh chords
+  'major7': [0, 4, 7, 11],
+  'minor7': [0, 3, 7, 10],
+  'dominant7': [0, 4, 7, 10],
+  'diminished7': [0, 3, 6, 9],
+  
+  // Suspended chords
+  'sus2': [0, 2, 7],
+  'sus4': [0, 5, 7]
+};
+
+// Chord quality and description info
+export const CHORD_INFO: Record<ExtendedChordType, { quality: ChordIdentification['quality']; description: string }> = {
+  'major': {
+    quality: 'major',
+    description: 'Bright, happy, stable sound. The foundation of Western harmony.'
+  },
+  'minor': {
+    quality: 'minor',
+    description: 'Melancholy, emotional, introspective. Darker than major.'
+  },
+  'diminished': {
+    quality: 'diminished',
+    description: 'Tense, unstable, mysterious. Creates harmonic tension.'
+  },
+  'augmented': {
+    quality: 'augmented',
+    description: 'Dreamy, floating, unresolved. Neither major nor minor.'
+  },
+  'major7': {
+    quality: 'major',
+    description: 'Sophisticated, jazzy, warm. Major triad with added seventh.'
+  },
+  'minor7': {
+    quality: 'minor',
+    description: 'Smooth, jazzy, mellow. Minor triad with added seventh.'
+  },
+  'dominant7': {
+    quality: 'dominant',
+    description: 'Bluesy, driving, wants to resolve. The sound of blues and jazz.'
+  },
+  'diminished7': {
+    quality: 'diminished',
+    description: 'Highly tense, symmetrical, mysterious. Used in jazz and classical.'
+  },
+  'sus2': {
+    quality: 'suspended',
+    description: 'Open, airy, unresolved. Second replaces the third.'
+  },
+  'sus4': {
+    quality: 'suspended',
+    description: 'Suspended, anticipatory, wants resolution. Fourth replaces third.'
+  }
+};
+
+// Generate chord from root and type
+export function generateChord(root: Note, chordType: ExtendedChordType): ChordIdentification {
+  const intervals = CHORD_INTERVALS[chordType];
+  const notes = intervals.map(interval => getNoteAtInterval(root, interval));
+  const info = CHORD_INFO[chordType];
+  
+  const chordTypeDisplayNames: Record<ExtendedChordType, string> = {
+    'major': 'Major',
+    'minor': 'Minor',
+    'diminished': 'Diminished',
+    'augmented': 'Augmented',
+    'major7': 'Major 7th',
+    'minor7': 'Minor 7th',
+    'dominant7': 'Dominant 7th',
+    'diminished7': 'Diminished 7th',
+    'sus2': 'Suspended 2nd',
+    'sus4': 'Suspended 4th'
+  };
+  
+  const chordSymbols: Record<ExtendedChordType, string> = {
+    'major': '',
+    'minor': 'm',
+    'diminished': 'dim',
+    'augmented': 'aug',
+    'major7': 'maj7',
+    'minor7': 'm7',
+    'dominant7': '7',
+    'diminished7': 'dim7',
+    'sus2': 'sus2',
+    'sus4': 'sus4'
+  };
+  
+  return {
+    root,
+    type: chordType,
+    name: `${root}${chordSymbols[chordType]}`,
+    notes,
+    intervals,
+    inversion: 'root',
+    quality: info.quality,
+    description: info.description
+  };
+}
+
+// Identify chord from a set of notes
+export function identifyChord(notes: Note[]): ChordIdentification[] {
+  if (notes.length < 2) return [];
+  
+  const results: ChordIdentification[] = [];
+  
+  // Try each note as a potential root
+  for (const root of notes) {
+    // Calculate intervals from this root
+    const intervals = notes.map(note => {
+      const rootIndex = NOTES.indexOf(root);
+      const noteIndex = NOTES.indexOf(note);
+      return (noteIndex - rootIndex + 12) % 12;
+    }).sort((a, b) => a - b);
+    
+    // Check against known chord patterns
+    for (const [chordType, chordIntervals] of Object.entries(CHORD_INTERVALS)) {
+      const sortedChordIntervals = [...chordIntervals].sort((a, b) => a - b);
+      
+      if (intervalsMatch(intervals, sortedChordIntervals)) {
+        const chord = generateChord(root, chordType as ExtendedChordType);
+        
+        // Determine inversion
+        const lowestNote = notes[0];
+        if (lowestNote === root) {
+          chord.inversion = 'root';
+        } else {
+          const bassIndex = chord.notes.indexOf(lowestNote);
+          if (bassIndex === 1) chord.inversion = 'first';
+          else if (bassIndex === 2) chord.inversion = 'second';
+          else if (bassIndex === 3) chord.inversion = 'third';
+        }
+        
+        results.push(chord);
+      }
+    }
+  }
+  
+  // Remove duplicates and sort by likelihood
+  const uniqueResults = results.filter((chord, index, self) => 
+    index === self.findIndex(c => c.name === chord.name && c.inversion === chord.inversion)
+  );
+  
+  return uniqueResults.sort((a, b) => {
+    // Prefer root position chords
+    if (a.inversion === 'root' && b.inversion !== 'root') return -1;
+    if (b.inversion === 'root' && a.inversion !== 'root') return 1;
+    
+    // Prefer simpler chords (triads over 7ths)
+    return a.notes.length - b.notes.length;
+  });
+}
+
+// Helper function to check if intervals match
+function intervalsMatch(intervals1: number[], intervals2: number[]): boolean {
+  if (intervals1.length !== intervals2.length) return false;
+  return intervals1.every((interval, index) => interval === intervals2[index]);
+}
+
+// Generate all inversions of a chord
+export function generateChordInversions(chord: ChordIdentification): ChordIdentification[] {
+  const inversions: ChordIdentification[] = [];
+  const inversionNames: ChordInversion[] = ['root', 'first', 'second', 'third'];
+  
+  for (let i = 0; i < chord.notes.length; i++) {
+    const invertedNotes = [...chord.notes.slice(i), ...chord.notes.slice(0, i)];
+    const inversion: ChordIdentification = {
+      ...chord,
+      notes: invertedNotes,
+      inversion: inversionNames[i] || 'root',
+      name: i === 0 ? chord.name : `${chord.name}/${invertedNotes[0]}`
+    };
+    inversions.push(inversion);
+  }
+  
+  return inversions;
+}
+
+// Find common chord voicings for an instrument
+export function generateChordVoicings(chord: ChordIdentification, instrument: 'piano' | 'guitar' = 'piano'): ChordVoicing[] {
+  const voicings: ChordVoicing[] = [];
+  
+  if (instrument === 'piano') {
+    // Basic piano voicings
+    voicings.push({
+      name: 'Close Position',
+      notes: chord.notes,
+      difficulty: 'easy',
+      instrument: 'piano'
+    });
+    
+    if (chord.notes.length >= 3) {
+      voicings.push({
+        name: 'Open Position',
+        notes: [chord.notes[0], chord.notes[2], chord.notes[1]], // Spread out
+        difficulty: 'intermediate',
+        instrument: 'piano'
+      });
+    }
+  } else if (instrument === 'guitar') {
+    // Basic guitar voicings (simplified)
+    voicings.push({
+      name: 'Open Chord',
+      notes: chord.notes,
+      fingering: 'Varies by chord',
+      difficulty: 'easy',
+      instrument: 'guitar'
+    });
+  }
+  
+  return voicings;
+}

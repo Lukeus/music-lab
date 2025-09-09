@@ -1,0 +1,327 @@
+---
+import Base from '../../layouts/base.astro';
+---
+
+<Base 
+  title="Chord Finder | Music Tools" 
+  description="Interactive chord identification tool. Select notes to discover chords, explore inversions, and find voicings for piano and guitar."
+>
+<header>
+  <div class="container">
+    <div class="header-content">
+      <a href="/tools" class="nav-link">← Back to Tools</a>
+      <a href="/" class="logo" id="logo-text">Music Lab</a>
+    </div>
+  </div>
+</header>
+
+<section class="tool-hero">
+  <div class="container">
+    <div class="tool-hero-content">
+      <h1 class="tool-title">🎯 Chord Finder</h1>
+      <p class="tool-description">
+        Identify chords from selected notes, explore inversions, and discover voicings for different instruments
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="tool-runtime">
+  <div class="container">
+    <!-- Help Button - Fixed positioned -->
+    <button id="help-toggle" class="floating-help-btn" aria-expanded="false">
+      <span class="help-icon">❓</span>
+      <span class="help-text">Help</span>
+    </button>
+    
+    <div id="chord-finder-container" class="tool-container">
+      <!-- ChordFinder will render here -->
+    </div>
+    
+    <!-- Examples Section -->
+    <section class="examples-section">
+      <h2 class="examples-title">💡 Try These Examples</h2>
+      <p class="examples-description">Click any example to load it into the chord finder above</p>
+      <div class="example-chords">
+        <button class="example-chord" data-notes="C,E,G">
+          <strong>C Major</strong><br>C, E, G
+        </button>
+        <button class="example-chord" data-notes="G,B,D,F">
+          <strong>G7</strong><br>G, B, D, F
+        </button>
+        <button class="example-chord" data-notes="A,C,E">
+          <strong>Am</strong><br>A, C, E
+        </button>
+        <button class="example-chord" data-notes="C,E,G,B">
+          <strong>Cmaj7</strong><br>C, E, G, B
+        </button>
+        <button class="example-chord" data-notes="F,A,C,E">
+          <strong>Fmaj7</strong><br>F, A, C, E
+        </button>
+        <button class="example-chord" data-notes="D,F#,A">
+          <strong>D Major</strong><br>D, F♯, A
+        </button>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- Help Panel - Slides in from right -->
+<div id="help-panel" class="help-panel">
+  <div class="help-panel-header">
+    <h3>🎯 How to Use Chord Finder</h3>
+    <button id="help-close" class="help-close-btn" aria-label="Close help">
+      <span>×</span>
+    </button>
+  </div>
+  
+  <div class="help-panel-content">
+    <div class="help-section-item">
+      <h4>🎹 Select Notes</h4>
+      <p>Choose your input method:</p>
+      <ul>
+        <li><strong>Keyboard Mode:</strong> Click on piano keys to select notes</li>
+        <li><strong>Note Selector:</strong> Use buttons to pick notes directly</li>
+      </ul>
+    </div>
+
+    <div class="help-section-item">
+      <h4>🎯 Identify Chords</h4>
+      <p>As you select notes (minimum 2), the tool automatically:</p>
+      <ul>
+        <li>Identifies all possible chord interpretations</li>
+        <li>Shows chord quality (major, minor, diminished, etc.)</li>
+        <li>Displays inversion information</li>
+      </ul>
+    </div>
+
+    <div class="help-section-item">
+      <h4>🔍 Explore Details</h4>
+      <p>Click on any identified chord to see:</p>
+      <ul>
+        <li><strong>Note Roles:</strong> Root, 3rd, 5th, 7th, extensions</li>
+        <li><strong>Inversions:</strong> All possible inversions with names</li>
+        <li><strong>Voicings:</strong> Common fingerings for piano or guitar</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- Help Panel Overlay -->
+<div id="help-overlay" class="help-overlay"></div>
+
+<style>
+/* Match the site's design system */
+.tool-hero {
+  padding: 60px 0 40px 0;
+  text-align: center;
+}
+
+.tool-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tool-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tool-runtime { 
+  padding: 20px 0 80px 0; 
+}
+
+.tool-container {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-3);
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-1);
+  margin-bottom: 3rem;
+}
+
+/* Examples Section Styles */
+.examples-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-3);
+  backdrop-filter: blur(10px);
+}
+
+.examples-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.examples-description {
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.example-chords {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.example-chord {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-2);
+  padding: 1rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-family);
+  text-align: center;
+}
+
+.example-chord:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.example-chord strong {
+  display: block;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+}
+
+/* Help panel styles now handled by shared design system */
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .tool-container {
+    padding: 1rem;
+  }
+  
+  .examples-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+  }
+  
+  .example-chords {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .example-chord {
+    padding: 0.75rem;
+  }
+}
+</style>
+
+<script>
+import { createWebChordFinder } from '../../scripts/chordFinder';
+  import { addTooltip, MusicTooltips } from '../../scripts/tooltips';
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Chord Finder
+    const el = document.getElementById('chord-finder-container');
+    let chordFinder = null;
+    
+    if (el) { 
+      chordFinder = createWebChordFinder(el); 
+      chordFinder.init();
+    }
+
+    // Help panel functionality
+    const helpToggle = document.getElementById('help-toggle');
+    const helpPanel = document.getElementById('help-panel');
+    const helpOverlay = document.getElementById('help-overlay');
+    const helpClose = document.getElementById('help-close');
+
+    function openHelpPanel() {
+      helpPanel?.classList.add('active');
+      helpOverlay?.classList.add('active');
+      helpToggle?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeHelpPanel() {
+      helpPanel?.classList.remove('active');
+      helpOverlay?.classList.remove('active');
+      helpToggle?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    helpToggle?.addEventListener('click', openHelpPanel);
+    helpClose?.addEventListener('click', closeHelpPanel);
+    helpOverlay?.addEventListener('click', closeHelpPanel);
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && helpPanel?.classList.contains('active')) {
+        closeHelpPanel();
+      }
+    });
+
+    // Example chord click handlers with enhanced tooltips
+    const exampleChords = document.querySelectorAll('.example-chord');
+    exampleChords.forEach(chord => {
+      // Add enhanced tooltip to example chord buttons
+      const chordName = chord.querySelector('strong')?.textContent?.trim() || '';
+      const notesStr = chord.getAttribute('data-notes') || '';
+      const notes = notesStr.split(',').map(n => n.trim());
+      
+      addTooltip(chord as HTMLElement, {
+        content: MusicTooltips.chord(chordName, notes, 'Click to try this chord'),
+        type: 'chord',
+        position: 'top'
+      });
+      
+      chord.addEventListener('click', () => {
+        if (chordFinder && notes.length > 0) {
+          chordFinder.clearNotes();
+          notes.forEach(note => chordFinder.toggleNote(note.trim()));
+          
+          document.getElementById('chord-finder-container')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      });
+    });
+    
+    // Add tooltips to the main tool container
+    const toolContainer = document.getElementById('chord-finder-container');
+    if (toolContainer) {
+      addTooltip(toolContainer, {
+        content: 'TITLE:Chord Finder\nDESC:Select notes using the keyboard or note buttons to identify chords\nKEY:Click keys or use mouse',
+        type: 'chord',
+        position: 'top',
+        multiLine: true
+      });
+    }
+
+    // Track page view
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'page_view', {
+        page_title: 'Chord Finder',
+        page_location: window.location.href,
+        content_group1: 'Music Tools'
+      });
+    }
+  });
+</script>
+</Base>

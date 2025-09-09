@@ -1,12 +1,12 @@
 /* ===== Lukeus.art – Design tokens & themes ===== */
 :root {
     /* Base (dark default) */
-    --bg: #0B0F14;
+    --bg: #0b0f14;
     --bg-elev: #121821;
-    --text: #EAF2FF;
-    --muted: #A9B6CC;
-    --accent: #7CD2FF;
-    --accent-2: #A3FFB0;
+    --text: #eaf2ff;
+    --muted: #a9b6cc;
+    --accent: #7cd2ff;
+    --accent-2: #a3ffb0;
 
     /* Aliases used by components */
     --bg-dark: var(--bg);
@@ -26,17 +26,17 @@
     --space-12: 48px;
     --radius-2: 8px;
     --radius-3: 12px;
-    --shadow-1: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 20px rgba(0, 0, 0, .25);
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 /* Light theme overrides */
-:root[data-theme="light"] {
-    --bg: #F7FAFF;
-    --bg-elev: #FFFFFF;
-    --text: #0A0F14;
-    --muted: #3B4B61;
-    --accent: #006F9C;
-    --accent-2: #146C43;
+:root[data-theme='light'] {
+    --bg: #f7faff;
+    --bg-elev: #ffffff;
+    --text: #0a0f14;
+    --muted: #3b4b61;
+    --accent: #006f9c;
+    --accent-2: #146c43;
 
     --bg-dark: var(--bg);
     --bg-secondary: var(--bg-elev);
@@ -53,18 +53,23 @@ html {
 
 /* MDN: color-scheme */
 
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
 body {
     background: var(--bg);
     color: var(--text);
-    font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-family:
+        'Manrope',
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Arial,
+        sans-serif;
     line-height: 1.6;
     /* >= 150% for accessibility */
     -webkit-font-smoothing: antialiased;
@@ -122,7 +127,11 @@ header .logo#logo-text {
     inline-size: 36px;
     block-size: 36px;
     border-radius: 999px;
-    background: linear-gradient(135deg, rgba(124, 210, 255, 0.18), rgba(163, 255, 176, 0.18));
+    background: linear-gradient(
+        135deg,
+        rgba(124, 210, 255, 0.18),
+        rgba(163, 255, 176, 0.18)
+    );
     box-shadow: var(--shadow-1);
 }
 
@@ -138,14 +147,16 @@ header .logo#logo-text {
 
 /* Buttons */
 .enter-button {
-    background: linear-gradient(180deg, var(--accent), #57BFF0);
+    background: linear-gradient(180deg, var(--accent), #57bff0);
     color: #041018;
     border: 0;
     border-radius: var(--radius-3);
     padding: var(--space-3) var(--space-6);
     font-weight: 700;
     box-shadow: var(--shadow-1);
-    transition: transform 120ms ease, box-shadow 120ms ease;
+    transition:
+        transform 120ms ease,
+        box-shadow 120ms ease;
 }
 
 .enter-button:hover {
@@ -168,17 +179,16 @@ a:hover {
 }
 
 /* Accessible focus states */
-:where(a, button, [role="button"]) {
+:where(a, button, [role='button']) {
     outline: none;
 }
 
-:where(a, button, [role="button"]):focus-visible {
+:where(a, button, [role='button']):focus-visible {
     outline: 3px solid var(--accent-2);
     outline-offset: 3px;
     /* clear visual indicator */
     border-radius: 6px;
 }
-
 
 /* Avatar framing */
 .avatar-container {
@@ -195,10 +205,12 @@ a:hover {
     inset: -8px;
     border-radius: 24px;
     pointer-events: none;
-    background: radial-gradient(60% 60% at 50% 40%, rgba(124, 210, 255, 0.25), transparent 70%);
+    background: radial-gradient(
+        60% 60% at 50% 40%,
+        rgba(124, 210, 255, 0.25),
+        transparent 70%
+    );
 }
-
-
 
 .scroll-lock {
     overflow: hidden;
@@ -373,7 +385,6 @@ header {
 }
 
 @keyframes pulse {
-
     0%,
     100% {
         opacity: 1;
@@ -388,7 +399,11 @@ header {
 .hero {
     padding: 80px 0;
     text-align: center;
-    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(255, 107, 107, 0.1) 100%);
+    background: linear-gradient(
+        135deg,
+        rgba(0, 255, 136, 0.1) 0%,
+        rgba(255, 107, 107, 0.1) 100%
+    );
     position: relative;
     overflow: hidden;
     background-size: cover;
@@ -708,7 +723,6 @@ header {
 }
 
 @keyframes gentle-float {
-
     0%,
     100% {
         transform: translateY(0px);
@@ -754,10 +768,12 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    background: repeating-linear-gradient(90deg,
-            transparent 0px,
-            rgba(255, 255, 255, 0.05) 10px,
-            transparent 20px);
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        rgba(255, 255, 255, 0.05) 10px,
+        transparent 20px
+    );
     animation: progress-shimmer 3s ease-in-out infinite;
 }
 
@@ -777,15 +793,16 @@ header {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg,
-            transparent,
-            rgba(255, 255, 255, 0.3),
-            transparent);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
     animation: progress-sweep 2s ease-in-out infinite;
 }
 
 @keyframes progress-shimmer {
-
     0%,
     100% {
         transform: translateX(-100%);
@@ -877,7 +894,6 @@ header {
 }
 
 @keyframes pulse-play {
-
     0%,
     100% {
         transform: scale(1);
@@ -972,10 +988,12 @@ header {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg,
-            transparent,
-            rgba(0, 255, 136, 0.2),
-            transparent);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 136, 0.2),
+        transparent
+    );
     animation: wave 4s infinite;
     pointer-events: none;
 }
@@ -988,15 +1006,43 @@ header {
     height: 100%;
     background-image:
         linear-gradient(var(--accent) 0%, var(--accent) 100%),
-        linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%),
+        linear-gradient(
+            var(--accent-secondary) 0%,
+            var(--accent-secondary) 100%
+        ),
         linear-gradient(var(--accent) 0%, var(--accent) 100%),
-        linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%),
+        linear-gradient(
+            var(--accent-secondary) 0%,
+            var(--accent-secondary) 100%
+        ),
         linear-gradient(var(--accent) 0%, var(--accent) 100%),
-        linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%),
+        linear-gradient(
+            var(--accent-secondary) 0%,
+            var(--accent-secondary) 100%
+        ),
         linear-gradient(var(--accent) 0%, var(--accent) 100%),
-        linear-gradient(var(--accent-secondary) 0%, var(--accent-secondary) 100%);
-    background-size: 3px 20%, 3px 60%, 3px 35%, 3px 80%, 3px 45%, 3px 25%, 3px 70%, 3px 15%;
-    background-position: 10px center, 20px center, 30px center, 40px center, 50px center, 60px center, 70px center, 80px center;
+        linear-gradient(
+            var(--accent-secondary) 0%,
+            var(--accent-secondary) 100%
+        );
+    background-size:
+        3px 20%,
+        3px 60%,
+        3px 35%,
+        3px 80%,
+        3px 45%,
+        3px 25%,
+        3px 70%,
+        3px 15%;
+    background-position:
+        10px center,
+        20px center,
+        30px center,
+        40px center,
+        50px center,
+        60px center,
+        70px center,
+        80px center;
     background-repeat: no-repeat;
     animation: waveform-pulse 2s ease-in-out infinite;
     opacity: 0.7;
@@ -1013,7 +1059,6 @@ header {
 }
 
 @keyframes waveform-pulse {
-
     0%,
     100% {
         transform: scaleY(1);
@@ -1039,22 +1084,22 @@ header {
 }
 
 .journal-head {
-  display: grid;
-  gap: 8px;
-  margin: 0 0 12px;
-  padding: 6px 2px; /* add breathing room top/bottom */
+    display: grid;
+    gap: 8px;
+    margin: 0 0 12px;
+    padding: 6px 2px; /* add breathing room top/bottom */
 }
 
 .journal-title {
-  margin: 2px 0 4px;  /* was 0; gives the title space from date/pill */
-  font-weight: 700;
-  color: var(--text);
+    margin: 2px 0 4px; /* was 0; gives the title space from date/pill */
+    font-weight: 700;
+    color: var(--text);
 }
 
 .journal-date {
-  color: var(--text-secondary);
-  font-size: .9rem;
-  margin: 0; /* prevent collapsing into header padding */
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0; /* prevent collapsing into header padding */
 }
 
 .journal-entries::before {
@@ -1064,10 +1109,12 @@ header {
     top: 0;
     bottom: 0;
     width: 0px;
-    background: linear-gradient(to bottom,
-            var(--accent) 0%,
-            var(--accent-secondary) 50%,
-            var(--accent) 100%);
+    background: linear-gradient(
+        to bottom,
+        var(--accent) 0%,
+        var(--accent-secondary) 50%,
+        var(--accent) 100%
+    );
     opacity: 0.3;
 }
 
@@ -1158,11 +1205,11 @@ header {
     padding: 6px 10px;
     border-radius: 999px;
     cursor: pointer;
-    font-size: .9rem;
+    font-size: 0.9rem;
 }
 
 .tag-filter.is-active,
-.tag-filter[aria-pressed="true"] {
+.tag-filter[aria-pressed='true'] {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
@@ -1173,7 +1220,9 @@ header {
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 20px;
-    transition: transform .2s ease, box-shadow .2s ease;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .journal-card:hover {
@@ -1196,7 +1245,7 @@ header {
     background: color-mix(in srgb, var(--accent) 18%, transparent);
     color: var(--text);
     width: fit-content;
-    font-size: .85rem;
+    font-size: 0.85rem;
 }
 
 .journal-title {
@@ -1207,7 +1256,7 @@ header {
 
 .journal-date {
     color: var(--text-secondary);
-    font-size: .9rem;
+    font-size: 0.9rem;
 }
 
 .journal-snippet {
@@ -1221,7 +1270,11 @@ header {
 
 /* Read-more toggle */
 .read-more {
-    background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #57BFF0));
+    background: linear-gradient(
+        180deg,
+        var(--accent),
+        color-mix(in srgb, var(--accent) 60%, #57bff0)
+    );
     color: #041018;
     border: 0;
     border-radius: var(--radius-2);
@@ -1448,8 +1501,8 @@ a:focus-visible {
     margin-top: 10px;
 }
 
-.project-card .project-meta>span,
-.experiment-card .project-meta>span {
+.project-card .project-meta > span,
+.experiment-card .project-meta > span {
     order: 0;
     /* text/meta first */
 }
@@ -1475,7 +1528,7 @@ a:focus-visible {
 }
 
 .experiment-card .experiment-header .experiment-type {
-    opacity: .85;
+    opacity: 0.85;
 }
 
 /* Audio UI inside cards: compact and full-width */
@@ -1502,7 +1555,6 @@ a:focus-visible {
 
 /* Keep stacked on desktop to avoid crowding; we can opt-in to split later */
 @media (min-width: 900px) {
-
     .project-card .project-meta,
     .experiment-card .project-meta {
         grid-template-columns: 1fr;
@@ -1527,7 +1579,9 @@ a:focus-visible {
     border-radius: 12px;
     transform: translateY(120%);
     opacity: 0;
-    transition: transform .3s ease, opacity .3s ease;
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
     z-index: 1000;
     color: #fff;
 }
@@ -1568,8 +1622,8 @@ a:focus-visible {
 }
 
 .mini-player .audio-time {
-    font-size: .85rem;
-    opacity: .85;
+    font-size: 0.85rem;
+    opacity: 0.85;
 }
 
 .mini-player .audio-progress {
@@ -1611,12 +1665,12 @@ a:focus-visible {
     overflow: visible;
     background: #000;
     color: #fff;
-    padding: .5rem .75rem;
-    border-radius: .25rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
 }
 
 /* Respect iOS safe area */
-@supports(padding: max(0px)) {
+@supports (padding: max(0px)) {
     .mini-player {
         bottom: max(16px, env(safe-area-inset-bottom));
     }
@@ -1638,10 +1692,12 @@ a:focus-visible {
     z-index: -2;
     pointer-events: none;
     overflow: hidden;
-    background: radial-gradient(ellipse at center, 
-        rgba(124, 210, 255, 0.03) 0%, 
-        rgba(163, 255, 176, 0.02) 40%, 
-        transparent 70%);
+    background: radial-gradient(
+        ellipse at center,
+        rgba(124, 210, 255, 0.03) 0%,
+        rgba(163, 255, 176, 0.02) 40%,
+        transparent 70%
+    );
 }
 
 /* Dynamic lighting layers */
@@ -1652,15 +1708,22 @@ a:focus-visible {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle at 30% 20%, 
-        rgba(124, 210, 255, 0.08) 0%, 
-        transparent 50%),
-    radial-gradient(circle at 70% 80%, 
-        rgba(163, 255, 176, 0.06) 0%, 
-        transparent 50%),
-    radial-gradient(circle at 50% 50%, 
-        rgba(255, 107, 107, 0.04) 0%, 
-        transparent 70%);
+    background:
+        radial-gradient(
+            circle at 30% 20%,
+            rgba(124, 210, 255, 0.08) 0%,
+            transparent 50%
+        ),
+        radial-gradient(
+            circle at 70% 80%,
+            rgba(163, 255, 176, 0.06) 0%,
+            transparent 50%
+        ),
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(255, 107, 107, 0.04) 0%,
+            transparent 70%
+        );
     animation: cinematic-drift 45s ease-in-out infinite;
     opacity: 0.7;
 }
@@ -1672,12 +1735,14 @@ a:focus-visible {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, 
-        transparent 0%, 
-        rgba(124, 210, 255, 0.02) 25%, 
-        transparent 50%, 
-        rgba(163, 255, 176, 0.02) 75%, 
-        transparent 100%);
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(124, 210, 255, 0.02) 25%,
+        transparent 50%,
+        rgba(163, 255, 176, 0.02) 75%,
+        transparent 100%
+    );
     animation: cinematic-sweep 60s ease-in-out infinite;
 }
 
@@ -1755,14 +1820,16 @@ a:focus-visible {
         opacity: 0.8;
     }
     50% {
-        transform: translateY(50vh) translateX(var(--drift, 0px)) scale(1) rotate(180deg);
+        transform: translateY(50vh) translateX(var(--drift, 0px)) scale(1)
+            rotate(180deg);
     }
     90% {
         opacity: 0.2;
     }
     100% {
         opacity: 0;
-        transform: translateY(-20vh) translateX(calc(var(--drift, 0px) * 2)) scale(1.2) rotate(360deg);
+        transform: translateY(-20vh) translateX(calc(var(--drift, 0px) * 2))
+            scale(1.2) rotate(360deg);
     }
 }
 
@@ -1806,7 +1873,8 @@ a:focus-visible {
 
 /* Dynamic lighting animations */
 @keyframes cinematic-drift {
-    0%, 100% {
+    0%,
+    100% {
         transform: translate(0%, 0%) scale(1);
         filter: hue-rotate(0deg);
     }
@@ -1890,7 +1958,11 @@ a:focus-visible {
     position: absolute;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(124, 210, 255, 0.15) 0%, transparent 70%);
+    background: radial-gradient(
+        circle,
+        rgba(124, 210, 255, 0.15) 0%,
+        transparent 70%
+    );
     border-radius: 50%;
     pointer-events: none;
     opacity: 0;
@@ -1903,14 +1975,16 @@ a:focus-visible {
 }
 
 @keyframes spotlight-roam {
-    0%, 100% {
+    0%,
+    100% {
         transform: translate(-200px, -200px) scale(0.8);
     }
     25% {
         transform: translate(calc(100vw - 200px), -100px) scale(1.2);
     }
     50% {
-        transform: translate(calc(100vw - 100px), calc(100vh - 200px)) scale(0.9);
+        transform: translate(calc(100vw - 100px), calc(100vh - 200px))
+            scale(0.9);
     }
     75% {
         transform: translate(-100px, calc(100vh - 100px)) scale(1.1);
@@ -1931,14 +2005,31 @@ a:focus-visible {
 }
 
 @keyframes grain-dance {
-    0%, 100% { transform: translate(0, 0); }
-    12.5% { transform: translate(-2%, 1%); }
-    25% { transform: translate(1%, -1%); }
-    37.5% { transform: translate(-1%, 2%); }
-    50% { transform: translate(2%, -2%); }
-    62.5% { transform: translate(-1%, -1%); }
-    75% { transform: translate(1%, 1%); }
-    87.5% { transform: translate(-2%, -1%); }
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+    12.5% {
+        transform: translate(-2%, 1%);
+    }
+    25% {
+        transform: translate(1%, -1%);
+    }
+    37.5% {
+        transform: translate(-1%, 2%);
+    }
+    50% {
+        transform: translate(2%, -2%);
+    }
+    62.5% {
+        transform: translate(-1%, -1%);
+    }
+    75% {
+        transform: translate(1%, 1%);
+    }
+    87.5% {
+        transform: translate(-2%, -1%);
+    }
 }
 
 /* Responsive adjustments */
@@ -1946,11 +2037,11 @@ a:focus-visible {
     .cinematic-background {
         opacity: 0.7; /* Reduce intensity on mobile */
     }
-    
+
     .particle {
         font-size: 1.2rem;
     }
-    
+
     .cinematic-spotlight {
         width: 300px;
         height: 300px;
@@ -1966,7 +2057,7 @@ a:focus-visible {
         animation: none !important;
         transform: none !important;
     }
-    
+
     .cinematic-background::before,
     .cinematic-background::after {
         animation: none !important;

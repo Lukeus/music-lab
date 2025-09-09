@@ -10,6 +10,7 @@ import '../styles/mini-player.css';
 import '../styles/mobile.css';
 import '../styles/keyFriend.css';
 import '../styles/scaleExplorer.css';
+import '../styles/chordFinder.css';
 import '../styles/toolPages.css';
 import '../styles/utilities.css';
 
@@ -33,13 +34,13 @@ const {
   description = 'Step into Lukeus\'s creative laboratory where experimental music, sound design, and musical storytelling come to life. From acoustic sessions to electronic transformations.',
   ogTitle,
   ogDescription,
-  ogImage = 'https://music-labs-1d8e1.web.app/assets/images/lukeus-avatar.png',
+  ogImage = 'https://lukeus.app/assets/images/lukeus-avatar.png',
   ogType = 'website',
-  ogUrl = 'https://music-labs-1d8e1.web.app/',
+  ogUrl = 'https://lukeus.app/',
   twitterTitle,
   twitterDescription,
   twitterImage,
-  canonicalUrl = 'https://music-labs-1d8e1.web.app/',
+  canonicalUrl = 'https://lukeus.app/',
   keywords = 'lukeus, music lab, experimental music, electronic music, acoustic sessions, creative process, music producer, Portland musician'
 } = Astro.props;
 ---
@@ -92,41 +93,348 @@ const {
     <meta name="format-detection" content="telephone=no" />
 
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Lukeus Music Lab",
-        "alternateName": "Because Music Matters",
-        "url": "https://lukeus.app/",
-        "description": "Experimental music laboratory and creative workspace by Lukeus",
-        "author": {
-          "@type": "Person",
-          "name": "Lukeus",
-          "url": "https://lukeus.com/",
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": ["WebSite", "CreativeWork"],
+          "@id": "https://lukeus.app/#website",
+          "name": "Lukeus Music Lab",
+          "alternateName": ["Because Music Matters", "Music Lab", "Lukeus.app", "Lukeus.art"],
+          "url": "https://lukeus.app/",
           "sameAs": [
+            "https://lukeus.art/",
+            "https://lukeus.com/"
+          ],
+          "description": "Interactive music laboratory and creative workspace where experimental music, sound design, and musical storytelling come to life. From acoustic sessions to electronic transformations.",
+          "keywords": "experimental music, electronic music, acoustic sessions, music production, sound design, creative process, interactive music tools, Portland musician, indie artist",
+          "inLanguage": "en-US",
+          "isAccessibleForFree": true,
+          "copyrightYear": 2025,
+          "dateCreated": "2025-01-01",
+          "dateModified": "2025-01-20",
+          "genre": ["Electronic Music", "Acoustic Music", "Experimental Music", "Indie Music"],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Musicians, Music Producers, Music Lovers, Creative Artists"
+          },
+          "mainEntity": {
+            "@type": "MusicGroup",
+            "@id": "https://lukeus.app/#artist",
+            "name": "Lukeus",
+            "alternateName": "Luke Adams",
+            "description": "Indie artist, music producer, and creative experimenter based in Portland, Oregon. Creating everything from acoustic storytelling to electronic transformations.",
+            "url": "https://lukeus.com/",
+            "sameAs": [
+              "https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl",
+              "https://soundcloud.com/lukeusmusic",
+              "https://www.instagram.com/musiclukeus/",
+              "https://lukeus.app/",
+              "https://lukeus.art/"
+            ],
+            "genre": ["Electronic", "Acoustic", "Experimental", "Indie", "EDM"],
+            "foundingLocation": {
+              "@type": "Place",
+              "name": "Portland, Oregon",
+              "addressCountry": "US"
+            },
+            "member": {
+              "@type": "Person",
+              "@id": "https://lukeus.com/#person",
+              "name": "Lukeus",
+              "alternateName": "Luke Adams",
+              "jobTitle": ["Music Producer", "Singer-Songwriter", "Electronic Music Artist", "Sound Designer"],
+              "description": "Musician, Artist, Dreamer, Creator - crafting experimental music that bridges acoustic storytelling with electronic innovation.",
+              "url": "https://lukeus.com/",
+              "image": "https://lukeus.app/assets/images/lukeus-avatar.png",
+              "sameAs": [
+                "https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl",
+                "https://soundcloud.com/lukeusmusic",
+                "https://www.instagram.com/musiclukeus/"
+              ],
+              "knowsAbout": [
+                "Music Production",
+                "Sound Design",
+                "Electronic Music",
+                "Acoustic Guitar",
+                "Logic Pro",
+                "UAD Plugins",
+                "Freestyle Vocals",
+                "Creative Process"
+              ],
+              "hasOccupation": {
+                "@type": "Occupation",
+                "name": "Music Producer",
+                "occupationalCategory": "Arts, Design, Entertainment, Sports, and Media Occupations",
+                "skills": "Music Production, Sound Engineering, Songwriting, Performance"
+              },
+              "homeLocation": {
+                "@type": "Place",
+                "name": "Portland, Oregon",
+                "addressCountry": "US"
+              }
+            },
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Music & Creative Services",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Music Production",
+                    "description": "Custom music production from acoustic to electronic"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Sound Design",
+                    "description": "Creative sound design and audio experimentation"
+                  }
+                }
+              ]
+            }
+          },
+          "author": {
+            "@id": "https://lukeus.com/#person"
+          },
+          "creator": {
+            "@id": "https://lukeus.com/#person"
+          },
+          "publisher": {
+            "@id": "https://lukeus.com/#person"
+          },
+          "copyrightHolder": {
+            "@id": "https://lukeus.com/#person"
+          },
+          "potentialAction": [
+            {
+              "@type": "ListenAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://lukeus.app/#projects",
+                "actionPlatform": [
+                  "https://schema.org/DesktopWebPlatform",
+                  "https://schema.org/MobileWebPlatform"
+                ]
+              },
+              "result": {
+                "@type": "MusicRecording",
+                "name": "Current Projects Audio Samples"
+              }
+            },
+            {
+              "@type": "InteractAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://lukeus.app/tools",
+                "actionPlatform": [
+                  "https://schema.org/DesktopWebPlatform",
+                  "https://schema.org/MobileWebPlatform"
+                ]
+              },
+              "instrument": "Interactive Music Tools"
+            },
+            {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://lukeus.app/journal?q={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          ],
+          "hasPart": [
+            {
+              "@type": "WebPage",
+              "@id": "https://lukeus.app/tools",
+              "name": "Music Tools",
+              "description": "Interactive music creation tools including Key Friend, Scale Explorer, and Chord Finder",
+              "url": "https://lukeus.app/tools"
+            },
+            {
+              "@type": "Blog",
+              "@id": "https://lukeus.app/#journal",
+              "name": "Creative Journal",
+              "description": "Insights into the creative process, studio notes, and musical reflections",
+              "url": "https://lukeus.app/#journal"
+            }
+          ],
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "itemOffered": {
+              "@type": "WebApplication",
+              "name": "Lukeus Music Lab",
+              "applicationCategory": "MusicApplication",
+              "operatingSystem": "Web Browser",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              }
+            }
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "@id": "https://lukeus.app/#webapp",
+          "name": "Lukeus Music Lab",
+          "alternateName": "Music Lab",
+          "description": "Interactive web application for music creation, featuring drum machine, audio visualization, music theory tools, and creative journal",
+          "url": "https://lukeus.app/",
+          "applicationCategory": ["MusicApplication", "EntertainmentApplication"],
+          "operatingSystem": "Web Browser",
+          "browserRequirements": "Modern web browser with Web Audio API support",
+          "memoryRequirements": "512MB RAM",
+          "processorRequirements": "Modern CPU with audio processing capabilities",
+          "featureList": [
+            "Interactive Drum Machine",
+            "Real-time Audio Waveform Visualization",
+            "Music Theory Tools (Key Friend, Scale Explorer, Chord Finder)",
+            "Audio Player with Single-instance Playback",
+            "Creative Process Journal",
+            "Mobile-responsive Design",
+            "Progressive Web App Features"
+          ],
+          "screenshot": "https://lukeus.app/assets/images/lab_bg.png",
+          "author": {
+            "@id": "https://lukeus.com/#person"
+          },
+          "creator": {
+            "@id": "https://lukeus.com/#person"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "isAccessibleForFree": true,
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Music Tools & Features",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "SoftwareApplication",
+                  "name": "Drum Machine",
+                  "description": "Interactive drum pad system with Web Audio API"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "SoftwareApplication",
+                  "name": "Key Friend",
+                  "description": "Chord progression builder and music theory explorer"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "SoftwareApplication",
+                  "name": "Scale Explorer",
+                  "description": "Interactive scale visualization with keyboard, fretboard, and circle modes"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://lukeus.app/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Music Tools",
+              "item": "https://lukeus.app/tools"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Journal",
+              "item": "https://lukeus.app/#journal"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "@id": "https://lukeus.app/#organization",
+          "name": "Lukeus Music Lab",
+          "alternateName": "Because Music Matters",
+          "description": "Independent music laboratory focused on experimental sound design and creative music production",
+          "url": "https://lukeus.app/",
+          "logo": "https://lukeus.app/assets/images/lukeus-avatar.png",
+          "image": "https://lukeus.app/assets/images/lukeus-avatar.png",
+          "foundingDate": "2025-01-01",
+          "founder": {
+            "@id": "https://lukeus.com/#person"
+          },
+          "member": {
+            "@id": "https://lukeus.com/#person"
+          },
+          "location": {
+            "@type": "Place",
+            "name": "Portland, Oregon",
+            "addressCountry": "US"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Creative Inquiries",
+            "url": "https://lukeus.app/",
+            "availableLanguage": "English"
+          },
+          "sameAs": [
+            "https://lukeus.art/",
             "https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl",
             "https://soundcloud.com/lukeusmusic",
             "https://www.instagram.com/musiclukeus/"
           ],
-          "jobTitle": "Music Producer, Artist",
-          "knowsAbout": ["Electronic Music", "Acoustic Music", "Sound Design", "Music Production"]
-        },
-        "publisher": {
-          "@type": "Person",
-          "name": "Lukeus",
-          "url": "https://lukeus.com/"
-        },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://lukeus.app/?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        },
-        "mainEntity": {
-          "@type": "CreativeWork",
-          "name": "Music Lab",
-          "description": "Experimental music projects and creative process documentation"
+          "knowsAbout": [
+            "Electronic Music Production",
+            "Acoustic Songwriting",
+            "Interactive Music Applications",
+            "Sound Design",
+            "Creative Process Documentation"
+          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Creative Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "CreativeWork",
+                  "name": "Experimental Music",
+                  "description": "Original compositions blending acoustic and electronic elements"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Music Production Consultation",
+                  "description": "Creative guidance for music production and sound design projects"
+                }
+              }
+            ]
+          }
         }
-      }
+      ]
     </script>
   </head>
   <body>

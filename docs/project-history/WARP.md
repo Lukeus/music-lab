@@ -64,6 +64,8 @@ This is an **Astro + TypeScript** music portfolio site with interactive audio fe
 - `src/scripts/drumMachine.ts` - Interactive drum pad system triggered by avatar click
 - **`src/scripts/keyFriend.ts` - Key Friend chord progression explorer (client-side wrapper)**
 - **`src/scripts/scaleExplorer.ts` - Scale Explorer with multiple visualization modes (client-side wrapper)**
+- **`src/scripts/chordFinder.ts` - Chord Finder identification tool (client-side wrapper)**
+- **`src/scripts/helpPanel.ts` - Shared help panel system with TypeScript classes and type safety**
 - `src/scripts/site.ts` - Main orchestrator that initializes all interactive features
 - `src/scripts/journal.ts` - Journal filtering and "read more" functionality
 - `src/scripts/parallax.ts` - Smooth scrolling effects and background animations
@@ -102,11 +104,15 @@ This is an **Astro + TypeScript** music portfolio site with interactive audio fe
 - Journal entries support filtering by tags and expandable "read more" functionality
 - Waveform visualizations are canvas-based with requestAnimationFrame loops
 
-**TypeScript Module System:**
-- Each feature has its own TypeScript module (audio, drumMachine, journal, etc.)
+**TypeScript-First Development:**
+- **All interactive JavaScript should be written in TypeScript** (.ts files) that compiles to JavaScript
+- Each feature has its own TypeScript module with proper type definitions
 - `src/scripts/site.ts` imports and initializes all features on DOM ready
 - Functions are exported/imported rather than using global variables
 - Event listeners use `__bound` flag to prevent duplicate binding
+- **Class-based architecture** for complex UI components (HelpPanelManager, ChordFinder, etc.)
+- **Interface definitions** for configuration objects and API contracts
+- **Type safety** enforced across all interactive components
 
 ### Development Workflow
 
@@ -125,12 +131,65 @@ This is an **Astro + TypeScript** music portfolio site with interactive audio fe
 - **Individual tool pages in `src/pages/tools/` for focused experiences**
 - **Dashboard at `src/pages/tools.astro` orchestrates navigation between tools**
 - **CSS for tools is modular: `keyFriend.css`, `scaleExplorer.css`, `toolPages.css`**
+- **Shared UI components (like piano keyboard) are defined in `packages/design-system/css/components.css`**
 
 **Adding New Scales to Scale Explorer:**
 1. Add scale intervals to `SCALE_INTERVALS` in `packages/music-tools/src/theory.ts`
 2. Add scale metadata to `SCALE_INFO` with description and related chords
 3. Update the `ScaleType` type union to include new scale
 4. Rebuild the music-tools package with `npm run build`
+
+**Working with Shared Piano Keyboard Component:**
+1. **HTML Structure:** All tools using piano keyboard must use this exact structure:
+   ```html
+   <div class="keyboard">
+     <div class="white-keys">[white key buttons]</div>
+     <div class="black-keys">[black key buttons]</div>
+   </div>
+   ```
+2. **CSS Classes:** Use these exact class names for consistent styling:
+   - `.keyboard` - Main container with glassmorphism background
+   - `.white-keys` - Flexbox container for white keys
+   - `.black-keys` - Absolute positioned container for black keys
+   - `.key`, `.white-key`, `.black-key` - Individual key styling
+   - `.selected`, `.in-scale`, `.root-note` - State classes for highlighting
+3. **Black Key Positioning:** Uses percentage-based positioning (10.7%, 25%, 53.6%, 67.9%, 82.1%) for accurate piano layout
+4. **Data Attributes:** Use `data-note="C#"` etc. for JavaScript event handling and CSS targeting
+5. **Responsive Behavior:** Automatically adjusts key sizes and spacing on mobile devices
+
+**Working with Shared Help Panel System:**
+1. **TypeScript Class:** Import and use `HelpPanelManager` from `src/scripts/helpPanel.ts`
+   ```typescript
+   import { createHelpPanel } from '../../scripts/helpPanel';
+   const helpPanel = createHelpPanel();
+   helpPanel.init();
+   ```
+2. **HTML Structure:** All tools must include these exact elements:
+   ```html
+   <!-- Floating help button -->
+   <button id="help-toggle" class="floating-help-btn" aria-expanded="false">
+     <span class="help-icon">❓</span><span class="help-text">Help</span>
+   </button>
+   
+   <!-- Help panel -->
+   <div id="help-panel" class="help-panel">
+     <div class="help-panel-header">...</div>
+     <div class="help-panel-content">...</div>
+   </div>
+   
+   <!-- Overlay -->
+   <div id="help-overlay" class="help-overlay"></div>
+   ```
+3. **CSS Classes:** All styling handled by shared design system in `components.css`:
+   - `.floating-help-btn` - Fixed positioned help button with gradient styling
+   - `.help-panel` - Slide-in panel from right side
+   - `.help-overlay` - Backdrop overlay with blur effect
+   - `.help-section-item` - Individual help content sections
+4. **Consistent Content Structure:** Use standardized help content layout:
+   - Tool-specific instructions with emoji headers
+   - Example interactions (chords, progressions, scales)
+   - Keyboard shortcuts and tips
+5. **Analytics Integration:** Automatic Google Analytics tracking for help panel usage
 
 **Modifying Styles:**
 - Edit design tokens in `src/styles/tokens.css` for global changes
@@ -152,6 +211,38 @@ This is an **Astro + TypeScript** music portfolio site with interactive audio fe
 - Canvas animations use `requestAnimationFrame` with proper cleanup
 - Static site generation via Astro provides excellent initial page load performance
 - **Dashboard animations use CSS transforms for 60fps performance**
+
+### Common Pitfalls and Lessons Learned
+
+**Keyboard Component Integration Issues:**
+- **Problem:** New tools (like Chord Finder) often implement their own keyboard styling, leading to inconsistent appearance and positioning bugs
+- **Solution:** Always use the shared keyboard component in `packages/design-system/css/components.css`
+- **Key Lesson:** When copying keyboard structure from one tool to another, ensure both HTML structure and CSS class names match exactly
+- **Black Key Positioning:** Must use percentage-based positioning (`left: 7.14%` etc.) rather than pixel calculations for responsive behavior
+
+**Design System Consistency:**
+- **Problem:** Each tool implementing its own version of common UI components
+- **Solution:** Establish shared components in design system package first, then consume in tools
+- **Pattern:** When adding a new tool, identify reusable UI patterns and extract them to the design system
+- **Glassmorphism Theme:** All tools should use consistent blur effects, transparencies, and color schemes from CSS custom properties
+
+**Tool Development Workflow:**
+1. **Start with Design System:** Before building tool-specific styles, check if shared components exist
+2. **Copy Proven Patterns:** Use working tools (like Scale Explorer) as reference for keyboard, button, and layout patterns
+3. **TypeScript First:** Write all interactive code in TypeScript with proper interfaces and type definitions
+4. **Shared Components:** Extract reusable UI logic into TypeScript classes (like HelpPanelManager)
+5. **Test Across Tools:** Ensure new shared components work in all existing tools
+6. **Mobile-First:** Always test responsive behavior, especially for interactive components like keyboards
+
+**TypeScript Development Best Practices:**
+1. **Never write JavaScript inline in .astro files** - Always use separate .ts files
+2. **Define interfaces** for all configuration objects and API contracts
+3. **Use classes** for stateful UI components (modals, panels, interactive widgets)
+4. **Export factory functions** for easy component instantiation (`createHelpPanel()`, `createChordFinder()`)
+5. **Include proper error handling** with type guards and null checks
+6. **Add JSDoc comments** for public methods and complex logic
+7. **Use strict TypeScript config** - all `any` types should be avoided
+8. **Import/export pattern:** Prefer named exports over default exports for better tree-shaking
 
 ### Browser Compatibility
 
