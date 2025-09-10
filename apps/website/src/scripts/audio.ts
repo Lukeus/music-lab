@@ -32,14 +32,16 @@ async function startWaveform(canvas: HTMLCanvasElement) {
             audioCtx = new AudioContextClass();
         }
     }
-    if (!analyser) {
+    if (!analyser && audioCtx) {
         analyser = audioCtx.createAnalyser();
         analyser.fftSize = 256;
     }
-    if (!sourceNode) {
-        sourceNode = audioCtx.createMediaElementSource(currentAudio!);
-        sourceNode.connect(analyser);
-        analyser.connect(audioCtx.destination);
+    if (!sourceNode && audioCtx && currentAudio) {
+        sourceNode = audioCtx.createMediaElementSource(currentAudio);
+        if (analyser) {
+            sourceNode.connect(analyser);
+            analyser.connect(audioCtx.destination);
+        }
     }
     const ctx2d = canvas.getContext('2d');
     const draw = () => {

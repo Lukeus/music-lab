@@ -33,7 +33,7 @@ class Particle {
     symbol: string;
     opacity: number;
     size: number;
-    element: HTMLElement;
+    element!: HTMLElement;
     baseOpacity: number;
     life: number;
     maxLife: number;

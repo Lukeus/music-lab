@@ -35,7 +35,7 @@ const sortedEntries = journalEntries
   </div>
   <div class="journal-entries" aria-live="polite">
     {
-      sortedEntries.map((entry: CollectionEntry<'journal'>) => (
+      sortedEntries.map((entry: any) => (
         <article class="journal-card" data-tags={(entry.data.tags ?? []).join(' ')}>
           <header class="journal-head">
             <div class="journal-meta">

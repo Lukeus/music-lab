@@ -486,7 +486,7 @@ const {
         // Add click cursor to avatar
         avatar.style.cursor = 'pointer';
         if (avatarContainer) {
-          avatarContainer.style.cursor = 'pointer';
+          (avatarContainer as HTMLElement).style.cursor = 'pointer';
         }
 
         // Add click event to avatar

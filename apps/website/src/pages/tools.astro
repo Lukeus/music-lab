@@ -606,9 +606,9 @@ import Base from '../layouts/base.astro';
         console.log(`📊 Interest tracked: ${toolName}`);
 
         // Add visual feedback
-        card.style.transform = 'scale(0.98)';
+        (card as HTMLElement).style.transform = 'scale(0.98)';
         setTimeout(() => {
-          card.style.transform = '';
+          (card as HTMLElement).style.transform = '';
         }, 150);
       });
     });

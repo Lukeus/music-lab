@@ -154,6 +154,7 @@ import ToolNavigation from '../../components/ToolNavigation.astro';
 
   <script>
     import { createWebChordFinder } from '../../scripts/chordFinder';
+    import type { Note } from '@lukeus/music-tools';
 
     document.addEventListener('DOMContentLoaded', () => {
       // Initialize Chord Finder
@@ -196,7 +197,7 @@ import ToolNavigation from '../../components/ToolNavigation.astro';
 
           if (chordFinder && notes.length > 0) {
             chordFinder.clearNotes();
-            notes.forEach(note => chordFinder.toggleNote(note));
+            notes.forEach(note => chordFinder.toggleNote(note as Note));
 
             document.getElementById('chord-finder-container')?.scrollIntoView({
               behavior: 'smooth',

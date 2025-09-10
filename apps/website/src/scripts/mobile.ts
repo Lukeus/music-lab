@@ -73,7 +73,7 @@ export function initSwipeGestures() {
         let isDragging = false;
 
         card.addEventListener('touchstart', e => {
-            const touch = e.touches[0];
+            const touch = (e as TouchEvent).touches[0];
             startX = touch.clientX;
             startY = touch.clientY;
             isDragging = true;
@@ -85,7 +85,7 @@ export function initSwipeGestures() {
             e => {
                 if (!isDragging) return;
 
-                const touch = e.touches[0];
+                const touch = (e as TouchEvent).touches[0];
                 currentX = touch.clientX - startX;
                 const currentY = touch.clientY - startY;
 

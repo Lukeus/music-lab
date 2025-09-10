@@ -243,6 +243,7 @@ import Base from '../../layouts/base.astro';
   <script>
     import { createWebChordFinder } from '../../scripts/chordFinder';
     import { addTooltip, MusicTooltips } from '../../scripts/tooltips';
+    import type { Note } from '@lukeus/music-tools';
 
     document.addEventListener('DOMContentLoaded', () => {
       // Initialize Chord Finder
@@ -302,7 +303,7 @@ import Base from '../../layouts/base.astro';
         chord.addEventListener('click', () => {
           if (chordFinder && notes.length > 0) {
             chordFinder.clearNotes();
-            notes.forEach(note => chordFinder.toggleNote(note.trim()));
+            notes.forEach(note => chordFinder.toggleNote(note.trim() as Note));
 
             document.getElementById('chord-finder-container')?.scrollIntoView({
               behavior: 'smooth',

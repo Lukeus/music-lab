@@ -1,7 +1,7 @@
 ---
 // src/pages/journal.astro
 import Base from '../layouts/base.astro';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import { formatDate, calculateReadingTime, generateExcerpt, createSlug } from '../utils/blog';
 import content from '../data/content.json';
 

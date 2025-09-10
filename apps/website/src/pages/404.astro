@@ -179,26 +179,29 @@ import Base from '../layouts/base.astro';
 
   <script>
     // Simple static waveform for 404 page
-    const canvas = document.getElementById('error-canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById('error-canvas') as HTMLCanvasElement;
+    
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      
+      if (ctx) {
+        ctx.strokeStyle = '#7CD2FF';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
 
-    if (ctx) {
-      ctx.strokeStyle = '#7CD2FF';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
+        // Draw a "flat line" - no signal found
+        const centerY = canvas.height / 2;
+        ctx.moveTo(0, centerY);
+        ctx.lineTo(canvas.width, centerY);
 
-      // Draw a "flat line" - no signal found
-      const centerY = canvas.height / 2;
-      ctx.moveTo(0, centerY);
-      ctx.lineTo(canvas.width, centerY);
+        // Add some small noise to show it's "trying"
+        for (let i = 0; i < canvas.width; i += 20) {
+          const noise = (Math.random() - 0.5) * 4;
+          ctx.lineTo(i, centerY + noise);
+        }
 
-      // Add some small noise to show it's "trying"
-      for (let i = 0; i < canvas.width; i += 20) {
-        const noise = (Math.random() - 0.5) * 4;
-        ctx.lineTo(i, centerY + noise);
+        ctx.stroke();
       }
-
-      ctx.stroke();
     }
   </script>
 </Base>
