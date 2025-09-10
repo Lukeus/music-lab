@@ -57,10 +57,18 @@ jobs:
           npm run lint 2>/dev/null || echo "⚠️ Lint issues found but continuing..."
           echo "✅ Lint check completed"
       
-      - name: 🏗️ Build for preview
+      - name: 🏧 Build for preview
         run: |
-          echo "🏗️ Building PR changes..."
-          npm run build
+          echo "🏧 Building PR changes..."
+          # Build packages first (dependencies)
+          npm run build --workspace=packages/shared-types --if-present
+          npm run build --workspace=packages/shared-components --if-present
+          npm run build --workspace=packages/music-tools --if-present
+          npm run build --workspace=packages/audio-engine --if-present
+          npm run build --workspace=packages/design-system --if-present
+          
+          # Then build apps (which depend on packages)
+          npm run build --workspace=apps/website --if-present
           echo "✅ Build successful"
       
       - name: 📤 Upload preview build

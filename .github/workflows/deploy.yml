@@ -77,10 +77,18 @@ jobs:
           npm run format
           echo "✅ Formatting check completed"
       
-      - name: 🏗️ Build all packages
+      - name: 🏧 Build all packages
         run: |
-          echo "🏗️ Building all monorepo packages..."
-          npm run build
+          echo "🏧 Building all monorepo packages..."
+          # Build packages first (dependencies)
+          npm run build --workspace=packages/shared-types --if-present
+          npm run build --workspace=packages/shared-components --if-present
+          npm run build --workspace=packages/music-tools --if-present
+          npm run build --workspace=packages/audio-engine --if-present
+          npm run build --workspace=packages/design-system --if-present
+          
+          # Then build apps (which depend on packages)
+          npm run build --workspace=apps/website --if-present
           echo "✅ All packages built successfully"
       
       - name: 📊 Check build output
