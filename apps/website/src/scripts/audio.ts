@@ -20,9 +20,18 @@ function stopWaveform() {
 async function startWaveform(canvas: HTMLCanvasElement) {
     if (!canvas) return;
     activeCanvas = canvas;
-    if (!audioCtx)
-        audioCtx = new (window.AudioContext ||
-            (window as any).webkitAudioContext)();
+    if (!audioCtx) {
+        const AudioContextClass =
+            window.AudioContext ||
+            (
+                window as typeof window & {
+                    webkitAudioContext?: typeof AudioContext;
+                }
+            ).webkitAudioContext;
+        if (AudioContextClass) {
+            audioCtx = new AudioContextClass();
+        }
+    }
     if (!analyser) {
         analyser = audioCtx.createAnalyser();
         analyser.fftSize = 256;
@@ -115,9 +124,30 @@ function ensureMiniPlayer() {
     return mp;
 }
 
-function getMiniElements() {
+interface MiniPlayerElements {
+    root: HTMLElement | null;
+    play: HTMLButtonElement | null;
+    close: HTMLButtonElement | null;
+    title: HTMLElement | null;
+    timeCurrent: HTMLElement | null;
+    timeDuration: HTMLElement | null;
+    progress: HTMLElement | null;
+    progressFill: HTMLElement | null;
+}
+
+function getMiniElements(): MiniPlayerElements {
     const mp = document.getElementById('mini-player');
-    if (!mp) return {} as any;
+    if (!mp)
+        return {
+            root: null,
+            play: null,
+            close: null,
+            title: null,
+            timeCurrent: null,
+            timeDuration: null,
+            progress: null,
+            progressFill: null,
+        };
     return {
         root: mp,
         play: mp.querySelector('.mini-play') as HTMLButtonElement,
@@ -132,8 +162,8 @@ function getMiniElements() {
 
 export function bindMiniPlayer() {
     const { play, close, progress, root } = getMiniElements();
-    if (play && !(play as any).__bound) {
-        (play as any).__bound = true;
+    if (play && !(play as HTMLElement & { __bound?: boolean }).__bound) {
+        (play as HTMLElement & { __bound?: boolean }).__bound = true;
         play.innerHTML = iconPlaySVG(); // Always show SVG only
         play.addEventListener('click', () => {
             if (!currentAudio) return;
@@ -173,8 +203,8 @@ export function bindMiniPlayer() {
             }
         });
     }
-    if (close && !(close as any).__bound) {
-        (close as any).__bound = true;
+    if (close && !(close as HTMLElement & { __bound?: boolean }).__bound) {
+        (close as HTMLElement & { __bound?: boolean }).__bound = true;
         close.addEventListener('click', () => {
             if (currentAudio) {
                 currentAudio.pause();
@@ -185,9 +215,12 @@ export function bindMiniPlayer() {
             showToast('Player closed');
         });
     }
-    if (progress && !(progress as any).__bound) {
-        (progress as any).__bound = true;
-        function seekFromClientX(clientX: number) {
+    if (
+        progress &&
+        !(progress as HTMLElement & { __bound?: boolean }).__bound
+    ) {
+        (progress as HTMLElement & { __bound?: boolean }).__bound = true;
+        const seekFromClientX = (clientX: number) => {
             if (!currentAudio) return;
             const rect = progress.getBoundingClientRect();
             const pct = Math.max(
@@ -197,7 +230,7 @@ export function bindMiniPlayer() {
             if (isFinite(currentAudio.duration)) {
                 currentAudio.currentTime = pct * currentAudio.duration;
             }
-        }
+        };
         progress.addEventListener('pointerdown', (e: PointerEvent) => {
             seekFromClientX(e.clientX);
         });
@@ -310,8 +343,8 @@ export function initSharedAudio() {
 export function bindPlayButtons(selector = '[data-audio]') {
     const audio = initSharedAudio();
     document.querySelectorAll<HTMLElement>(selector).forEach(btn => {
-        if ((btn as any).__bound) return;
-        (btn as any).__bound = true;
+        if ((btn as HTMLElement & { __bound?: boolean }).__bound) return;
+        (btn as HTMLElement & { __bound?: boolean }).__bound = true;
         btn.addEventListener('click', async () => {
             const src = btn.dataset.audio!;
             if (!src) return;

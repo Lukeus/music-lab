@@ -200,6 +200,12 @@ import Base from '../layouts/base.astro';
           aria-label="Open Lukeus on Instagram">Instagram</a
         >
       </div>
+
+      <!-- Share this page section -->
+      <div class="page-share">
+        <!-- ShareLinks component will populate this container -->
+      </div>
+
       <p>&copy; 2025 Lukeus. All tools are works in progress.</p>
     </div>
   </footer>
@@ -617,4 +623,27 @@ import Base from '../layouts/base.astro';
       });
     });
   });
+</script>
+
+<script>
+  // Import and initialize ShareLinks component
+  import { createShareLinks } from '@lukeus/shared-components';
+
+  // Initialize when DOM is ready
+  function initPageShareLinks() {
+    const shareLinks = createShareLinks({
+      containerSelector: '.page-share',
+      title: 'Music Tools Dashboard | Lukeus Music Lab',
+      description:
+        'Explore interactive music theory tools including Key Friend, Scale Explorer, and Chord Finder. Learn music theory through hands-on experimentation.',
+    });
+
+    shareLinks.init();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPageShareLinks);
+  } else {
+    initPageShareLinks();
+  }
 </script>

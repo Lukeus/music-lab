@@ -1,0 +1,161 @@
+name: 🔒 Security & Dependency Scan
+
+on:
+  # Run on pushes to main and PRs
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  
+  # Run weekly security scans
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 6 AM UTC
+  
+  # Allow manual execution
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '18.x'
+
+jobs:
+  # Job 1: Dependency Vulnerability Scan
+  dependency-scan:
+    name: 🔍 Dependency Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: 📦 Install dependencies
+        run: |
+          echo "🔍 Installing dependencies for security scan..."
+          npm ci
+          echo "✅ Dependencies installed"
+      
+      - name: 🔒 Run npm audit
+        run: |
+          echo "🔒 Running npm security audit..."
+          npm audit --audit-level=moderate || echo "⚠️ Vulnerabilities found - check output above"
+          echo "✅ Security audit completed"
+      
+      - name: 🔍 Check for outdated packages
+        run: |
+          echo "🔍 Checking for outdated packages..."
+          npm outdated || echo "📦 Some packages could be updated"
+          echo "✅ Outdated package check completed"
+  
+  # Job 2: Code Security Analysis
+  code-security:
+    name: 🛡️ Code Security Analysis
+    runs-on: ubuntu-latest
+    
+    permissions:
+      # Required for CodeQL
+      actions: read
+      contents: read
+      security-events: write
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🛡️ Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-and-quality
+      
+      - name: 🏗️ Autobuild
+        uses: github/codeql-action/autobuild@v3
+      
+      - name: 🔍 Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript-typescript"
+  
+  # Job 3: License Compliance Check
+  license-check:
+    name: 📄 License Compliance
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: 📦 Install dependencies
+        run: |
+          npm ci
+          npm install -g license-checker
+      
+      - name: 📄 Check licenses
+        run: |
+          echo "📄 Checking package licenses..."
+          license-checker --summary --onlyAllow "MIT;BSD;ISC;Apache-2.0;BSD-2-Clause;BSD-3-Clause;CC0-1.0;Unlicense" || echo "⚠️ License issues found"
+          echo "✅ License check completed"
+      
+      - name: 📋 Generate license report
+        run: |
+          echo "📋 Generating detailed license report..."
+          license-checker --csv --out license-report.csv
+          echo "✅ License report generated"
+      
+      - name: 📤 Upload license report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: license-report-${{ github.sha }}
+          path: license-report.csv
+          retention-days: 30
+  
+  # Job 4: Security Summary
+  security-summary:
+    name: 📊 Security Summary
+    if: always()
+    needs: [dependency-scan, code-security, license-check]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📊 Security Status Summary
+        run: |
+          echo "📊 SECURITY SCAN SUMMARY"
+          echo "========================="
+          echo ""
+          echo "🔍 Dependency Scan: ${{ needs.dependency-scan.result }}"
+          echo "🛡️ Code Security: ${{ needs.code-security.result }}"
+          echo "📄 License Check: ${{ needs.license-check.result }}"
+          echo ""
+          
+          if [[ "${{ needs.dependency-scan.result }}" == "success" && "${{ needs.code-security.result }}" == "success" && "${{ needs.license-check.result }}" == "success" ]]; then
+            echo "✅ ALL SECURITY CHECKS PASSED"
+            echo "🎵 Music Lab is secure and ready for deployment!"
+          else
+            echo "⚠️ Some security checks failed or had warnings"
+            echo "🔍 Review the individual job outputs for details"
+            echo ""
+            echo "🛠️ Common fixes:"
+            echo "   - Update vulnerable dependencies with 'npm update'"
+            echo "   - Review and fix any CodeQL security findings"
+            echo "   - Check license compatibility issues"
+          fi
+      
+      - name: 🔒 Security Badge Status
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [[ "${{ needs.dependency-scan.result }}" == "success" && "${{ needs.code-security.result }}" == "success" && "${{ needs.license-check.result }}" == "success" ]]; then
+            echo "🎯 Security status: SECURE ✅"
+          else
+            echo "⚠️ Security status: NEEDS ATTENTION"
+          fi

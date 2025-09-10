@@ -39,7 +39,12 @@ export function initializeDrumMachine() {
     // Ensure AudioContext exists (reuse site context if present)
     let audioCtx = window.audioCtx;
     try {
-        if (!audioCtx) audioCtx = new (window.AudioContext as any)();
+        if (!audioCtx) {
+            const AudioContextClass = window.AudioContext;
+            if (AudioContextClass) {
+                audioCtx = new AudioContextClass();
+            }
+        }
     } catch (e) {
         console.warn('AudioContext creation failed:', e);
     }
@@ -147,7 +152,7 @@ export function initializeDrumMachine() {
     // Load embedded samples up-front (fallback to simple synths if no AudioContext)
     (async () => {
         if (audioCtx) {
-            const loaded = await load808Samples(audioCtx);
+            const loaded = await load808Samples();
             state.samples = loaded;
         }
     })();
@@ -454,7 +459,7 @@ export function initializeDrumMachine() {
             Clap: mkClap808(),
         };
     }
-    async function load808Samples(ctx: AudioContext) {
+    async function load808Samples() {
         const embedded = buildEmbedded808();
         const out: Record<string, AudioBuffer> = {};
         (Object.keys(embedded) as (keyof typeof embedded)[]).forEach(k => {

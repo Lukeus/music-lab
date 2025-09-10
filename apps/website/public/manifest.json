@@ -1,7 +1,7 @@
 {
   "name": "Lukeus Music Lab",
   "short_name": "Music Lab",
-  "description": "Interactive music creation laboratory with drum machine, audio visualization, and creative journal",
+  "description": "Interactive music creation laboratory with drum machine, audio visualization, music theory tools (Key Friend, Scale Explorer, Chord Finder), and creative journal",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0B0F14",
@@ -41,10 +41,10 @@
   ],
   "shortcuts": [
     {
-      "name": "Drum Machine",
-      "short_name": "Drums",
-      "description": "Create beats with the interactive drum machine",
-      "url": "/#drum-machine",
+      "name": "Music Tools",
+      "short_name": "Tools",
+      "description": "Interactive music theory tools: Key Friend, Scale Explorer, Chord Finder",
+      "url": "/tools",
       "icons": [
         {
           "src": "/assets/images/lukeus-avatar.png",
@@ -53,26 +53,38 @@
       ]
     },
     {
-      "name": "Audio Player", 
-      "short_name": "Audio",
-      "description": "Listen to current projects",
-      "url": "/#projects",
+      "name": "Key Friend",
+      "short_name": "Chords",
+      "description": "Explore chord progressions and music theory",
+      "url": "/tools/key-friend",
       "icons": [
         {
-          "src": "/assets/images/lukeus-avatar.png", 
+          "src": "/assets/images/lukeus-avatar.png",
           "sizes": "96x96"
         }
       ]
     },
     {
-      "name": "Creative Journal",
-      "short_name": "Journal", 
-      "description": "Browse creative insights and process",
-      "url": "/journal",
+      "name": "Scale Explorer",
+      "short_name": "Scales",
+      "description": "Visualize scales on keyboard, fretboard, and circle of fifths",
+      "url": "/tools/scale-explorer",
       "icons": [
         {
           "src": "/assets/images/lukeus-avatar.png",
-          "sizes": "96x96" 
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Chord Finder",
+      "short_name": "Find",
+      "description": "Identify chords from selected notes",
+      "url": "/tools/chord-finder",
+      "icons": [
+        {
+          "src": "/assets/images/lukeus-avatar.png",
+          "sizes": "96x96"
         }
       ]
     }

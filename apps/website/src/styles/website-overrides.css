@@ -1,0 +1,10 @@
+/* ===== WEBSITE-SPECIFIC OVERRIDES ===== */
+/* 
+ * This file contains styles that are specific to the website application
+ * and not part of the shared design system. These should eventually be
+ * moved to the design system or refactored to use design system tokens.
+ */
+
+/* Any website-specific component overrides can go here */
+
+/* Temporary: Until all styles are properly migrated to design system */

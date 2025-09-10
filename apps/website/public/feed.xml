@@ -31,6 +31,31 @@
     <category domain="https://lukeus.app/">Sound Design</category>
 
     <item>
+      <title>About Lukeus - Meet the Artist Behind the Music</title>
+      <link>https://lukeus.app/about</link>
+      <guid isPermaLink="true">https://lukeus.app/about#about-page</guid>
+      <description>Learn about Lukeus, the indie artist creating experimental music from Portland, OR. From acoustic storytelling to electronic transformation, discover the journey behind the music and the philosophy that drives every note.</description>
+      <content:encoded><![CDATA[
+        <p>Step into the world of Lukeus, where dreams meet sound in perfect harmony. Based in Portland, Oregon, this indie artist transforms emotions into musical landscapes that bridge acoustic storytelling with electronic innovation.</p>
+        
+        <h3>The Journey</h3>
+        <p>"We want things in this world to be perfect, perfected, and not to contain any flaws. To live in that reality of perfection, we must live in our dreams and to live in our dreams, we must be dreamers."</p>
+        
+        <p>This philosophy drives every song created in the Lukeus Music Lab. From acoustic foundations with freestyle lyrics to electronic transformations using Logic Pro and UAD plugins, each track represents a different facet of the journey from feeling to sound.</p>
+        
+        <h3>The Process</h3>
+        <p>98% of lyrics flow from spontaneous truth—no plan, just pure emotion meeting vibration. The challenge isn't technical perfection; it's emotional accuracy, capturing the sensation of music resonating through your entire being.</p>
+        
+        <p>Discover the complete story, philosophy, and musical journey at <a href="https://lukeus.app/about">the full About page</a>, and explore the interactive music tools that make theory accessible and fun.</p>
+      ]]></content:encoded>
+      <dc:creator>Lukeus</dc:creator>
+      <pubDate>Wed, 20 Jan 2025 16:00:00 GMT</pubDate>
+      <category>About</category>
+      <category>Artist Story</category>
+      <category>Philosophy</category>
+    </item>
+
+    <item>
       <title>Finding Melody in the Process</title>
       <link>https://lukeus.app/journal/2025-01-20-finding-melody/</link>
       <guid isPermaLink="true">https://lukeus.app/journal/2025-01-20-finding-melody/</guid>

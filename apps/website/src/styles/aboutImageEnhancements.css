@@ -1,0 +1,414 @@
+/* Enhanced About Page Image Styling */
+/* Sophisticated glassmorphism effects, 3D transforms, and dynamic animations */
+
+/* Enhanced Image Container */
+.enhanced-image-container {
+    position: relative;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+.enhanced-image-container::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: -60px;
+    right: -60px;
+    bottom: -60px;
+    background: conic-gradient(
+        from 0deg at 50% 50%,
+        rgba(124, 210, 255, 0.2) 0deg,
+        rgba(163, 255, 176, 0.2) 90deg,
+        rgba(255, 187, 124, 0.2) 180deg,
+        rgba(255, 124, 187, 0.2) 270deg,
+        rgba(124, 210, 255, 0.2) 360deg
+    );
+    border-radius: 50%;
+    z-index: -2;
+    animation: rotateHalo 25s linear infinite;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.enhanced-image-container:hover::before {
+    opacity: 1;
+}
+
+@keyframes rotateHalo {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Enhanced Image Frame */
+.enhanced-image-container .image-frame {
+    position: relative;
+    border-radius: 40px;
+    overflow: hidden;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.18) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(124, 210, 255, 0.12) 100%
+    );
+    backdrop-filter: blur(25px) saturate(2);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 30px rgba(124, 210, 255, 0.05);
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.enhanced-image-container:hover .image-frame {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 15px 50px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(124, 210, 255, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 0 40px rgba(124, 210, 255, 0.15),
+        0 0 80px rgba(163, 255, 176, 0.08);
+}
+
+/* Enhanced Hero Image */
+.enhanced-hero-image {
+    position: relative;
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    filter: contrast(1.1) brightness(1.05) saturate(1.2)
+        drop-shadow(0 0 20px rgba(124, 210, 255, 0.1));
+    will-change: filter, transform;
+}
+
+.enhanced-image-container:hover .enhanced-hero-image {
+    filter: contrast(1.15) brightness(1.08) saturate(1.3)
+        drop-shadow(0 0 30px rgba(124, 210, 255, 0.2));
+}
+
+/* Dynamic Glow Effect */
+.enhanced-image-container .image-glow {
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(124, 210, 255, var(--dynamic-glow-opacity, 0.2)) 0%,
+        rgba(163, 255, 176, calc(var(--dynamic-glow-opacity, 0.2) * 0.7)) 30%,
+        rgba(255, 187, 124, calc(var(--dynamic-glow-opacity, 0.2) * 0.5)) 60%,
+        transparent 80%
+    );
+    border-radius: inherit;
+    z-index: -1;
+    animation: dynamicGlow 10s ease-in-out infinite;
+    filter: blur(15px);
+    transition: all 0.6s ease;
+}
+
+@keyframes dynamicGlow {
+    0%,
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: var(--dynamic-glow-opacity, 0.2);
+    }
+    33% {
+        transform: scale(1.03) rotate(120deg);
+        opacity: calc(var(--dynamic-glow-opacity, 0.2) * 1.1);
+    }
+    66% {
+        transform: scale(0.97) rotate(240deg);
+        opacity: calc(var(--dynamic-glow-opacity, 0.2) * 0.7);
+    }
+}
+
+/* Enhanced Overlay Effects */
+.enhanced-image-container .hero-image-overlay {
+    background: linear-gradient(
+        135deg,
+        rgba(124, 210, 255, 0.08) 0%,
+        transparent 30%,
+        transparent 70%,
+        rgba(163, 255, 176, 0.06) 100%
+    );
+    mix-blend-mode: overlay;
+    transition: all 0.6s ease;
+}
+
+.enhanced-image-container:hover .hero-image-overlay {
+    background: linear-gradient(
+        135deg,
+        rgba(124, 210, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(163, 255, 176, 0.1) 100%
+    );
+}
+
+/* Enhanced Decorative Elements */
+.enhanced-image-container .decoration {
+    border: 2px solid rgba(124, 210, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.enhanced-image-container:hover .decoration {
+    border-color: rgba(124, 210, 255, 0.6);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 8px 25px rgba(124, 210, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.enhanced-image-container .decoration-1 {
+    animation: decorationFloat 8s ease-in-out infinite;
+}
+
+.enhanced-image-container .decoration-2 {
+    animation: decorationFloat 6s ease-in-out infinite reverse;
+}
+
+.enhanced-image-container .decoration-3 {
+    animation: decorationFloat 7s ease-in-out infinite;
+    animation-delay: -2s;
+}
+
+/* Particle System Enhancements */
+.particle-container .floating-particle {
+    text-shadow:
+        0 0 10px currentColor,
+        0 0 20px rgba(124, 210, 255, 0.3),
+        0 0 30px rgba(163, 255, 176, 0.2);
+    filter: blur(0.5px);
+    transition: all 0.3s ease;
+    will-change: transform, opacity;
+}
+
+.particle-container .floating-particle:hover {
+    transform: scale(1.2) !important;
+    filter: blur(0px);
+    text-shadow:
+        0 0 15px currentColor,
+        0 0 30px rgba(124, 210, 255, 0.6),
+        0 0 45px rgba(163, 255, 176, 0.4);
+}
+
+/* Advanced 3D Effects */
+.enhanced-image-container {
+    perspective: 1200px;
+}
+
+.enhanced-image-container .image-frame {
+    transform-style: preserve-3d;
+}
+
+.enhanced-image-container .enhanced-hero-image {
+    transform-origin: center center;
+    backface-visibility: hidden;
+}
+
+/* Holographic Effect on Hover */
+.enhanced-image-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    z-index: 3;
+    transition: left 0.8s ease;
+    pointer-events: none;
+    border-radius: 32px;
+    mix-blend-mode: overlay;
+}
+
+.enhanced-image-container:hover::after {
+    left: 100%;
+}
+
+/* Ambient Light Effect */
+.enhanced-image-container .ambient-light {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(
+        circle at center,
+        rgba(124, 210, 255, 0.08) 0%,
+        rgba(163, 255, 176, 0.04) 40%,
+        rgba(255, 187, 124, 0.02) 60%,
+        transparent 80%
+    );
+    transform: translate(-50%, -50%);
+    z-index: -3;
+    animation: ambientPulse 6s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes ambientPulse {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(0.9);
+        opacity: 0.15;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.25;
+    }
+}
+
+/* Magnetic Field Lines Effect */
+.enhanced-image-container .magnetic-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.enhanced-image-container .magnetic-lines::before,
+.enhanced-image-container .magnetic-lines::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 450px;
+    height: 450px;
+    border: 1px solid rgba(124, 210, 255, 0.06);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: magneticField 18s linear infinite;
+}
+
+.enhanced-image-container .magnetic-lines::after {
+    width: 350px;
+    height: 350px;
+    border-color: rgba(163, 255, 176, 0.06);
+    animation-duration: 14s;
+    animation-direction: reverse;
+}
+
+@keyframes magneticField {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg) scale(0.8);
+        opacity: 0.2;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg) scale(1.2);
+        opacity: 0.2;
+    }
+}
+
+/* Performance Optimizations */
+.enhanced-image-container * {
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .enhanced-image-container::before,
+    .enhanced-image-container .image-glow,
+    .enhanced-image-container .decoration,
+    .enhanced-image-container .magnetic-lines::before,
+    .enhanced-image-container .magnetic-lines::after,
+    .enhanced-image-container .ambient-light,
+    .particle-container .floating-particle {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .enhanced-image-container:hover .image-frame {
+        transform: none !important;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .enhanced-image-container .image-frame {
+        border: 3px solid var(--accent);
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    .enhanced-image-container .decoration {
+        border-color: var(--accent);
+        background: var(--bg);
+    }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .enhanced-image-container::before {
+        display: none; /* Remove heavy effects on mobile */
+    }
+
+    .enhanced-image-container .image-glow {
+        filter: blur(8px); /* Reduce blur for performance */
+        animation-duration: 8s; /* Slower animation */
+    }
+
+    .particle-container .floating-particle {
+        text-shadow: 0 0 8px currentColor; /* Simpler shadows */
+        filter: none;
+    }
+
+    .enhanced-image-container .magnetic-lines {
+        display: none; /* Remove complex animations */
+    }
+
+    .enhanced-image-container .ambient-light {
+        animation-duration: 6s; /* Slower for battery */
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .enhanced-image-container:hover .image-frame,
+    .enhanced-image-container:hover .enhanced-hero-image,
+    .enhanced-image-container:hover .hero-image-overlay,
+    .enhanced-image-container:hover .decoration {
+        transform: none; /* Remove hover transforms on touch */
+    }
+
+    .enhanced-image-container::after {
+        display: none; /* Remove holographic effect */
+    }
+}
+
+/* Dark Theme Enhancements */
+@media (prefers-color-scheme: dark) {
+    .enhanced-image-container .image-frame {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.03) 50%,
+            rgba(124, 210, 255, 0.08) 100%
+        );
+        box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.5),
+            0 0 0 1px rgba(255, 255, 255, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+}

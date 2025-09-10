@@ -21,8 +21,11 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 - **Test music tools dashboard: Navigate to `/tools` to see animated tool cards and navigation**
 - **Test Key Friend: Go to `/tools/key-friend` or click "Launch Tool" from dashboard**
 - **Test Scale Explorer: Go to `/tools/scale-explorer` or click "Launch Tool" from dashboard**
+- **Test Chord Finder: Go to `/tools/chord-finder` or click "Launch Tool" from dashboard**
 - **Test scale visualizations: Switch between keyboard, fretboard, and circle modes in Scale Explorer**
 - **Test scale finder: Select notes in Scale Explorer to find matching scales**
+- **Test enhanced tooltips: Hover over interactive elements to see context-aware help and music theory information**
+- **Test about page enhancements: Visit `/about` to see improved image effects and visual design**
 
 ## Architecture Overview
 
@@ -34,10 +37,11 @@ This is an **Astro + TypeScript** music portfolio site with interactive audio fe
 - `apps/website/` - Main Astro website application
 
 **Packages:**
-- **`packages/music-tools/` - Core music theory engine with Key Friend and Scale Explorer classes**
+- **`packages/music-tools/` - Core music theory engine with Key Friend, Scale Explorer, and Chord Finder classes**
 - `packages/audio-engine/` - Web Audio API abstractions and utilities
-- `packages/design-system/` - Shared design tokens and CSS utilities
-- `packages/shared-types/` - TypeScript type definitions
+- `packages/design-system/` - Shared design tokens, CSS utilities, and component styles
+- `packages/shared-components/` - Reusable UI components and TypeScript modules
+- `packages/shared-types/` - TypeScript type definitions and interfaces
 
 **Key Benefits:**
 - **Shared music theory logic** between potential future apps (mobile, desktop, etc.)
@@ -66,6 +70,8 @@ This is an **Astro + TypeScript** music portfolio site with interactive audio fe
 - **`src/scripts/scaleExplorer.ts` - Scale Explorer with multiple visualization modes (client-side wrapper)**
 - **`src/scripts/chordFinder.ts` - Chord Finder identification tool (client-side wrapper)**
 - **`src/scripts/helpPanel.ts` - Shared help panel system with TypeScript classes and type safety**
+- **`src/scripts/tooltips.ts` - Enhanced tooltip system with music theory context and intelligent positioning**
+- **`src/scripts/aboutImageEnhancer.ts` - About page image enhancement with particle effects and interactions**
 - `src/scripts/site.ts` - Main orchestrator that initializes all interactive features
 - `src/scripts/journal.ts` - Journal filtering and "read more" functionality
 - `src/scripts/parallax.ts` - Smooth scrolling effects and background animations

@@ -351,6 +351,12 @@ const allTags = [...new Set(sortedEntries.flatMap((entry: any) => entry.data.tag
           aria-label="Open Lukeus on Instagram">Instagram</a
         >
       </div>
+
+      <!-- Share this page section -->
+      <div class="page-share">
+        <!-- ShareLinks component will populate this container -->
+      </div>
+
       <p>&copy; 2025 Lukeus. All reflections are works in progress.</p>
     </div>
   </footer>
@@ -1188,4 +1194,27 @@ const allTags = [...new Set(sortedEntries.flatMap((entry: any) => entry.data.tag
   }
 `;
   document.head.appendChild(style);
+</script>
+
+<script>
+  // Import and initialize ShareLinks component
+  import { createShareLinks } from '@lukeus/shared-components';
+
+  // Initialize when DOM is ready
+  function initPageShareLinks() {
+    const shareLinks = createShareLinks({
+      containerSelector: '.page-share',
+      title: 'Creative Journal | Lukeus Music Lab',
+      description:
+        'Dive into the creative process with studio notes, lyric sketches, and reflections on experimental music creation. Where ideas become sound and sound becomes story.',
+    });
+
+    shareLinks.init();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPageShareLinks);
+  } else {
+    initPageShareLinks();
+  }
 </script>

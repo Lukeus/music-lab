@@ -107,11 +107,11 @@ function initAvatarClickHandler() {
             drumContainer.style.transform = 'translateY(20px)';
 
             // Stop any playing drums
-            if (
-                (window as any).drumMachine &&
-                (window as any).drumMachine.stop
-            ) {
-                (window as any).drumMachine.stop();
+            const globalWindow = window as typeof window & {
+                drumMachine?: { stop?: () => void };
+            };
+            if (globalWindow.drumMachine?.stop) {
+                globalWindow.drumMachine.stop();
             }
         }
 

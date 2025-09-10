@@ -68,6 +68,11 @@ import Base from '../../layouts/base.astro';
           </button>
         </div>
       </section>
+
+      <!-- Share this tool section -->
+      <div class="page-share">
+        <!-- ShareLinks component will populate this container -->
+      </div>
     </div>
   </section>
 
@@ -327,6 +332,17 @@ import Base from '../../layouts/base.astro';
           content_group1: 'Music Tools',
         });
       }
+
+      // Initialize ShareLinks
+      import('@lukeus/shared-components').then(({ createShareLinks }) => {
+        const shareLinks = createShareLinks({
+          containerSelector: '.page-share',
+          title: 'Chord Finder | Music Tools',
+          description:
+            'Interactive chord identification tool. Select notes to discover chords, explore inversions, and find voicings for piano and guitar.',
+        });
+        shareLinks.init();
+      });
     });
   </script>
 </Base>

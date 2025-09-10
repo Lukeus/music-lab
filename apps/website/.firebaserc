@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "music-labs-1d8e1"
-  }
+    "default": "music-labs-1d8e1",
+    "demo": "music-labs-1d8e1"
+  },
+  "targets": {},
+  "etags": {}
 }

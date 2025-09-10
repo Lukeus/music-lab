@@ -41,6 +41,11 @@ import Base from '../../layouts/base.astro';
       <div id="scale-explorer-container" class="tool-container">
         <!-- Scale Explorer will render here -->
       </div>
+
+      <!-- Share this tool section -->
+      <div class="page-share">
+        <!-- ShareLinks component will populate this container -->
+      </div>
     </div>
   </section>
 
@@ -239,6 +244,17 @@ import Base from '../../layouts/base.astro';
           });
         });
       }, 1000); // Wait for tool to render
+
+      // Initialize ShareLinks
+      import('@lukeus/shared-components').then(({ createShareLinks }) => {
+        const shareLinks = createShareLinks({
+          containerSelector: '.page-share',
+          title: 'Scale Explorer | Music Tools',
+          description:
+            'Interactive scale discovery with keyboard, fretboard, and circle visualizations. Perfect for learning music theory and discovering new scales.',
+        });
+        shareLinks.init();
+      });
     });
   </script>
 </Base>

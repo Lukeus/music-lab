@@ -173,6 +173,12 @@ import content from '../data/content.json';
           aria-label="Open Lukeus on Instagram">Instagram</a
         >
       </div>
+
+      <!-- Share this page section -->
+      <div class="page-share">
+        <!-- ShareLinks component will populate this container -->
+      </div>
+
       <p>&copy; 2025 Lukeus. All experiments are works in progress.</p>
     </div>
   </footer>
@@ -229,3 +235,26 @@ import content from '../data/content.json';
     transform: translateX(4px);
   }
 </style>
+
+<script>
+  // Import and initialize ShareLinks component
+  import { createShareLinks } from '@lukeus/shared-components';
+
+  // Initialize when DOM is ready
+  function initPageShareLinks() {
+    const shareLinks = createShareLinks({
+      containerSelector: '.page-share',
+      title: 'Lukeus Music Lab - Experimental Music Creation',
+      description:
+        'Explore experimental music, interactive tools, and creative insights from Lukeus - a music producer pushing the boundaries of sound and technology.',
+    });
+
+    shareLinks.init();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPageShareLinks);
+  } else {
+    initPageShareLinks();
+  }
+</script>
