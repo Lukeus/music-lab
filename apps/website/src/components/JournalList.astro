@@ -1,12 +1,15 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
-import { formatDate, calculateReadingTime, generateExcerpt, createSlug } from "../utils/blog";
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { formatDate, calculateReadingTime, generateExcerpt, createSlug } from '../utils/blog';
 
-const journalEntries = await getCollection("journal");
+const journalEntries = await getCollection('journal');
 // Sort by date, newest first
 const sortedEntries = journalEntries
-  .filter((entry: CollectionEntry<"journal">) => entry.data.published !== false)
-  .sort((a: CollectionEntry<"journal">, b: CollectionEntry<"journal">) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+  .filter((entry: CollectionEntry<'journal'>) => entry.data.published !== false)
+  .sort(
+    (a: CollectionEntry<'journal'>, b: CollectionEntry<'journal'>) =>
+      new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  );
 ---
 
 <div class="container">
@@ -15,7 +18,14 @@ const sortedEntries = journalEntries
     <span>Creative Journal</span>
   </h2>
   <div class="journal-toolbar" role="region" aria-label="Filter journal entries">
-    <input id="journal-search" class="journal-search" type="search" placeholder="Search notes, lyrics, ideas…" aria-label="Search journal" autocomplete="off">
+    <input
+      id="journal-search"
+      class="journal-search"
+      type="search"
+      placeholder="Search notes, lyrics, ideas…"
+      aria-label="Search journal"
+      autocomplete="off"
+    />
     <div class="journal-tags" role="listbox" aria-label="Filter by tag">
       <button class="tag-filter is-active" data-tag="all" aria-pressed="true">All</button>
       <button class="tag-filter" data-tag="song-idea" aria-pressed="false">🎶 Song Idea</button>
@@ -24,37 +34,46 @@ const sortedEntries = journalEntries
     </div>
   </div>
   <div class="journal-entries" aria-live="polite">
-    {sortedEntries.map((entry: CollectionEntry<"journal">) => (
-      <article class="journal-card" data-tags={(entry.data.tags ?? []).join(" ")}>
-        <header class="journal-head">
-          <div class="journal-meta">
-            <time class="journal-date" datetime={entry.data.date}>
-              {formatDate(entry.data.date)}
-            </time>
-            <span class="journal-reading-time">
-              ⏱️ {calculateReadingTime(entry.body)} min read
-            </span>
+    {
+      sortedEntries.map((entry: CollectionEntry<'journal'>) => (
+        <article class="journal-card" data-tags={(entry.data.tags ?? []).join(' ')}>
+          <header class="journal-head">
+            <div class="journal-meta">
+              <time class="journal-date" datetime={entry.data.date}>
+                {formatDate(entry.data.date)}
+              </time>
+              <span class="journal-reading-time">⏱️ {calculateReadingTime(entry.body)} min read</span>
+            </div>
+            <h3 class="journal-title">
+              <a href={`/journal/${entry.slug || createSlug(entry.data.title)}`} class="journal-title-link">
+                {entry.data.title}
+              </a>
+            </h3>
+            <div class="journal-pill">
+              {(entry.data.tags ?? []).includes('song-idea') && '🎶 Song Idea'}
+              {(entry.data.tags ?? []).includes('lyric-sketch') && '✍️ Lyric Sketch'}
+              {(entry.data.tags ?? []).includes('studio-note') && '🧪 Studio Note'}
+              {!(entry.data.tags ?? []).some((tag: string) =>
+                ['song-idea', 'lyric-sketch', 'studio-note'].includes(tag)
+              ) &&
+                (entry.data.tags ?? []).length > 0 &&
+                `#${(entry.data.tags ?? [])[0]}`}
+            </div>
+          </header>
+          <div class="journal-body">
+            <p class="journal-snippet">{entry.data.excerpt || generateExcerpt(entry.body)}</p>
+            <div class="journal-more">
+              <a
+                href={`/journal/${entry.slug || createSlug(entry.data.title)}`}
+                class="read-more"
+                aria-label={`Read full post: ${entry.data.title}`}
+              >
+                Read more →
+              </a>
+            </div>
           </div>
-          <h3 class="journal-title">
-            <a href={`/journal/${entry.slug || createSlug(entry.data.title)}`} class="journal-title-link">{entry.data.title}</a>
-          </h3>
-          <div class="journal-pill">
-            {(entry.data.tags ?? []).includes("song-idea") && "🎶 Song Idea"}
-            {(entry.data.tags ?? []).includes("lyric-sketch") && "✍️ Lyric Sketch"}
-            {(entry.data.tags ?? []).includes("studio-note") && "🧪 Studio Note"}
-            {!(entry.data.tags ?? []).some((tag: string) => ['song-idea', 'lyric-sketch', 'studio-note'].includes(tag)) && 
-              (entry.data.tags ?? []).length > 0 && `#${(entry.data.tags ?? [])[0]}`}
-          </div>
-        </header>
-        <div class="journal-body">
-          <p class="journal-snippet">{entry.data.excerpt || generateExcerpt(entry.body)}</p>
-          <div class="journal-more">
-            <a href={`/journal/${entry.slug || createSlug(entry.data.title)}`} class="read-more" aria-label={`Read full post: ${entry.data.title}`}>
-              Read more →
-            </a>
-          </div>
-        </div>
-      </article>
-    ))}
+        </article>
+      ))
+    }
   </div>
 </div>

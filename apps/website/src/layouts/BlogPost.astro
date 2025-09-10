@@ -24,21 +24,27 @@ const postUrl = `https://music-labs-1d8e1.web.app${Astro.url.pathname}`;
 
 // Create social media optimized title and description
 const socialTitle = `${frontmatter.title} | Lukeus Music Lab`;
-const socialDescription = frontmatter.excerpt || `Read "${frontmatter.title}" - a creative journal entry from Lukeus Music Lab exploring experimental music, sound design, and musical storytelling.`;
+const socialDescription =
+  frontmatter.excerpt ||
+  `Read "${frontmatter.title}" - a creative journal entry from Lukeus Music Lab exploring experimental music, sound design, and musical storytelling.`;
 
 // Use featured image for social sharing, fallback to avatar
-const socialImage = frontmatter.featuredImage 
+const socialImage = frontmatter.featuredImage
   ? `https://music-labs-1d8e1.web.app${frontmatter.featuredImage}`
   : 'https://music-labs-1d8e1.web.app/assets/images/lukeus-avatar.png';
 
 // Keywords including tags
 const postKeywords = [
-  'lukeus', 'music lab', 'creative journal', 'experimental music', 'music producer',
-  ...(frontmatter.tags || [])
+  'lukeus',
+  'music lab',
+  'creative journal',
+  'experimental music',
+  'music producer',
+  ...(frontmatter.tags || []),
 ].join(', ');
 ---
 
-<Base 
+<Base
   title={socialTitle}
   description={socialDescription}
   ogTitle={socialTitle}
@@ -63,11 +69,13 @@ const postKeywords = [
           <span class="breadcrumb-current">{frontmatter.title}</span>
         </nav>
 
-        {frontmatter.featuredImage && (
-          <div class="featured-image">
-            <img src={frontmatter.featuredImage} alt={frontmatter.title} />
-          </div>
-        )}
+        {
+          frontmatter.featuredImage && (
+            <div class="featured-image">
+              <img src={frontmatter.featuredImage} alt={frontmatter.title} />
+            </div>
+          )
+        }
 
         <div class="post-meta">
           <time class="post-date" datetime={frontmatter.date}>
@@ -80,23 +88,23 @@ const postKeywords = [
         </div>
 
         <h1 class="post-title">{frontmatter.title}</h1>
-        
-        {frontmatter.excerpt && (
-          <p class="post-excerpt">{frontmatter.excerpt}</p>
-        )}
 
-        {(frontmatter.tags && frontmatter.tags.length > 0) && (
-          <div class="post-tags" role="list" aria-label="Post tags">
-            {frontmatter.tags.map(tag => (
-              <span class="post-tag" role="listitem">
-                {tag === 'song-idea' && '🎶 Song Idea'}
-                {tag === 'lyric-sketch' && '✍️ Lyric Sketch'}
-                {tag === 'studio-note' && '🧪 Studio Note'}
-                {!['song-idea', 'lyric-sketch', 'studio-note'].includes(tag) && `#${tag}`}
-              </span>
-            ))}
-          </div>
-        )}
+        {frontmatter.excerpt && <p class="post-excerpt">{frontmatter.excerpt}</p>}
+
+        {
+          frontmatter.tags && frontmatter.tags.length > 0 && (
+            <div class="post-tags" role="list" aria-label="Post tags">
+              {frontmatter.tags.map(tag => (
+                <span class="post-tag" role="listitem">
+                  {tag === 'song-idea' && '🎶 Song Idea'}
+                  {tag === 'lyric-sketch' && '✍️ Lyric Sketch'}
+                  {tag === 'studio-note' && '🧪 Studio Note'}
+                  {!['song-idea', 'lyric-sketch', 'studio-note'].includes(tag) && `#${tag}`}
+                </span>
+              ))}
+            </div>
+          )
+        }
       </div>
     </header>
 
@@ -111,20 +119,14 @@ const postKeywords = [
     <footer class="blog-post-footer">
       <div class="container">
         <div class="post-navigation">
-          <a href="/journal" class="back-to-journal">
-            ← Back to Journal
-          </a>
+          <a href="/journal" class="back-to-journal"> ← Back to Journal </a>
         </div>
-        
+
         <div class="post-share">
           <h3>Share this post</h3>
           <div class="share-buttons">
-            <button class="share-button" data-action="share">
-              📤 Share
-            </button>
-            <button class="share-button" data-action="copy">
-              🔗 Copy Link
-            </button>
+            <button class="share-button" data-action="share"> 📤 Share </button>
+            <button class="share-button" data-action="copy"> 🔗 Copy Link </button>
             <a class="share-button social-share" href="#" data-platform="twitter" target="_blank" rel="noopener">
               🐦 Twitter
             </a>
@@ -142,57 +144,58 @@ const postKeywords = [
 </Base>
 
 <!-- Structured Data for Blog Article -->
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": `${frontmatter.title}`,
-    "description": `${socialDescription}`,
-    "image": `${socialImage}`,
-    "author": {
-      "@type": "Person",
-      "name": `${frontmatter.author || 'Lukeus'}`,
-      "url": "https://lukeus.com/",
-      "sameAs": [
-        "https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl",
-        "https://soundcloud.com/lukeusmusic",
-        "https://www.instagram.com/musiclukeus/"
-      ]
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: frontmatter.title,
+    description: socialDescription,
+    image: socialImage,
+    author: {
+      '@type': 'Person',
+      name: frontmatter.author || 'Lukeus',
+      url: 'https://lukeus.com/',
+      sameAs: [
+        'https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl',
+        'https://soundcloud.com/lukeusmusic',
+        'https://www.instagram.com/musiclukeus/',
+      ],
     },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Lukeus Music Lab",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://music-labs-1d8e1.web.app/assets/images/lukeus-avatar.png"
-      }
+    publisher: {
+      '@type': 'Organization',
+      name: 'Lukeus Music Lab',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://music-labs-1d8e1.web.app/assets/images/lukeus-avatar.png',
+      },
     },
-    "datePublished": `${frontmatter.date}`,
-    "dateModified": `${frontmatter.date}`,
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `${postUrl}`
+    datePublished: frontmatter.date,
+    dateModified: frontmatter.date,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': postUrl,
     },
-    "keywords": `${postKeywords}`,
-    "articleSection": "Music Journal",
-    "inLanguage": "en-US",
-    "url": `${postUrl}`
-  }
-</script>
+    keywords: postKeywords,
+    articleSection: 'Music Journal',
+    inLanguage: 'en-US',
+    url: postUrl,
+  })}
+/>
 
 <script>
   // Share functionality
   function initShareButtons() {
     const shareButton = document.querySelector('.share-button[data-action="share"]');
     const copyButton = document.querySelector('.share-button[data-action="copy"]');
-    
+
     if (shareButton) {
       shareButton.addEventListener('click', () => {
         if (navigator.share) {
           const shareData = {
             title: document.title,
             text: document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
-            url: window.location.href
+            url: window.location.href,
           };
           navigator.share(shareData).catch(err => {
             console.log('Share failed:', err);
@@ -204,23 +207,25 @@ const postKeywords = [
         }
       });
     }
-    
+
     if (copyButton) {
       copyButton.addEventListener('click', copyToClipboard);
     }
-    
+
     // Handle social sharing links
     const socialLinks = document.querySelectorAll('.social-share');
     socialLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
+      link.addEventListener('click', e => {
         e.preventDefault();
         const platform = e.currentTarget.dataset.platform;
         const url = encodeURIComponent(window.location.href);
         const title = encodeURIComponent(document.title);
-        const description = encodeURIComponent(document.querySelector('meta[name="description"]')?.getAttribute('content') || '');
-        
+        const description = encodeURIComponent(
+          document.querySelector('meta[name="description"]')?.getAttribute('content') || ''
+        );
+
         let shareUrl = '';
-        
+
         switch (platform) {
           case 'twitter':
             shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
@@ -232,43 +237,46 @@ const postKeywords = [
             shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
             break;
         }
-        
+
         if (shareUrl) {
           window.open(shareUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
         }
       });
     });
-    
+
     function copyToClipboard() {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        if (copyButton) {
-          const originalText = copyButton.textContent;
-          copyButton.textContent = '✅ Copied!';
-          setTimeout(() => {
-            copyButton.textContent = originalText;
-          }, 2000);
-        }
-      }).catch(err => {
-        console.error('Copy failed:', err);
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = window.location.href;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        
-        if (copyButton) {
-          const originalText = copyButton.textContent;
-          copyButton.textContent = '✅ Copied!';
-          setTimeout(() => {
-            copyButton.textContent = originalText;
-          }, 2000);
-        }
-      });
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          if (copyButton) {
+            const originalText = copyButton.textContent;
+            copyButton.textContent = '✅ Copied!';
+            setTimeout(() => {
+              copyButton.textContent = originalText;
+            }, 2000);
+          }
+        })
+        .catch(err => {
+          console.error('Copy failed:', err);
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = window.location.href;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+
+          if (copyButton) {
+            const originalText = copyButton.textContent;
+            copyButton.textContent = '✅ Copied!';
+            setTimeout(() => {
+              copyButton.textContent = originalText;
+            }, 2000);
+          }
+        });
     }
   }
-  
+
   // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initShareButtons);
@@ -278,409 +286,422 @@ const postKeywords = [
 </script>
 
 <style>
-/* Smooth scrolling for the whole page */
-html {
-  scroll-behavior: smooth;
-}
+  /* Smooth scrolling for the whole page */
+  html {
+    scroll-behavior: smooth;
+  }
 
-.blog-post {
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  /* No padding needed - header is not sticky on blog pages */
-  padding-top: 0;
-  margin-top: 0;
-}
-
-/* Make header non-sticky on blog post pages */
-header {
-  position: relative !important;
-  top: auto !important;
-}
-
-.blog-post-header {
-  padding: 20px 0 15px 0;
-  border-bottom: 1px solid var(--border);
-  background: linear-gradient(135deg, 
-    rgba(124, 210, 255, 0.05) 0%, 
-    rgba(163, 255, 176, 0.05) 100%);
-}
-
-.blog-breadcrumb {
-  margin-bottom: 16px;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-
-.breadcrumb-link {
-  color: var(--accent);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.breadcrumb-link:hover {
-  color: var(--accent-secondary);
-}
-
-.breadcrumb-separator {
-  margin: 0 12px;
-  opacity: 0.5;
-}
-
-.breadcrumb-current {
-  color: var(--text);
-}
-
-.featured-image {
-  margin-bottom: 20px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow-1);
-}
-
-.featured-image img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.post-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 16px;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-
-.post-date, .post-reading-time, .post-author {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.post-title {
-  font-size: clamp(1.8rem, 4vw, 3rem);
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 12px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.post-excerpt {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 16px;
-  font-style: italic;
-}
-
-.post-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.post-tag {
-  background: rgba(124, 210, 255, 0.1);
-  color: var(--accent);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  border: 1px solid rgba(124, 210, 255, 0.2);
-}
-
-.blog-post-content {
-  padding: 30px 0;
-}
-
-.prose {
-  max-width: 80ch;
-  margin: 0 auto;
-  line-height: 1.7;
-  font-size: 1.1rem;
-  padding: 0 20px;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-}
-
-.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-  font-weight: 600;
-  line-height: 1.3;
-  margin: 2em 0 1em 0;
-  color: var(--text);
-  /* Account for sticky header when linking to headings */
-  scroll-margin-top: 120px;
-}
-
-.prose h1 { font-size: 2.25rem; }
-.prose h2 { font-size: 1.875rem; }
-.prose h3 { font-size: 1.5rem; }
-.prose h4 { font-size: 1.25rem; }
-
-.prose p {
-  margin: 1.5em 0;
-  color: var(--text);
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-
-.prose blockquote {
-  border-left: 4px solid var(--accent);
-  padding-left: 20px;
-  margin: 2em 0;
-  font-style: italic;
-  background: rgba(124, 210, 255, 0.05);
-  padding: 20px;
-  border-radius: 8px;
-}
-
-.prose code {
-  background: var(--bg-secondary);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-family: 'Fira Code', monospace;
-  font-size: 0.9em;
-}
-
-.prose pre {
-  background: var(--bg-secondary);
-  padding: 20px;
-  border-radius: 8px;
-  overflow-x: auto;
-  border: 1px solid var(--border);
-}
-
-.prose pre code {
-  background: none;
-  padding: 0;
-}
-
-.prose a {
-  color: var(--accent);
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
-  transition: color 0.3s ease;
-}
-
-.prose a:hover {
-  color: var(--accent-secondary);
-}
-
-.prose ul, .prose ol {
-  margin: 1.5em 0;
-  padding-left: 1.5em;
-}
-
-.prose li {
-  margin: 0.5em 0;
-}
-
-.blog-post-footer {
-  padding: 60px 0;
-  border-top: 1px solid var(--border);
-  background: var(--bg-secondary);
-}
-
-.post-navigation {
-  margin-bottom: 40px;
-}
-
-.back-to-journal {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.back-to-journal:hover {
-  color: var(--accent-secondary);
-  transform: translateX(-4px);
-}
-
-.post-share h3 {
-  margin-bottom: 16px;
-  color: var(--text);
-}
-
-.share-buttons {
-  display: flex;
-  gap: 12px;
-}
-
-.share-button {
-  background: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--border);
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.share-button:hover {
-  background: var(--accent);
-  color: var(--bg);
-  border-color: var(--accent);
-}
-
-.social-share {
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.social-share:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(124, 210, 255, 0.3);
-}
-
-@media (max-width: 768px) {
   .blog-post {
-    /* No padding needed - header is not sticky on mobile blog pages */
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    /* No padding needed - header is not sticky on blog pages */
     padding-top: 0;
     margin-top: 0;
-    background: var(--bg);
   }
-  
-  /* Ensure header is non-sticky on mobile blog pages */
+
+  /* Make header non-sticky on blog post pages */
   header {
     position: relative !important;
     top: auto !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   }
-  
+
   .blog-post-header {
-    padding: 20px 0 20px 0;
-    background: linear-gradient(135deg, 
-      rgba(124, 210, 255, 0.08) 0%, 
-      rgba(163, 255, 176, 0.08) 100%);
+    padding: 20px 0 15px 0;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(124, 210, 255, 0.05) 0%, rgba(163, 255, 176, 0.05) 100%);
   }
-  
-  .post-meta {
-    flex-direction: column;
-    gap: 12px;
-    font-size: 1rem;
-    margin-bottom: 20px;
-  }
-  
-  .prose {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    padding: 0 20px;
-    max-width: none;
-    color: var(--text);
-  }
-  
-  .prose p {
-    margin: 1.8em 0;
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: var(--text);
-  }
-  
-  .prose h1 {
-    font-size: 1.8rem;
-    margin: 2.5em 0 1.2em 0;
-    line-height: 1.2;
-  }
-  
-  .prose h2 {
-    font-size: 1.5rem;
-    margin: 2.2em 0 1em 0;
-    line-height: 1.3;
-    color: var(--accent);
-  }
-  
-  .prose h3 {
-    font-size: 1.25rem;
-    margin: 2em 0 0.8em 0;
-    line-height: 1.4;
-  }
-  
-  .prose ol, .prose ul {
-    margin: 2em 0;
-    padding-left: 1.8em;
-  }
-  
-  .prose li {
-    margin: 1em 0;
-    font-size: 1.1rem;
-    line-height: 1.8;
-  }
-  
-  .prose blockquote {
-    margin: 2.5em 0;
-    padding: 24px 20px;
-    font-size: 1.05rem;
-    line-height: 1.7;
-    border-left: 5px solid var(--accent);
-  }
-  
-  .share-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  
-  .share-button {
-    padding: 14px 10px;
-    font-size: 0.95rem;
-    border-radius: 10px;
-  }
-  
+
   .blog-breadcrumb {
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-  }
-  
-  .post-title {
-    font-size: clamp(1.6rem, 7vw, 2.2rem);
     margin-bottom: 16px;
-    line-height: 1.1;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
   }
-  
-  .post-excerpt {
-    font-size: 1.05rem;
-    line-height: 1.6;
+
+  .breadcrumb-link {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--accent-secondary);
+  }
+
+  .breadcrumb-separator {
+    margin: 0 12px;
+    opacity: 0.5;
+  }
+
+  .breadcrumb-current {
+    color: var(--text);
+  }
+
+  .featured-image {
     margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
   }
-  
+
+  .featured-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+
+  .post-date,
+  .post-reading-time,
+  .post-author {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .post-title {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .post-excerpt {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .post-tag {
+    background: rgba(124, 210, 255, 0.1);
+    color: var(--accent);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(124, 210, 255, 0.2);
+  }
+
   .blog-post-content {
     padding: 30px 0;
+  }
+
+  .prose {
+    max-width: 80ch;
+    margin: 0 auto;
+    line-height: 1.7;
+    font-size: 1.1rem;
+    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 2em 0 1em 0;
+    color: var(--text);
+    /* Account for sticky header when linking to headings */
+    scroll-margin-top: 120px;
+  }
+
+  .prose h1 {
+    font-size: 2.25rem;
+  }
+  .prose h2 {
+    font-size: 1.875rem;
+  }
+  .prose h3 {
+    font-size: 1.5rem;
+  }
+  .prose h4 {
+    font-size: 1.25rem;
+  }
+
+  .prose p {
+    margin: 1.5em 0;
+    color: var(--text);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .prose blockquote {
+    border-left: 4px solid var(--accent);
+    padding-left: 20px;
+    margin: 2em 0;
+    font-style: italic;
+    background: rgba(124, 210, 255, 0.05);
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .prose code {
+    background: var(--bg-secondary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9em;
+  }
+
+  .prose pre {
+    background: var(--bg-secondary);
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+
+  .prose pre code {
+    background: none;
+    padding: 0;
+  }
+
+  .prose a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    transition: color 0.3s ease;
+  }
+
+  .prose a:hover {
+    color: var(--accent-secondary);
+  }
+
+  .prose ul,
+  .prose ol {
+    margin: 1.5em 0;
+    padding-left: 1.5em;
+  }
+
+  .prose li {
+    margin: 0.5em 0;
+  }
+
+  .blog-post-footer {
+    padding: 60px 0;
+    border-top: 1px solid var(--border);
+    background: var(--bg-secondary);
+  }
+
+  .post-navigation {
+    margin-bottom: 40px;
+  }
+
+  .back-to-journal {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .back-to-journal:hover {
+    color: var(--accent-secondary);
+    transform: translateX(-4px);
+  }
+
+  .post-share h3 {
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .share-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .share-button {
     background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
   }
-  
-  .featured-image {
-    margin-bottom: 24px;
-    border-radius: 16px;
+
+  .share-button:hover {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
   }
-  
-  .featured-image img {
-    height: 180px;
+
+  .social-share {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
   }
-  
-  .post-tags {
-    gap: 10px;
-    margin-top: 16px;
+
+  .social-share:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 210, 255, 0.3);
   }
-  
-  .post-tag {
-    padding: 8px 14px;
-    font-size: 0.9rem;
-    border-radius: 12px;
+
+  @media (max-width: 768px) {
+    .blog-post {
+      /* No padding needed - header is not sticky on mobile blog pages */
+      padding-top: 0;
+      margin-top: 0;
+      background: var(--bg);
+    }
+
+    /* Ensure header is non-sticky on mobile blog pages */
+    header {
+      position: relative !important;
+      top: auto !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .blog-post-header {
+      padding: 20px 0 20px 0;
+      background: linear-gradient(135deg, rgba(124, 210, 255, 0.08) 0%, rgba(163, 255, 176, 0.08) 100%);
+    }
+
+    .post-meta {
+      flex-direction: column;
+      gap: 12px;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .prose {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      padding: 0 20px;
+      max-width: none;
+      color: var(--text);
+    }
+
+    .prose p {
+      margin: 1.8em 0;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .prose h1 {
+      font-size: 1.8rem;
+      margin: 2.5em 0 1.2em 0;
+      line-height: 1.2;
+    }
+
+    .prose h2 {
+      font-size: 1.5rem;
+      margin: 2.2em 0 1em 0;
+      line-height: 1.3;
+      color: var(--accent);
+    }
+
+    .prose h3 {
+      font-size: 1.25rem;
+      margin: 2em 0 0.8em 0;
+      line-height: 1.4;
+    }
+
+    .prose ol,
+    .prose ul {
+      margin: 2em 0;
+      padding-left: 1.8em;
+    }
+
+    .prose li {
+      margin: 1em 0;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+
+    .prose blockquote {
+      margin: 2.5em 0;
+      padding: 24px 20px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      border-left: 5px solid var(--accent);
+    }
+
+    .share-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .share-button {
+      padding: 14px 10px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+    }
+
+    .blog-breadcrumb {
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    .post-title {
+      font-size: clamp(1.6rem, 7vw, 2.2rem);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .post-excerpt {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .blog-post-content {
+      padding: 30px 0;
+      background: var(--bg);
+    }
+
+    .featured-image {
+      margin-bottom: 24px;
+      border-radius: 16px;
+    }
+
+    .featured-image img {
+      height: 180px;
+    }
+
+    .post-tags {
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .post-tag {
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      border-radius: 12px;
+    }
   }
-}
 </style>

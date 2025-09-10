@@ -1,559 +1,590 @@
 ---
 // src/pages/tools.astro
-import Base from "../layouts/base.astro";
+import Base from '../layouts/base.astro';
 ---
 
-<Base 
+<Base
   title="Music Tools | Lukeus Music Lab"
   description="Interactive music theory tools and utilities. Explore keys, chords, progressions, and more with Key Friend and other musical tools."
   keywords="music tools, music theory, chord progressions, key signatures, interactive tools, music education"
 >
-<header>
-  <div class="container">
-    <div class="header-content">
-      <span class="logo">Because Music Matters</span>
-      <nav class="nav-links">
-        <a href="/" class="nav-link">🏠 Home</a>
-        <a href="/journal" class="nav-link">📝 Journal</a>
-      </nav>
-      <a href="/" class="logo" id="logo-text">Music Lab</a>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <span class="logo">Because Music Matters</span>
+        <nav class="nav-links">
+          <a href="/" class="nav-link">🏠 Home</a>
+          <a href="/about" class="nav-link">👨‍🎤 About</a>
+          <a href="/journal" class="nav-link">📝 Journal</a>
+        </nav>
+        <a href="/" class="logo" id="logo-text">Music Lab</a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<section class="tools-hero">
-  <div class="container">
-    <div class="tools-hero-content">
-      <h1 class="tools-title">Music Tools Dashboard</h1>
-      <p class="tools-description">
-        Your creative toolkit for music theory exploration, chord discovery, and musical experimentation
-      </p>
+  <section class="tools-hero">
+    <div class="container">
+      <div class="tools-hero-content">
+        <h1 class="tools-title">Music Tools Dashboard</h1>
+        <p class="tools-description">
+          Your creative toolkit for music theory exploration, chord discovery, and musical experimentation
+        </p>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="tools-dashboard">
-  <div class="container">
-    <div class="dashboard-grid">
-      <!-- Available Tools -->
-      <div class="available-tools">
-        <h2 class="section-title">Available Tools</h2>
-        <div class="tools-grid">
-          <a href="/tools/key-friend" class="tool-card available" data-tool="key-friend">
-            <div class="tool-card-header">
-              <div class="tool-icon-large">🗝️</div>
-              <div class="tool-badge available-badge">Ready</div>
-            </div>
-            <div class="tool-card-content">
-              <h3 class="tool-card-title">Key Friend</h3>
-              <p class="tool-card-description">
-                Discover chord patterns and progressions for any key. Perfect for songwriting and music theory exploration.
-              </p>
-              <div class="tool-features">
-                <span class="feature-tag">🎹 Chord Progressions</span>
-                <span class="feature-tag">🎼 Key Signatures</span>
-                <span class="feature-tag">🎤 Songwriting</span>
+  <section class="tools-dashboard">
+    <div class="container">
+      <div class="dashboard-grid">
+        <!-- Available Tools -->
+        <div class="available-tools">
+          <h2 class="section-title">Available Tools</h2>
+          <div class="tools-grid">
+            <a href="/tools/key-friend" class="tool-card available" data-tool="key-friend">
+              <div class="tool-card-header">
+                <div class="tool-icon-large">🗝️</div>
+                <div class="tool-badge available-badge">Ready</div>
+              </div>
+              <div class="tool-card-content">
+                <h3 class="tool-card-title">Key Friend</h3>
+                <p class="tool-card-description">
+                  Discover chord patterns and progressions for any key. Perfect for songwriting and music theory
+                  exploration.
+                </p>
+                <div class="tool-features">
+                  <span class="feature-tag">🎹 Chord Progressions</span>
+                  <span class="feature-tag">🎼 Key Signatures</span>
+                  <span class="feature-tag">🎤 Songwriting</span>
+                </div>
+              </div>
+              <div class="tool-card-footer">
+                <span class="launch-text">Launch Tool →</span>
+              </div>
+            </a>
+
+            <a href="/tools/scale-explorer" class="tool-card available" data-tool="scale-explorer">
+              <div class="tool-card-header">
+                <div class="tool-icon-large">🎼</div>
+                <div class="tool-badge available-badge">Ready</div>
+              </div>
+              <div class="tool-card-content">
+                <h3 class="tool-card-title">Scale Explorer</h3>
+                <p class="tool-card-description">
+                  Interactive scale discovery with multiple visualization modes. Explore modes, pentatonic, blues, and
+                  exotic scales.
+                </p>
+                <div class="tool-features">
+                  <span class="feature-tag">🎹 Multiple Modes</span>
+                  <span class="feature-tag">🎸 Fretboard View</span>
+                  <span class="feature-tag">🔍 Scale Finder</span>
+                </div>
+              </div>
+              <div class="tool-card-footer">
+                <span class="launch-text">Launch Tool →</span>
+              </div>
+            </a>
+
+            <a href="/tools/chord-finder" class="tool-card available" data-tool="chord-finder">
+              <div class="tool-card-header">
+                <div class="tool-icon-large">🎯</div>
+                <div class="tool-badge available-badge">Ready</div>
+              </div>
+              <div class="tool-card-content">
+                <h3 class="tool-card-title">Chord Finder</h3>
+                <p class="tool-card-description">
+                  Identify chords from selected notes, explore inversions, and discover voicings for different
+                  instruments.
+                </p>
+                <div class="tool-features">
+                  <span class="feature-tag">🔍 Chord ID</span>
+                  <span class="feature-tag">🎹 Inversions</span>
+                  <span class="feature-tag">🎸 Voicings</span>
+                </div>
+              </div>
+              <div class="tool-card-footer">
+                <span class="launch-text">Launch Tool →</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Coming Soon Tools -->
+        <div class="coming-soon-tools">
+          <h2 class="section-title">Coming Soon</h2>
+          <div class="tools-grid">
+            <div class="tool-card coming-soon" data-tool="progression-generator">
+              <div class="tool-card-header">
+                <div class="tool-icon-large">🎵</div>
+                <div class="tool-badge coming-soon-badge">Coming Soon</div>
+              </div>
+              <div class="tool-card-content">
+                <h3 class="tool-card-title">Progression Generator</h3>
+                <p class="tool-card-description">
+                  AI-powered chord progression generator with style templates and customizable parameters.
+                </p>
+                <div class="tool-features">
+                  <span class="feature-tag disabled">🤖 AI Powered</span>
+                  <span class="feature-tag disabled">🎶 Style Templates</span>
+                  <span class="feature-tag disabled">⚙️ Customizable</span>
+                </div>
+              </div>
+              <div class="tool-card-footer">
+                <span class="launch-text disabled">In Development...</span>
               </div>
             </div>
-            <div class="tool-card-footer">
-              <span class="launch-text">Launch Tool →</span>
-            </div>
-          </a>
 
-          <a href="/tools/scale-explorer" class="tool-card available" data-tool="scale-explorer">
-            <div class="tool-card-header">
-              <div class="tool-icon-large">🎼</div>
-              <div class="tool-badge available-badge">Ready</div>
-            </div>
-            <div class="tool-card-content">
-              <h3 class="tool-card-title">Scale Explorer</h3>
-              <p class="tool-card-description">
-                Interactive scale discovery with multiple visualization modes. Explore modes, pentatonic, blues, and exotic scales.
-              </p>
-              <div class="tool-features">
-                <span class="feature-tag">🎹 Multiple Modes</span>
-                <span class="feature-tag">🎸 Fretboard View</span>
-                <span class="feature-tag">🔍 Scale Finder</span>
+            <div class="tool-card coming-soon" data-tool="audio-synth">
+              <div class="tool-card-header">
+                <div class="tool-icon-large">🎚️</div>
+                <div class="tool-badge coming-soon-badge">Coming Soon</div>
+              </div>
+              <div class="tool-card-content">
+                <h3 class="tool-card-title">Audio Synth</h3>
+                <p class="tool-card-description">
+                  Browser-based synthesizer with multiple waveforms, effects, and real-time audio visualization.
+                </p>
+                <div class="tool-features">
+                  <span class="feature-tag disabled">🎹 Synthesizer</span>
+                  <span class="feature-tag disabled">🎧 Effects</span>
+                  <span class="feature-tag disabled">📊 Visualization</span>
+                </div>
+              </div>
+              <div class="tool-card-footer">
+                <span class="launch-text disabled">In Development...</span>
               </div>
             </div>
-            <div class="tool-card-footer">
-              <span class="launch-text">Launch Tool →</span>
-            </div>
-          </a>
-
-          <a href="/tools/chord-finder" class="tool-card available" data-tool="chord-finder">
-            <div class="tool-card-header">
-              <div class="tool-icon-large">🎯</div>
-              <div class="tool-badge available-badge">Ready</div>
-            </div>
-            <div class="tool-card-content">
-              <h3 class="tool-card-title">Chord Finder</h3>
-              <p class="tool-card-description">
-                Identify chords from selected notes, explore inversions, and discover voicings for different instruments.
-              </p>
-              <div class="tool-features">
-                <span class="feature-tag">🔍 Chord ID</span>
-                <span class="feature-tag">🎹 Inversions</span>
-                <span class="feature-tag">🎸 Voicings</span>
-              </div>
-            </div>
-            <div class="tool-card-footer">
-              <span class="launch-text">Launch Tool →</span>
-            </div>
-          </a>
+          </div>
         </div>
       </div>
 
-      <!-- Coming Soon Tools -->
-      <div class="coming-soon-tools">
-        <h2 class="section-title">Coming Soon</h2>
-        <div class="tools-grid">
-
-          <div class="tool-card coming-soon" data-tool="progression-generator">
-            <div class="tool-card-header">
-              <div class="tool-icon-large">🎵</div>
-              <div class="tool-badge coming-soon-badge">Coming Soon</div>
-            </div>
-            <div class="tool-card-content">
-              <h3 class="tool-card-title">Progression Generator</h3>
-              <p class="tool-card-description">
-                AI-powered chord progression generator with style templates and customizable parameters.
-              </p>
-              <div class="tool-features">
-                <span class="feature-tag disabled">🤖 AI Powered</span>
-                <span class="feature-tag disabled">🎶 Style Templates</span>
-                <span class="feature-tag disabled">⚙️ Customizable</span>
-              </div>
-            </div>
-            <div class="tool-card-footer">
-              <span class="launch-text disabled">In Development...</span>
-            </div>
-          </div>
-
-          <div class="tool-card coming-soon" data-tool="audio-synth">
-            <div class="tool-card-header">
-              <div class="tool-icon-large">🎚️</div>
-              <div class="tool-badge coming-soon-badge">Coming Soon</div>
-            </div>
-            <div class="tool-card-content">
-              <h3 class="tool-card-title">Audio Synth</h3>
-              <p class="tool-card-description">
-                Browser-based synthesizer with multiple waveforms, effects, and real-time audio visualization.
-              </p>
-              <div class="tool-features">
-                <span class="feature-tag disabled">🎹 Synthesizer</span>
-                <span class="feature-tag disabled">🎧 Effects</span>
-                <span class="feature-tag disabled">📊 Visualization</span>
-              </div>
-            </div>
-            <div class="tool-card-footer">
-              <span class="launch-text disabled">In Development...</span>
-            </div>
-          </div>
+      <!-- Quick Stats -->
+      <div class="dashboard-stats">
+        <div class="stat-item">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Tools Available</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">2</div>
+          <div class="stat-label">In Development</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Creative Possibilities</div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Quick Stats -->
-    <div class="dashboard-stats">
-      <div class="stat-item">
-        <div class="stat-number">3</div>
-        <div class="stat-label">Tools Available</div>
+  <footer>
+    <div class="container">
+      <div class="social-links">
+        <a
+          href="https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl?si=pNvmFrLvTFGIBu0KTAYlqQ"
+          class="social-link"
+          target="_blank"
+          rel="noopener"
+          aria-label="Open Lukeus on Spotify">Spotify</a
+        >
+        <a
+          href="https://soundcloud.com/lukeusmusic"
+          class="social-link"
+          target="_blank"
+          rel="noopener"
+          aria-label="Open Lukeus on SoundCloud">SoundCloud</a
+        >
+        <a
+          href="https://www.instagram.com/musiclukeus/"
+          class="social-link"
+          target="_blank"
+          rel="noopener"
+          aria-label="Open Lukeus on Instagram">Instagram</a
+        >
       </div>
-      <div class="stat-item">
-        <div class="stat-number">2</div>
-        <div class="stat-label">In Development</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">∞</div>
-        <div class="stat-label">Creative Possibilities</div>
-      </div>
+      <p>&copy; 2025 Lukeus. All tools are works in progress.</p>
     </div>
-  </div>
-</section>
-
-<footer>
-  <div class="container">
-    <div class="social-links">
-      <a href="https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl?si=pNvmFrLvTFGIBu0KTAYlqQ" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on Spotify">Spotify</a>
-      <a href="https://soundcloud.com/lukeusmusic" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on SoundCloud">SoundCloud</a>
-      <a href="https://www.instagram.com/musiclukeus/" class="social-link" target="_blank" rel="noopener" aria-label="Open Lukeus on Instagram">Instagram</a>
-    </div>
-    <p>&copy; 2025 Lukeus. All tools are works in progress.</p>
-  </div>
-</footer>
+  </footer>
 </Base>
 
 <style>
-/* Tools Dashboard Styles */
-.tools-hero {
-  padding: 80px 0 60px 0;
-  background: linear-gradient(135deg, 
-    rgba(124, 210, 255, 0.1) 0%, 
-    rgba(163, 255, 176, 0.1) 100%);
-  text-align: center;
-}
-
-.tools-title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 700;
-  margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.tools-description {
-  font-size: 1.2rem;
-  color: var(--text-secondary);
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-
-/* Dashboard Layout */
-.tools-dashboard {
-  padding: 60px 0 80px 0;
-}
-
-.dashboard-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
-}
-
-.section-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 32px;
-  text-align: center;
-  position: relative;
-}
-
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-  border-radius: 2px;
-}
-
-.tools-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Tool Cards */
-.tool-card {
-  background: linear-gradient(145deg, rgba(11, 15, 20, 0.95), rgba(15, 22, 30, 0.95));
-  border: 1px solid rgba(124, 210, 255, 0.2);
-  border-radius: 20px;
-  padding: 28px;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  min-height: 320px;
-}
-
-.tool-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(145deg, 
-    rgba(124, 210, 255, 0.02) 0%, 
-    rgba(163, 255, 176, 0.02) 100%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.tool-card.available:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: rgba(124, 210, 255, 0.6);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(124, 210, 255, 0.2);
-}
-
-.tool-card.available:hover::before {
-  opacity: 1;
-}
-
-.tool-card.coming-soon {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.tool-card.coming-soon:hover {
-  transform: translateY(-2px);
-  border-color: rgba(124, 210, 255, 0.3);
-}
-
-/* Tool Card Header */
-.tool-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 20px;
-}
-
-.tool-icon-large {
-  font-size: 3rem;
-  line-height: 1;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-}
-
-.tool-badge {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.available-badge {
-  background: linear-gradient(135deg, var(--accent-secondary), rgba(163, 255, 176, 0.8));
-  color: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 4px 12px rgba(163, 255, 176, 0.3);
-}
-
-.coming-soon-badge {
-  background: rgba(255, 193, 7, 0.2);
-  border: 1px solid rgba(255, 193, 7, 0.4);
-  color: rgba(255, 193, 7, 0.9);
-}
-
-/* Tool Card Content */
-.tool-card-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.tool-card-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 12px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.tool-card-description {
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 20px;
-  flex: 1;
-}
-
-.tool-features {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.feature-tag {
-  background: rgba(124, 210, 255, 0.1);
-  border: 1px solid rgba(124, 210, 255, 0.3);
-  border-radius: 16px;
-  padding: 4px 10px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  white-space: nowrap;
-}
-
-.feature-tag.disabled {
-  background: rgba(124, 124, 124, 0.1);
-  border-color: rgba(124, 124, 124, 0.3);
-  color: var(--text-secondary);
-  opacity: 0.6;
-}
-
-/* Tool Card Footer */
-.tool-card-footer {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: auto;
-}
-
-.launch-text {
-  font-weight: 600;
-  color: var(--accent);
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-}
-
-.tool-card.available:hover .launch-text {
-  color: var(--accent-secondary);
-  transform: translateX(4px);
-}
-
-.launch-text.disabled {
-  color: var(--text-secondary);
-  opacity: 0.6;
-}
-
-/* Dashboard Stats */
-.dashboard-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
-  margin-top: 60px;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.stat-item {
-  text-align: center;
-  padding: 32px 20px;
-  background: rgba(11, 15, 20, 0.6);
-  border: 1px solid rgba(124, 210, 255, 0.2);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.stat-item:hover {
-  background: rgba(11, 15, 20, 0.8);
-  border-color: rgba(124, 210, 255, 0.4);
-  transform: translateY(-4px);
-}
-
-.stat-number {
-  font-size: 2.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 8px;
-  line-height: 1;
-}
-
-.stat-label {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
+  /* Tools Dashboard Styles */
   .tools-hero {
-    padding: 60px 0 40px 0;
+    padding: 80px 0 60px 0;
+    background: linear-gradient(135deg, rgba(124, 210, 255, 0.1) 0%, rgba(163, 255, 176, 0.1) 100%);
+    text-align: center;
   }
-  
+
+  .tools-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .tools-description {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Dashboard Layout */
   .tools-dashboard {
-    padding: 40px 0 60px 0;
+    padding: 60px 0 80px 0;
   }
-  
+
   .dashboard-grid {
-    gap: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
   }
-  
-  .tools-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .tool-card {
-    padding: 24px;
-    min-height: auto;
-  }
-  
-  .tool-icon-large {
-    font-size: 2.5rem;
-  }
-  
-  .tool-card-title {
-    font-size: 1.3rem;
-  }
-  
-  .dashboard-stats {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-top: 40px;
-  }
-  
-  .stat-item {
-    padding: 24px 16px;
-  }
-  
-  .stat-number {
-    font-size: 2rem;
-  }
-}
 
-@media (max-width: 480px) {
-  .tools-grid {
-    grid-template-columns: 1fr;
+  .section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 32px;
+    text-align: center;
+    position: relative;
   }
-  
-  .tool-card {
-    padding: 20px;
-  }
-  
-  .feature-tag {
-    font-size: 0.7rem;
-    padding: 3px 8px;
-  }
-}
 
-/* Animations */
-@keyframes slideUp {
-  from {
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    border-radius: 2px;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Tool Cards */
+  .tool-card {
+    background: linear-gradient(145deg, rgba(11, 15, 20, 0.95), rgba(15, 22, 30, 0.95));
+    border: 1px solid rgba(124, 210, 255, 0.2);
+    border-radius: 20px;
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 320px;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(145deg, rgba(124, 210, 255, 0.02) 0%, rgba(163, 255, 176, 0.02) 100%);
     opacity: 0;
-    transform: translateY(30px);
+    transition: opacity 0.4s ease;
   }
-  to {
+
+  .tool-card.available:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(124, 210, 255, 0.6);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      0 0 40px rgba(124, 210, 255, 0.2);
+  }
+
+  .tool-card.available:hover::before {
     opacity: 1;
-    transform: translateY(0);
   }
-}
 
-.tool-card {
-  animation: slideUp 0.6s ease-out forwards;
-}
+  .tool-card.coming-soon {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 
-.tool-card:nth-child(1) { animation-delay: 0.1s; }
-.tool-card:nth-child(2) { animation-delay: 0.2s; }
-.tool-card:nth-child(3) { animation-delay: 0.3s; }
-.tool-card:nth-child(4) { animation-delay: 0.4s; }
-.tool-card:nth-child(5) { animation-delay: 0.5s; }
+  .tool-card.coming-soon:hover {
+    transform: translateY(-2px);
+    border-color: rgba(124, 210, 255, 0.3);
+  }
 
-.stat-item {
-  animation: slideUp 0.6s ease-out forwards;
-  animation-delay: 0.8s;
-  opacity: 0;
-}
+  /* Tool Card Header */
+  .tool-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
 
-.stat-item:nth-child(2) { animation-delay: 0.9s; }
-.stat-item:nth-child(3) { animation-delay: 1s; }
+  .tool-icon-large {
+    font-size: 3rem;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  }
+
+  .tool-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .available-badge {
+    background: linear-gradient(135deg, var(--accent-secondary), rgba(163, 255, 176, 0.8));
+    color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 12px rgba(163, 255, 176, 0.3);
+  }
+
+  .coming-soon-badge {
+    background: rgba(255, 193, 7, 0.2);
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    color: rgba(255, 193, 7, 0.9);
+  }
+
+  /* Tool Card Content */
+  .tool-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tool-card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .tool-card-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+
+  .tool-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .feature-tag {
+    background: rgba(124, 210, 255, 0.1);
+    border: 1px solid rgba(124, 210, 255, 0.3);
+    border-radius: 16px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .feature-tag.disabled {
+    background: rgba(124, 124, 124, 0.1);
+    border-color: rgba(124, 124, 124, 0.3);
+    color: var(--text-secondary);
+    opacity: 0.6;
+  }
+
+  /* Tool Card Footer */
+  .tool-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .launch-text {
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .tool-card.available:hover .launch-text {
+    color: var(--accent-secondary);
+    transform: translateX(4px);
+  }
+
+  .launch-text.disabled {
+    color: var(--text-secondary);
+    opacity: 0.6;
+  }
+
+  /* Dashboard Stats */
+  .dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-top: 60px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 32px 20px;
+    background: rgba(11, 15, 20, 0.6);
+    border: 1px solid rgba(124, 210, 255, 0.2);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .stat-item:hover {
+    background: rgba(11, 15, 20, 0.8);
+    border-color: rgba(124, 210, 255, 0.4);
+    transform: translateY(-4px);
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+
+  .stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .tools-hero {
+      padding: 60px 0 40px 0;
+    }
+
+    .tools-dashboard {
+      padding: 40px 0 60px 0;
+    }
+
+    .dashboard-grid {
+      gap: 40px;
+    }
+
+    .tools-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .tool-card {
+      padding: 24px;
+      min-height: auto;
+    }
+
+    .tool-icon-large {
+      font-size: 2.5rem;
+    }
+
+    .tool-card-title {
+      font-size: 1.3rem;
+    }
+
+    .dashboard-stats {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .stat-item {
+      padding: 24px 16px;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tools-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tool-card {
+      padding: 20px;
+    }
+
+    .feature-tag {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+    }
+  }
+
+  /* Animations */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .tool-card {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+
+  .tool-card:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .tool-card:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .tool-card:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .tool-card:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .tool-card:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+
+  .stat-item {
+    animation: slideUp 0.6s ease-out forwards;
+    animation-delay: 0.8s;
+    opacity: 0;
+  }
+
+  .stat-item:nth-child(2) {
+    animation-delay: 0.9s;
+  }
+  .stat-item:nth-child(3) {
+    animation-delay: 1s;
+  }
 </style>
 
 <script>
@@ -561,13 +592,13 @@ import Base from "../layouts/base.astro";
   document.addEventListener('DOMContentLoaded', () => {
     // Add click analytics for coming soon tools
     const comingSoonCards = document.querySelectorAll('.tool-card.coming-soon');
-    
+
     comingSoonCards.forEach(card => {
-      card.addEventListener('click', (e) => {
+      card.addEventListener('click', e => {
         e.preventDefault();
         const toolName = card.getAttribute('data-tool');
         console.log(`📊 Interest tracked: ${toolName}`);
-        
+
         // Add visual feedback
         card.style.transform = 'scale(0.98)';
         setTimeout(() => {
@@ -575,10 +606,10 @@ import Base from "../layouts/base.astro";
         }, 150);
       });
     });
-    
+
     // Add hover sound effects or visual feedback if needed
     const availableCards = document.querySelectorAll('.tool-card.available');
-    
+
     availableCards.forEach(card => {
       card.addEventListener('mouseenter', () => {
         // Could add subtle sound effect here
@@ -587,4 +618,3 @@ import Base from "../layouts/base.astro";
     });
   });
 </script>
-</Base>

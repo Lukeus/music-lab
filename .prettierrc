@@ -9,6 +9,7 @@
   "arrowParens": "avoid",
   "endOfLine": "lf",
   "htmlWhitespaceSensitivity": "css",
+  "plugins": ["prettier-plugin-astro"],
   "overrides": [
     {
       "files": "*.html",
@@ -21,6 +22,14 @@
       "files": "*.css",
       "options": {
         "tabWidth": 4
+      }
+    },
+    {
+      "files": "*.astro",
+      "options": {
+        "parser": "astro",
+        "printWidth": 120,
+        "tabWidth": 2
       }
     }
   ]

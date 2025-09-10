@@ -3,7 +3,10 @@ import Base from '../../layouts/base.astro';
 import ToolNavigation from '../../components/ToolNavigation.astro';
 ---
 
-<Base title="Chord Finder | Music Tools" description="Interactive chord identification tool. Select notes to discover chords, explore inversions, and find voicings for piano and guitar.">
+<Base
+  title="Chord Finder | Music Tools"
+  description="Interactive chord identification tool. Select notes to discover chords, explore inversions, and find voicings for piano and guitar."
+>
   <div class="tool-page">
     <div class="tool-page-header">
       <div class="tool-header-content">
@@ -12,7 +15,7 @@ import ToolNavigation from '../../components/ToolNavigation.astro';
           <span class="breadcrumb-separator">›</span>
           <span class="breadcrumb-current">Chord Finder</span>
         </div>
-        
+
         <div class="tool-title-section">
           <h1 class="tool-page-title">
             <span class="tool-icon">🎯</span>
@@ -48,7 +51,7 @@ import ToolNavigation from '../../components/ToolNavigation.astro';
             <span class="toggle-arrow">▼</span>
           </button>
         </div>
-        
+
         <div id="help-content" class="help-content" hidden>
           <div class="help-grid">
             <div class="help-card">
@@ -151,14 +154,14 @@ import ToolNavigation from '../../components/ToolNavigation.astro';
 
   <script>
     import { createWebChordFinder } from '../../scripts/chordFinder';
-    
+
     document.addEventListener('DOMContentLoaded', () => {
       // Initialize Chord Finder
       const el = document.getElementById('chord-finder-container');
       let chordFinder = null;
-      
-      if (el) { 
-        chordFinder = createWebChordFinder(el); 
+
+      if (el) {
+        chordFinder = createWebChordFinder(el);
         chordFinder.init();
       }
 
@@ -169,18 +172,18 @@ import ToolNavigation from '../../components/ToolNavigation.astro';
 
       helpToggle?.addEventListener('click', () => {
         const isExpanded = helpToggle.getAttribute('aria-expanded') === 'true';
-        
+
         helpToggle.setAttribute('aria-expanded', (!isExpanded).toString());
         helpContent?.toggleAttribute('hidden');
-        
+
         if (toggleArrow) {
           toggleArrow.textContent = isExpanded ? '▼' : '▲';
         }
-        
+
         if (!isExpanded) {
-          helpToggle.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
+          helpToggle.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
           });
         }
       });
@@ -190,14 +193,14 @@ import ToolNavigation from '../../components/ToolNavigation.astro';
       exampleChords.forEach(chord => {
         chord.addEventListener('click', () => {
           const notes = chord.textContent.match(/[CDEFGAB][#b]?/g) || [];
-          
+
           if (chordFinder && notes.length > 0) {
             chordFinder.clearNotes();
             notes.forEach(note => chordFinder.toggleNote(note));
-            
+
             document.getElementById('chord-finder-container')?.scrollIntoView({
               behavior: 'smooth',
-              block: 'center'
+              block: 'center',
             });
           }
         });
@@ -208,15 +211,15 @@ import ToolNavigation from '../../components/ToolNavigation.astro';
         gtag('event', 'page_view', {
           page_title: 'Chord Finder',
           page_location: window.location.href,
-          content_group1: 'Music Tools'
+          content_group1: 'Music Tools',
         });
       }
     });
   </script>
 
   <!-- Import design system styles -->
-  <link rel="stylesheet" href="/packages/design-system/css/chord-finder.css">
-  
+  <link rel="stylesheet" href="/packages/design-system/css/chord-finder.css" />
+
   <!-- Page-specific styles -->
   <style>
     /* Remove the old styling and use the new design system */
@@ -313,8 +316,12 @@ import ToolNavigation from '../../components/ToolNavigation.astro';
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     .tool-error {

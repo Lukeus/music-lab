@@ -14,22 +14,22 @@ const tools = [
     name: 'Key Friend',
     href: '/tools/key-friend',
     icon: '🗝️',
-    description: 'Chord progressions & songwriting'
+    description: 'Chord progressions & songwriting',
   },
   {
     id: 'scale-explorer',
     name: 'Scale Explorer',
-    href: '/tools/scale-explorer', 
+    href: '/tools/scale-explorer',
     icon: '🎼',
-    description: 'Discover scales & modes'
+    description: 'Discover scales & modes',
   },
   {
     id: 'chord-finder',
     name: 'Chord Finder',
     href: '/tools/chord-finder',
     icon: '🎯',
-    description: 'Identify chords & inversions'
-  }
+    description: 'Identify chords & inversions',
+  },
 ];
 ---
 
@@ -38,21 +38,19 @@ const tools = [
     <h3>Music Tools</h3>
     <a href="/tools" class="back-link">← All Tools</a>
   </div>
-  
+
   <div class="tool-nav-links">
-    {tools.map(tool => (
-      <a 
-        href={tool.href} 
-        class={`tool-nav-link ${tool.id === currentTool ? 'active' : ''}`}
-        data-tool={tool.id}
-      >
-        <span class="tool-nav-icon">{tool.icon}</span>
-        <div class="tool-nav-content">
-          <span class="tool-nav-name">{tool.name}</span>
-          <span class="tool-nav-desc">{tool.description}</span>
-        </div>
-      </a>
-    ))}
+    {
+      tools.map(tool => (
+        <a href={tool.href} class={`tool-nav-link ${tool.id === currentTool ? 'active' : ''}`} data-tool={tool.id}>
+          <span class="tool-nav-icon">{tool.icon}</span>
+          <div class="tool-nav-content">
+            <span class="tool-nav-name">{tool.name}</span>
+            <span class="tool-nav-desc">{tool.description}</span>
+          </div>
+        </a>
+      ))
+    }
   </div>
 </nav>
 
@@ -156,17 +154,17 @@ const tools = [
     .tool-navigation {
       padding: 1rem;
     }
-    
+
     .tool-nav-links {
       flex-direction: column;
       gap: 0.5rem;
     }
-    
+
     .tool-nav-link {
       min-width: unset;
       width: 100%;
     }
-    
+
     .tool-nav-header {
       flex-direction: column;
       align-items: flex-start;
@@ -178,11 +176,11 @@ const tools = [
     .tool-nav-content {
       gap: 0.1rem;
     }
-    
+
     .tool-nav-name {
       font-size: 0.85rem;
     }
-    
+
     .tool-nav-desc {
       font-size: 0.7rem;
     }
