@@ -38,18 +38,10 @@ jobs:
           echo "📦 Running npm install..."
           npm install --no-audit --no-fund --include=optional
           
-          # Verify and potentially fix Rollup binary installation
-          echo "🔍 Verifying Rollup installation..."
-          if ! npm list rollup --depth=0 >/dev/null 2>&1; then
-            echo "⚠️ Rollup not found, attempting to install directly..."
-            npm install rollup --save-dev --no-optional
-          fi
-          
-          # Check for platform-specific rollup binaries and install if missing
-          if [ ! -d "node_modules/@rollup" ]; then
-            echo "🔧 Installing Rollup platform binaries..."
-            npm install @rollup/rollup-linux-x64-gnu --save-dev --optional
-          fi
+          # Force reinstall Rollup with proper platform binaries
+          echo "🔧 Installing Rollup with platform binaries..."
+          npm install @rollup/rollup-linux-x64-gnu --force --save-optional
+          npm rebuild rollup
           
           echo "✅ Dependencies installed"
       
