@@ -16,6 +16,19 @@
     </image:image>
   </url>
   
+  <!-- About Page -->
+  <url>
+    <loc>https://lukeus.app/about</loc>
+    <lastmod>2025-01-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://lukeus.app/assets/images/lukeus-hero-about.png</image:loc>
+      <image:title>About Lukeus - Artist and Creator</image:title>
+      <image:caption>Learn about the artist behind the music and the creative process that drives experimental musical exploration</image:caption>
+    </image:image>
+  </url>
+  
   <!-- Music Tools Dashboard -->
   <url>
     <loc>https://lukeus.app/tools</loc>

@@ -1,9 +1,13 @@
 ---
 // src/layouts/Base.astro
+// Import design system CSS (sourced from packages/design-system)
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/layout.css';
 import '../styles/components.css';
+import '../styles/utilities.css';
+
+// Import feature-specific CSS
 import '../styles/drumMachine.css';
 import '../styles/journal.css';
 import '../styles/mini-player.css';
@@ -12,7 +16,10 @@ import '../styles/keyFriend.css';
 import '../styles/scaleExplorer.css';
 import '../styles/chordFinder.css';
 import '../styles/toolPages.css';
-import '../styles/utilities.css';
+import '../styles/aboutImageEnhancements.css';
+
+// Import any website-specific overrides
+import '../styles/website-overrides.css';
 
 interface Props {
   title?: string;

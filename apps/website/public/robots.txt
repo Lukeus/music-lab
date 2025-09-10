@@ -102,8 +102,9 @@ Allow: /tools/key-friend
 Allow: /tools/scale-explorer
 Allow: /tools/chord-finder
 
-# Journal/Blog content
+# About and journal/blog content
 User-agent: *
+Allow: /about
 Allow: /journal/
 
 # Disallow admin or private areas (if any exist in future)

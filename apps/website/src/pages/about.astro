@@ -9,7 +9,13 @@ import content from '../data/content.json';
 <Base
   title="About Lukeus | Music Producer & Songwriter"
   description="Learn about Lukeus, the indie artist creating experimental music from Portland, OR. From acoustic storytelling to electronic transformation, discover the journey behind the music."
-  keywords="Lukeus, indie artist, music producer, songwriter, Portland music, experimental music, acoustic, electronic"
+  keywords="Lukeus, indie artist, music producer, songwriter, Portland music, experimental music, acoustic, electronic, music philosophy, creative process, Delancey Street, Logic Pro, UAD plugins"
+  ogTitle="About Lukeus - Meet the Musician Behind the Magic"
+  ogDescription="Discover the artist who transforms dreams into sound. From acoustic storytelling to electronic innovation, explore the philosophy and process behind experimental music from Portland, Oregon."
+  ogImage="https://lukeus.app/assets/images/lukeus-hero-about.png"
+  ogType="profile"
+  ogUrl="https://lukeus.app/about"
+  canonicalUrl="https://lukeus.app/about"
 >
   <ParallaxBackground />
   <CinematicBackground />
@@ -64,6 +70,9 @@ import content from '../data/content.json';
               <div class="decoration decoration-2"></div>
               <div class="decoration decoration-3"></div>
             </div>
+            <!-- Enhanced Effects Elements -->
+            <div class="ambient-light"></div>
+            <div class="magnetic-lines"></div>
           </div>
         </div>
 
@@ -308,9 +317,104 @@ import content from '../data/content.json';
           aria-label="Open Lukeus on Instagram">Instagram</a
         >
       </div>
+
+      <!-- Share this page section -->
+      <div class="page-share">
+        <!-- ShareLinks component will populate this container -->
+      </div>
+
       <p>&copy; 2025 Lukeus. All dreams are works in progress.</p>
     </div>
   </footer>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "@id": "https://lukeus.app/about#aboutpage",
+      "url": "https://lukeus.app/about",
+      "name": "About Lukeus - Music Producer & Songwriter",
+      "description": "Learn about Lukeus, the indie artist creating experimental music from Portland, OR. From acoustic storytelling to electronic transformation, discover the journey behind the music.",
+      "mainEntity": {
+        "@type": "Person",
+        "@id": "https://lukeus.app/about#person",
+        "name": "Lukeus",
+        "alternateName": "Luke Adams",
+        "description": "Indie artist, music producer, and creative experimenter based in Portland, Oregon. Creating everything from acoustic storytelling to electronic transformations.",
+        "url": "https://lukeus.app/about",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://lukeus.app/assets/images/lukeus-hero-about.png",
+          "width": 800,
+          "height": 600,
+          "caption": "Lukeus - Music Producer and Songwriter surrounded by musical notes"
+        },
+        "sameAs": [
+          "https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl",
+          "https://soundcloud.com/lukeusmusic",
+          "https://www.instagram.com/musiclukeus/",
+          "https://lukeus.com/",
+          "https://lukeus.art/"
+        ],
+        "jobTitle": ["Music Producer", "Singer-Songwriter", "Electronic Music Artist", "Sound Designer"],
+        "genre": ["Electronic", "Acoustic", "Experimental", "Indie", "EDM"],
+        "homeLocation": {
+          "@type": "Place",
+          "name": "Portland, Oregon",
+          "addressCountry": "US"
+        },
+        "knowsAbout": [
+          "Music Production",
+          "Sound Design",
+          "Electronic Music",
+          "Acoustic Guitar",
+          "Logic Pro",
+          "UAD Plugins",
+          "Freestyle Vocals",
+          "Creative Process",
+          "Music Theory",
+          "Songwriting"
+        ],
+        "hasOccupation": {
+          "@type": "Occupation",
+          "name": "Music Producer",
+          "occupationalCategory": "Arts, Design, Entertainment, Sports, and Media Occupations",
+          "skills": "Music Production, Sound Engineering, Songwriting, Performance, Electronic Music, Acoustic Music"
+        }
+      },
+      "about": {
+        "@type": "Thing",
+        "name": "Music Production and Creative Process",
+        "description": "Experimental music creation process from acoustic storytelling to electronic transformation"
+      },
+      "mentions": [
+        {
+          "@type": "MusicGroup",
+          "name": "Lukeus",
+          "sameAs": "https://open.spotify.com/artist/3NckmpFR1r92wBscpnbVXl"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Logic Pro"
+        },
+        {
+          "@type": "Place",
+          "name": "Portland, Oregon"
+        },
+        {
+          "@type": "Organization",
+          "name": "Delancey Street"
+        }
+      ],
+      "inLanguage": "en-US",
+      "dateModified": "2025-01-20",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Lukeus Music Lab",
+        "url": "https://lukeus.app/"
+      }
+    }
+  </script>
 </Base>
 
 <style>
@@ -465,7 +569,7 @@ import content from '../data/content.json';
 
   .hero-image-container {
     position: relative;
-    max-width: 450px;
+    max-width: 650px;
     margin: 0 auto;
   }
 
@@ -1135,3 +1239,58 @@ import content from '../data/content.json';
     }
   }
 </style>
+
+<script>
+  // Import and initialize ShareLinks component
+  import { createShareLinks } from '@lukeus/shared-components';
+
+  // Initialize when DOM is ready
+  function initPageComponents() {
+    // Initialize ShareLinks
+    const shareLinks = createShareLinks({
+      containerSelector: '.page-share',
+      title: 'About Lukeus | Music Producer & Songwriter',
+      description:
+        'Learn about Lukeus, the indie artist creating experimental music from Portland, OR. From acoustic storytelling to electronic transformation, discover the journey behind the music.',
+    });
+    shareLinks.init();
+
+    // Dynamically import enhanced image effects to ensure proper TypeScript compilation
+    import('../scripts/aboutImageEnhancer.js')
+      .then(({ createAboutImageEnhancer }) => {
+        // Optimize settings based on screen size and device capabilities
+        const isMobile = window.innerWidth <= 768;
+        const hasReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const imageEnhancer = createAboutImageEnhancer({
+          parallaxStrength: isMobile ? 0.02 : 0.03,
+          glowIntensity: isMobile ? 0.6 : 0.8,
+          particleOptions: {
+            count: isMobile ? 8 : 15, // More particles for larger image on desktop
+            symbols: ['♪', '♫', '♬', '♩', '♭', '♯', '𝅘𝅥𝅮', '𝅘𝅥', '♮', '𝅘𝅥', '𝅘𝅥𝅮'],
+            speedRange: [0.1, 0.6],
+            opacityRange: [0.1, 0.25],
+            sizeRange: [1.4, 2.2],
+          },
+          enableMouseTracking: !isMobile && !hasReducedMotion,
+          enable3DEffect: !isMobile && !hasReducedMotion,
+          enableParticles: !hasReducedMotion,
+        });
+
+        if (imageEnhancer.init()) {
+          console.log('✨ About page image enhancements loaded successfully');
+        } else {
+          console.warn('⚠️ About page image enhancements failed to initialize');
+        }
+      })
+      .catch(error => {
+        console.error('Failed to load about image enhancements:', error);
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPageComponents);
+  } else {
+    initPageComponents();
+  }
+</script>

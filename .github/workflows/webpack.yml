@@ -1,35 +1,16 @@
-# name: Static Site - Serve Public Folder
-
-# on:
-#   push:
-#     branches: [ "main" ]
-#   pull_request:
-#     branches: [ "main" ]
-
-# jobs:
-#   preview:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: 20.x
-
-#       - name: Install dependencies
-#         run: npm install
-
-#       - name: Serve public folder for CI (optional)
-#         run: npx serve public --listen 5000 &
-#         # Only for preview/test. For deployment, skip or use a deployment action.
-
-#       - name: Lint and format
-#         run: |
-#           npm run lint
-#           npm run format
-
-#       # Remove Webpack step, as you don't use it!
-
-#       # Optionally, add deployment step if not using GitHub Pages automatic deploy
-#       # See https://github.com/peaceiris/actions-gh-pages for deploying manually
+# Legacy Webpack Workflow - DEPRECATED
+# This file has been replaced by the new Firebase deployment workflows:
+#   - deploy.yml (Production deployments to Firebase)
+#   - preview.yml (Preview deployments for PRs)
+#   - security.yml (Security scanning and dependency checks)
+#
+# The new workflows provide:
+# ✅ Firebase Hosting deployment
+# ✅ Monorepo support with proper TypeScript compilation
+# ✅ Preview deployments for pull requests
+# ✅ Security and dependency scanning
+# ✅ Comprehensive build and test pipeline
+#
+# This file can be safely deleted once the new workflows are confirmed working.
+# 
+# Migration completed: January 2025

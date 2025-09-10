@@ -177,6 +177,11 @@ import Base from '../../layouts/base.astro';
       <div id="key-friend-container" class="tool-container">
         <!-- Key Friend will render here -->
       </div>
+
+      <!-- Share this tool section -->
+      <div class="page-share">
+        <!-- ShareLinks component will populate this container -->
+      </div>
     </div>
   </section>
 
@@ -541,6 +546,17 @@ import Base from '../../layouts/base.astro';
           }
         });
       }, 1500); // Wait for Key Friend to fully render
+
+      // Initialize ShareLinks
+      import('@lukeus/shared-components').then(({ createShareLinks }) => {
+        const shareLinks = createShareLinks({
+          containerSelector: '.page-share',
+          title: 'Key Friend - Interactive Chord Progression Builder | Lukeus Music Tools',
+          description:
+            'Discover chord progressions and relationships with Key Friend, a free interactive music theory tool. Perfect for songwriters and music students.',
+        });
+        shareLinks.init();
+      });
     });
   </script>
 </Base>

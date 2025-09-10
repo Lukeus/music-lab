@@ -1,0 +1,27 @@
+{
+  "name": "@lukeus/shared-components",
+  "version": "1.0.0",
+  "description": "Shared UI components for Lukeus Music Lab",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rimraf dist",
+    "type-check": "tsc --noEmit",
+    "dev": "tsc --build --watch"
+  },
+  "keywords": ["shared-components", "ui", "typescript", "astro"],
+  "author": "Lukeus",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "rimraf": "^5.0.0"
+  },
+  "dependencies": {
+    "@lukeus/shared-types": "file:../shared-types"
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
+}

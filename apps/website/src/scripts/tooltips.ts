@@ -207,10 +207,8 @@ class TooltipManager {
         }
 
         this.showTimeout = window.setTimeout(() => {
-            // Hide any current tooltip
-            if (this.currentTooltip && this.currentTooltip !== tooltip) {
-                this.hideTooltip(this.currentTooltip);
-            }
+            // IMPORTANT: Hide ALL existing tooltips first to prevent overlap
+            this.hideAllTooltips();
 
             // Position tooltip first
             this.positionTooltip(trigger, tooltip);
@@ -253,6 +251,38 @@ class TooltipManager {
                 }
             }, 300);
         }, 100);
+    }
+
+    /**
+     * Hide all visible tooltips to prevent overlap
+     */
+    private hideAllTooltips(): void {
+        // Clear any existing timeouts
+        if (this.showTimeout) {
+            clearTimeout(this.showTimeout);
+            this.showTimeout = null;
+        }
+        if (this.hideTimeout) {
+            clearTimeout(this.hideTimeout);
+            this.hideTimeout = null;
+        }
+
+        // Hide current tooltip if exists
+        if (this.currentTooltip) {
+            this.currentTooltip.classList.remove('show');
+            this.currentTooltip.style.visibility = 'hidden';
+            this.currentTooltip.style.opacity = '0';
+            this.currentTooltip = null;
+        }
+
+        // Hide all tooltips in the DOM as a safety measure
+        document.querySelectorAll('.tooltip').forEach(tooltip => {
+            if (tooltip instanceof HTMLElement) {
+                tooltip.classList.remove('show');
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.opacity = '0';
+            }
+        });
     }
 
     /**
@@ -432,24 +462,20 @@ class TooltipManager {
         window.addEventListener(
             'scroll',
             () => {
-                if (this.currentTooltip) {
-                    this.hideTooltip(this.currentTooltip);
-                }
+                this.hideAllTooltips();
             },
             { passive: true }
         );
 
         // Hide tooltips on window resize
         window.addEventListener('resize', () => {
-            if (this.currentTooltip) {
-                this.hideTooltip(this.currentTooltip);
-            }
+            this.hideAllTooltips();
         });
 
         // Hide tooltips on escape key
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape' && this.currentTooltip) {
-                this.hideTooltip(this.currentTooltip);
+            if (e.key === 'Escape') {
+                this.hideAllTooltips();
             }
         });
     }
@@ -466,9 +492,10 @@ class TooltipManager {
     /**
      * Play subtle audio feedback for tooltip interactions
      */
-    private playTooltipSound(_type: string): void {
+    private playTooltipSound(type: string): void {
         // Audio feedback is disabled for tooltips to prevent beeping sounds
         // Visual feedback is sufficient for tooltip interactions
+        console.debug(`Tooltip sound disabled for type: ${type}`);
         return;
     }
 
