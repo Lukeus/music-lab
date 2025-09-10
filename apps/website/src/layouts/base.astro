@@ -31,7 +31,7 @@ interface Props {
 
 const {
   title = 'Lukeus Music Lab',
-  description = 'Step into Lukeus\'s creative laboratory where experimental music, sound design, and musical storytelling come to life. From acoustic sessions to electronic transformations.',
+  description = "Step into Lukeus's creative laboratory where experimental music, sound design, and musical storytelling come to life. From acoustic sessions to electronic transformations.",
   ogTitle,
   ogDescription,
   ogImage = 'https://lukeus.app/assets/images/lukeus-avatar.png',
@@ -41,7 +41,7 @@ const {
   twitterDescription,
   twitterImage,
   canonicalUrl = 'https://lukeus.app/',
-  keywords = 'lukeus, music lab, experimental music, electronic music, acoustic sessions, creative process, music producer, Portland musician'
+  keywords = 'lukeus, music lab, experimental music, electronic music, acoustic sessions, creative process, music producer, Portland musician',
 } = Astro.props;
 ---
 
@@ -55,16 +55,16 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
-    
+
     <!-- Canonical and site relationships -->
     <link rel="canonical" href={canonicalUrl} />
     <link rel="alternate" type="application/rss+xml" title="Lukeus Music Lab Journal" href="/feed.xml" />
-    
+
     <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/lukeus-avatar.png" />
     <link rel="manifest" href="/manifest.json" />
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -79,14 +79,14 @@ const {
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={ogUrl} />
     <meta property="og:site_name" content="Lukeus Music Lab" />
-    
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={twitterTitle || ogTitle || title} />
     <meta name="twitter:description" content={twitterDescription || ogDescription || description} />
     <meta name="twitter:image" content={twitterImage || ogImage} />
     <meta name="twitter:creator" content="@lukeus" />
-    
+
     <!-- Theme and app -->
     <meta name="theme-color" content="#0B0F14" />
     <meta name="color-scheme" content="dark light" />
@@ -101,10 +101,7 @@ const {
           "name": "Lukeus Music Lab",
           "alternateName": ["Because Music Matters", "Music Lab", "Lukeus.app", "Lukeus.art"],
           "url": "https://lukeus.app/",
-          "sameAs": [
-            "https://lukeus.art/",
-            "https://lukeus.com/"
-          ],
+          "sameAs": ["https://lukeus.art/", "https://lukeus.com/"],
           "description": "Interactive music laboratory and creative workspace where experimental music, sound design, and musical storytelling come to life. From acoustic sessions to electronic transformations.",
           "keywords": "experimental music, electronic music, acoustic sessions, music production, sound design, creative process, interactive music tools, Portland musician, indie artist",
           "inLanguage": "en-US",
@@ -214,10 +211,7 @@ const {
               "target": {
                 "@type": "EntryPoint",
                 "urlTemplate": "https://lukeus.app/#projects",
-                "actionPlatform": [
-                  "https://schema.org/DesktopWebPlatform",
-                  "https://schema.org/MobileWebPlatform"
-                ]
+                "actionPlatform": ["https://schema.org/DesktopWebPlatform", "https://schema.org/MobileWebPlatform"]
               },
               "result": {
                 "@type": "MusicRecording",
@@ -229,10 +223,7 @@ const {
               "target": {
                 "@type": "EntryPoint",
                 "urlTemplate": "https://lukeus.app/tools",
-                "actionPlatform": [
-                  "https://schema.org/DesktopWebPlatform",
-                  "https://schema.org/MobileWebPlatform"
-                ]
+                "actionPlatform": ["https://schema.org/DesktopWebPlatform", "https://schema.org/MobileWebPlatform"]
               },
               "instrument": "Interactive Music Tools"
             },
@@ -440,7 +431,7 @@ const {
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <slot />
-    
+
     <script>
       import { bindPlayButtons, bindMiniPlayer, bindWaveform } from '../scripts/audio';
       import { bindJournalFeatures } from '../scripts/journal';
@@ -469,28 +460,28 @@ const {
         const avatar = document.getElementById('hero-avatar');
         const drumContainer = document.getElementById('drum-machine-container');
         const avatarContainer = document.querySelector('.avatar-container');
-        
+
         if (!avatar || !drumContainer) return;
-        
+
         // Ensure drum machine starts hidden
         drumContainer.classList.remove('show');
-        
+
         // Force initial hidden styles
         drumContainer.style.opacity = '0';
         drumContainer.style.visibility = 'hidden';
         drumContainer.style.maxHeight = '0';
         drumContainer.style.transform = 'translateY(20px)';
-        
+
         let drumMachineInitialized = false;
         let isVisible = false;
         let isToggling = false; // Prevent rapid clicks
-        
+
         // Add click cursor to avatar
         avatar.style.cursor = 'pointer';
         if (avatarContainer) {
           avatarContainer.style.cursor = 'pointer';
         }
-        
+
         // Add click event to avatar
         const toggleDrumMachine = async () => {
           // Prevent rapid clicks
@@ -499,9 +490,9 @@ const {
             return;
           }
           isToggling = true;
-          
+
           console.log('🥁 Avatar clicked! Initializing drum machine...');
-          
+
           if (!drumMachineInitialized) {
             // Initialize drum machine on first click
             try {
@@ -513,52 +504,52 @@ const {
               return;
             }
           }
-          
+
           // Toggle visibility
           isVisible = !isVisible;
           console.log(`🎵 Toggling drum machine visibility: ${isVisible ? 'SHOW' : 'HIDE'}`);
-          
+
           if (isVisible) {
             drumContainer.classList.add('show');
             console.log('✅ Drum machine shown');
-            
+
             // Force styles with inline CSS as fallback
             drumContainer.style.opacity = '1';
             drumContainer.style.visibility = 'visible';
             drumContainer.style.maxHeight = '800px';
             drumContainer.style.transform = 'translateY(0)';
-            
+
             // Smooth scroll to drum machine after animation
             setTimeout(() => {
-              drumContainer.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'center' 
+              drumContainer.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
               });
             }, 300);
           } else {
             drumContainer.classList.remove('show');
             console.log('✅ Drum machine hidden');
-            
+
             // Force hidden styles with inline CSS as fallback
             drumContainer.style.opacity = '0';
             drumContainer.style.visibility = 'hidden';
             drumContainer.style.maxHeight = '0';
             drumContainer.style.transform = 'translateY(20px)';
-            
+
             // Stop any playing drums
             if (window.drumMachine && window.drumMachine.stop) {
               window.drumMachine.stop();
             }
           }
-          
+
           // Reset toggle lock after animation completes
           setTimeout(() => {
             isToggling = false;
           }, 600); // Match CSS transition duration
         };
-        
+
         // Only bind to avatar image to prevent double-firing
-        avatar.addEventListener('click', (e) => {
+        avatar.addEventListener('click', e => {
           e.preventDefault();
           e.stopPropagation();
           toggleDrumMachine();

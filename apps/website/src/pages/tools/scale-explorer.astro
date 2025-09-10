@@ -1,238 +1,244 @@
 ---
-import Base from "../../layouts/base.astro";
+import Base from '../../layouts/base.astro';
 ---
 
-<Base 
+<Base
   title="Scale Explorer | Music Tools"
   description="Interactive scale discovery with keyboard, fretboard, and circle visualizations."
   keywords="scale explorer, modes, pentatonic, blues scales, music theory"
 >
-<header>
-  <div class="container">
-    <div class="header-content">
-      <a href="/tools" class="nav-link">← Back to Tools</a>
-      <a href="/" class="logo" id="logo-text">Music Lab</a>
-    </div>
-  </div>
-</header>
-
-<section class="tool-hero">
-  <div class="container">
-    <div class="tool-hero-content">
-      <h1 class="tool-title">Scale Explorer</h1>
-      <p class="tool-description">
-        Discover scales, modes, and their musical relationships
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="tool-runtime">
-  <div class="container">
-    <!-- Help Button - Fixed positioned -->
-    <button id="help-toggle" class="floating-help-btn" aria-expanded="false">
-      <span class="help-icon">❓</span>
-      <span class="help-text">Help</span>
-    </button>
-    
-    <div id="scale-explorer-container" class="tool-container">
-      <!-- Scale Explorer will render here -->
-    </div>
-  </div>
-</section>
-
-<!-- Help Panel -->
-<div id="help-panel" class="help-panel">
-  <div class="help-panel-header">
-    <h3>🎼 How to Use Scale Explorer</h3>
-    <button id="help-close" class="help-close-btn" aria-label="Close help">
-      <span>×</span>
-    </button>
-  </div>
-  
-  <div class="help-panel-content">
-    <div class="help-section-item">
-      <h4>🎵 Choose Your Scale</h4>
-      <p>Start by selecting your scale parameters:</p>
-      <ul>
-        <li><strong>Root Note:</strong> Pick the starting note (C, D, E, etc.)</li>
-        <li><strong>Category:</strong> Filter by scale type (modes, pentatonic, blues, etc.)</li>
-        <li><strong>Scale Type:</strong> Choose the specific scale pattern</li>
-      </ul>
-    </div>
-
-    <div class="help-section-item">
-      <h4>👀 Visual Modes</h4>
-      <p>Explore scales using different visualizations:</p>
-      <ul>
-        <li><strong>Keyboard:</strong> See scale notes on a piano keyboard</li>
-        <li><strong>Fretboard:</strong> Visualize scales on a guitar fretboard</li>
-        <li><strong>Circle:</strong> View relationships in the circle of fifths</li>
-      </ul>
-    </div>
-
-    <div class="help-section-item">
-      <h4>🔍 Scale Finder</h4>
-      <p>Find scales containing specific notes:</p>
-      <ul>
-        <li>Click note buttons at the bottom to select them</li>
-        <li>Scale suggestions will appear automatically</li>
-        <li>Click any suggestion to explore that scale</li>
-      </ul>
-    </div>
-
-    <div class="help-section-item">
-      <h4>💡 Popular Scales</h4>
-      <div class="example-progressions">
-        <div class="example-progression">
-          <strong>C Major</strong>
-          C - D - E - F - G - A - B
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="nav-links">
+          <a href="/" class="nav-link">🏠 Home</a>
+          <a href="/about" class="nav-link">👨‍🎤 About</a>
+          <a href="/tools" class="nav-link">← Tools</a>
+          <a href="/journal" class="nav-link">📝 Journal</a>
         </div>
-        <div class="example-progression">
-          <strong>A Minor Pentatonic</strong>
-          A - C - D - E - G
-        </div>
-        <div class="example-progression">
-          <strong>E Dorian</strong>
-          E - F# - G - A - B - C# - D
-        </div>
-        <div class="example-progression">
-          <strong>Blues Scale</strong>
-          C - Eb - F - Gb - G - Bb
+        <a href="/" class="logo" id="logo-text">Music Lab</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="tool-hero">
+    <div class="container">
+      <div class="tool-hero-content">
+        <h1 class="tool-title">Scale Explorer</h1>
+        <p class="tool-description">Discover scales, modes, and their musical relationships</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-runtime">
+    <div class="container">
+      <!-- Help Button - Fixed positioned -->
+      <button id="help-toggle" class="floating-help-btn" aria-expanded="false">
+        <span class="help-icon">❓</span>
+        <span class="help-text">Help</span>
+      </button>
+
+      <div id="scale-explorer-container" class="tool-container">
+        <!-- Scale Explorer will render here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Help Panel -->
+  <div id="help-panel" class="help-panel">
+    <div class="help-panel-header">
+      <h3>🎼 How to Use Scale Explorer</h3>
+      <button id="help-close" class="help-close-btn" aria-label="Close help">
+        <span>×</span>
+      </button>
+    </div>
+
+    <div class="help-panel-content">
+      <div class="help-section-item">
+        <h4>🎵 Choose Your Scale</h4>
+        <p>Start by selecting your scale parameters:</p>
+        <ul>
+          <li><strong>Root Note:</strong> Pick the starting note (C, D, E, etc.)</li>
+          <li><strong>Category:</strong> Filter by scale type (modes, pentatonic, blues, etc.)</li>
+          <li><strong>Scale Type:</strong> Choose the specific scale pattern</li>
+        </ul>
+      </div>
+
+      <div class="help-section-item">
+        <h4>👀 Visual Modes</h4>
+        <p>Explore scales using different visualizations:</p>
+        <ul>
+          <li><strong>Keyboard:</strong> See scale notes on a piano keyboard</li>
+          <li><strong>Fretboard:</strong> Visualize scales on a guitar fretboard</li>
+          <li><strong>Circle:</strong> View relationships in the circle of fifths</li>
+        </ul>
+      </div>
+
+      <div class="help-section-item">
+        <h4>🔍 Scale Finder</h4>
+        <p>Find scales containing specific notes:</p>
+        <ul>
+          <li>Click note buttons at the bottom to select them</li>
+          <li>Scale suggestions will appear automatically</li>
+          <li>Click any suggestion to explore that scale</li>
+        </ul>
+      </div>
+
+      <div class="help-section-item">
+        <h4>💡 Popular Scales</h4>
+        <div class="example-progressions">
+          <div class="example-progression">
+            <strong>C Major</strong>
+            C - D - E - F - G - A - B
+          </div>
+          <div class="example-progression">
+            <strong>A Minor Pentatonic</strong>
+            A - C - D - E - G
+          </div>
+          <div class="example-progression">
+            <strong>E Dorian</strong>
+            E - F# - G - A - B - C# - D
+          </div>
+          <div class="example-progression">
+            <strong>Blues Scale</strong>
+            C - Eb - F - Gb - G - Bb
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Help Panel Overlay -->
-<div id="help-overlay" class="help-overlay"></div>
+  <!-- Help Panel Overlay -->
+  <div id="help-overlay" class="help-overlay"></div>
 
-<style>
-.tool-hero {
-  padding: 60px 0 40px 0;
-  text-align: center;
-}
-.tool-title {
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.tool-description {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-}
-.tool-runtime { padding: 20px 0 80px 0; }
-</style>
-
-<script>
-import { createWebScaleExplorer } from '../../scripts/scaleExplorer';
-  import { addTooltip, MusicTooltips } from '../../scripts/tooltips';
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Scale Explorer
-    const el = document.getElementById('scale-explorer-container');
-    if (el) { 
-      const app = createWebScaleExplorer(el); 
-      app.init(); 
+  <style>
+    .tool-hero {
+      padding: 60px 0 40px 0;
+      text-align: center;
     }
-    
-    // Help panel functionality
-    const helpToggle = document.getElementById('help-toggle');
-    const helpPanel = document.getElementById('help-panel');
-    const helpOverlay = document.getElementById('help-overlay');
-    const helpClose = document.getElementById('help-close');
-
-    function openHelpPanel() {
-      helpPanel?.classList.add('active');
-      helpOverlay?.classList.add('active');
-      helpToggle?.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
+    .tool-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-
-    function closeHelpPanel() {
-      helpPanel?.classList.remove('active');
-      helpOverlay?.classList.remove('active');
-      helpToggle?.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+    .tool-description {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
     }
+    .tool-runtime {
+      padding: 20px 0 80px 0;
+    }
+  </style>
 
-    helpToggle?.addEventListener('click', openHelpPanel);
-    helpClose?.addEventListener('click', closeHelpPanel);
-    helpOverlay?.addEventListener('click', closeHelpPanel);
-    
-    // Close on Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && helpPanel?.classList.contains('active')) {
-        closeHelpPanel();
+  <script>
+    import { createWebScaleExplorer } from '../../scripts/scaleExplorer';
+    import { addTooltip, MusicTooltips } from '../../scripts/tooltips';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Scale Explorer
+      const el = document.getElementById('scale-explorer-container');
+      if (el) {
+        const app = createWebScaleExplorer(el);
+        app.init();
       }
-    });
-    
-    // Add enhanced tooltips for Scale Explorer
-    const toolContainer = document.getElementById('scale-explorer-container');
-    if (toolContainer) {
-      addTooltip(toolContainer, {
-        content: 'TITLE:Scale Explorer\nDESC:Choose a root note and scale type to explore patterns and visualizations\nKEY:Click scale names and use keyboard',
-        type: 'scale',
-        position: 'top',
-        multiLine: true
-      });
-    }
-    
-    // Add tooltips to visualization mode buttons (when they're created by the tool)
-    setTimeout(() => {
-      const modeButtons = document.querySelectorAll('.mode-btn, .visualization-mode');
-      modeButtons.forEach(btn => {
-        const mode = btn.textContent?.toLowerCase() || '';
-        let description = '';
-        
-        if (mode.includes('keyboard')) {
-          description = 'Piano keyboard visualization showing scale notes';
-        } else if (mode.includes('fretboard')) {
-          description = 'Guitar fretboard showing scale positions';
-        } else if (mode.includes('circle')) {
-          description = 'Circle of fifths showing harmonic relationships';
-        }
-        
-        if (description) {
-          addTooltip(btn as HTMLElement, {
-            content: `TITLE:${btn.textContent}\nDESC:${description}`,
-            type: 'scale',
-            position: 'bottom'
-          });
+
+      // Help panel functionality
+      const helpToggle = document.getElementById('help-toggle');
+      const helpPanel = document.getElementById('help-panel');
+      const helpOverlay = document.getElementById('help-overlay');
+      const helpClose = document.getElementById('help-close');
+
+      function openHelpPanel() {
+        helpPanel?.classList.add('active');
+        helpOverlay?.classList.add('active');
+        helpToggle?.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeHelpPanel() {
+        helpPanel?.classList.remove('active');
+        helpOverlay?.classList.remove('active');
+        helpToggle?.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      helpToggle?.addEventListener('click', openHelpPanel);
+      helpClose?.addEventListener('click', closeHelpPanel);
+      helpOverlay?.addEventListener('click', closeHelpPanel);
+
+      // Close on Escape key
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && helpPanel?.classList.contains('active')) {
+          closeHelpPanel();
         }
       });
-      
-      // Add tooltips to scale type buttons
-      const scaleButtons = document.querySelectorAll('.scale-btn, .scale-type');
-      scaleButtons.forEach(btn => {
-        const scaleName = btn.textContent?.trim() || '';
-        const scaleDescriptions: Record<string, string> = {
-          'Major': 'Happy, bright sound - do re mi fa sol la ti do',
-          'Natural Minor': 'Sad, dark sound - relative to major scale',
-          'Harmonic Minor': 'Exotic sound with raised 7th degree',
-          'Melodic Minor': 'Jazz favorite with raised 6th and 7th ascending',
-          'Dorian': 'Minor with natural 6th - jazzy and sophisticated',
-          'Phrygian': 'Dark, Spanish/Middle Eastern flavor',
-          'Lydian': 'Bright, dreamy sound with raised 4th',
-          'Mixolydian': 'Dominant, bluesy feel with flat 7th',
-          'Pentatonic Major': 'Five-note scale - universal and catchy',
-          'Pentatonic Minor': 'Blues and rock foundation scale',
-          'Blues': 'Classic blues scale with blue notes',
-        };
-        
-        const description = scaleDescriptions[scaleName] || 'Musical scale pattern';
-        
-        addTooltip(btn as HTMLElement, {
-          content: MusicTooltips.scale(scaleName, [], description),
+
+      // Add enhanced tooltips for Scale Explorer
+      const toolContainer = document.getElementById('scale-explorer-container');
+      if (toolContainer) {
+        addTooltip(toolContainer, {
+          content:
+            'TITLE:Scale Explorer\nDESC:Choose a root note and scale type to explore patterns and visualizations\nKEY:Click scale names and use keyboard',
           type: 'scale',
-          position: 'top'
+          position: 'top',
+          multiLine: true,
         });
-      });
-    }, 1000); // Wait for tool to render
-  });
-</script>
+      }
+
+      // Add tooltips to visualization mode buttons (when they're created by the tool)
+      setTimeout(() => {
+        const modeButtons = document.querySelectorAll('.mode-btn, .visualization-mode');
+        modeButtons.forEach(btn => {
+          const mode = btn.textContent?.toLowerCase() || '';
+          let description = '';
+
+          if (mode.includes('keyboard')) {
+            description = 'Piano keyboard visualization showing scale notes';
+          } else if (mode.includes('fretboard')) {
+            description = 'Guitar fretboard showing scale positions';
+          } else if (mode.includes('circle')) {
+            description = 'Circle of fifths showing harmonic relationships';
+          }
+
+          if (description) {
+            addTooltip(btn as HTMLElement, {
+              content: `TITLE:${btn.textContent}\nDESC:${description}`,
+              type: 'scale',
+              position: 'bottom',
+            });
+          }
+        });
+
+        // Add tooltips to scale type buttons
+        const scaleButtons = document.querySelectorAll('.scale-btn, .scale-type');
+        scaleButtons.forEach(btn => {
+          const scaleName = btn.textContent?.trim() || '';
+          const scaleDescriptions: Record<string, string> = {
+            Major: 'Happy, bright sound - do re mi fa sol la ti do',
+            'Natural Minor': 'Sad, dark sound - relative to major scale',
+            'Harmonic Minor': 'Exotic sound with raised 7th degree',
+            'Melodic Minor': 'Jazz favorite with raised 6th and 7th ascending',
+            Dorian: 'Minor with natural 6th - jazzy and sophisticated',
+            Phrygian: 'Dark, Spanish/Middle Eastern flavor',
+            Lydian: 'Bright, dreamy sound with raised 4th',
+            Mixolydian: 'Dominant, bluesy feel with flat 7th',
+            'Pentatonic Major': 'Five-note scale - universal and catchy',
+            'Pentatonic Minor': 'Blues and rock foundation scale',
+            Blues: 'Classic blues scale with blue notes',
+          };
+
+          const description = scaleDescriptions[scaleName] || 'Musical scale pattern';
+
+          addTooltip(btn as HTMLElement, {
+            content: MusicTooltips.scale(scaleName, [], description),
+            type: 'scale',
+            position: 'top',
+          });
+        });
+      }, 1000); // Wait for tool to render
+    });
+  </script>
 </Base>

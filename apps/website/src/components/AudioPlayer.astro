@@ -1,5 +1,5 @@
 ---
-import "../styles/components.css";
+import '../styles/components.css';
 ---
 
 <div class="audio-ui">
@@ -7,8 +7,8 @@ import "../styles/components.css";
   <canvas class="waveform-canvas" width="180" height="32" style="vertical-align:middle;display:inline-block;"></canvas>
 </div>
 <script type="module">
-  import { bindPlayButtons, bindWaveform } from "../scripts/audio.ts";
-  window.addEventListener("DOMContentLoaded", () => {
+  import { bindPlayButtons, bindWaveform } from '../scripts/audio.ts';
+  window.addEventListener('DOMContentLoaded', () => {
     bindPlayButtons();
     bindWaveform();
   });

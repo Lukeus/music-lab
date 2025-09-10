@@ -5,7 +5,7 @@ import { createSlug } from '../../utils/blog';
 
 export async function getStaticPaths() {
   const journalEntries = await getCollection('journal');
-  
+
   return journalEntries.map((entry: CollectionEntry<'journal'>) => {
     const slug = entry.slug || createSlug(entry.data.title);
     return {
@@ -23,7 +23,7 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<BlogPost 
+<BlogPost
   frontmatter={{
     title: entry.data.title,
     date: entry.data.date,
@@ -31,7 +31,7 @@ const { Content } = await entry.render();
     tags: entry.data.tags,
     categories: entry.data.categories,
     featuredImage: entry.data.featuredImage,
-    author: entry.data.author
+    author: entry.data.author,
   }}
   content={entry.body}
 >
