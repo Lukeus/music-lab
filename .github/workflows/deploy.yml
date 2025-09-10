@@ -47,7 +47,28 @@ jobs:
       - name: 📦 Install dependencies
         run: |
           echo "🔍 Installing monorepo dependencies..."
-          npm ci
+          # Set npm to handle optional dependencies properly
+          npm config set optional true
+          npm config set fund false
+          npm config set audit false
+          
+          # Install with clean state and proper optional deps
+          echo "📦 Running npm install..."
+          npm install --no-audit --no-fund
+          
+          # Verify and potentially fix Rollup binary installation
+          echo "🔍 Verifying Rollup installation..."
+          if ! npm list rollup --depth=0 >/dev/null 2>&1; then
+            echo "⚠️ Rollup not found, attempting to install directly..."
+            npm install rollup --save-dev --no-optional
+          fi
+          
+          # Check for platform-specific rollup binaries and install if missing
+          if [ ! -d "node_modules/@rollup" ]; then
+            echo "🔧 Installing Rollup platform binaries..."
+            npm install @rollup/rollup-linux-x64-gnu --save-dev --optional
+          fi
+          
           echo "✅ Dependencies installed successfully"
       
       - name: 🔍 Type check all packages
