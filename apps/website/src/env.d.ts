@@ -3,9 +3,9 @@
 // Window object extensions
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void;
-    chordFinder?: any;
-    dataLayer?: any[];
+    gtag?: (...args: unknown[]) => void;
+    chordFinder?: unknown;
+    dataLayer?: unknown[];
     drumMachine?: {
       start: () => void;
       stop: () => void;
@@ -19,8 +19,8 @@ declare global {
       randomize: () => void;
       clear: () => void;
     };
-    drumMachineClient?: any;
-    chordFinderClient?: any;
+    drumMachineClient?: unknown;
+    chordFinderClient?: unknown;
   }
 }
 

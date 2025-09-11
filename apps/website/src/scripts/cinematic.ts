@@ -67,8 +67,8 @@ class CinematicParticleSystem {
             if (audioElements.length > 0) {
                 audioElements.forEach(audio => {
                     // Avoid double-binding
-                    if (!(audio as any).__cinematicBound) {
-                        (audio as any).__cinematicBound = true;
+                    if (!((audio as HTMLAudioElement & { __cinematicBound?: boolean }).__cinematicBound)) {
+                        (audio as HTMLAudioElement & { __cinematicBound?: boolean }).__cinematicBound = true;
                         audio.addEventListener('play', () =>
                             this.setAudioPlaying(true)
                         );
@@ -88,8 +88,8 @@ class CinematicParticleSystem {
             }
 
             // Try to access Web Audio API context from the global scope
-            if (typeof window !== 'undefined' && (window as any).audioCtx) {
-                this.setupWebAudioAnalysis((window as any).audioCtx);
+            if (typeof window !== 'undefined' && (window as { audioCtx?: AudioContext }).audioCtx) {
+                this.setupWebAudioAnalysis((window as { audioCtx?: AudioContext }).audioCtx!);
             }
         };
 
@@ -142,7 +142,7 @@ class CinematicParticleSystem {
                 const avgIntensity = sum / dataArray.length / 255; // normalize to 0-1
 
                 this.audioIntensity = avgIntensity;
-            } catch (e) {
+            } catch (_e) {
                 // Fall back to fake intensity based on current time
                 this.audioIntensity = this.calculateFakeIntensity(audio);
             }
